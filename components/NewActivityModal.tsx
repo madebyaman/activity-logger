@@ -1,16 +1,17 @@
 import { FormEvent, useState } from 'react';
+import { ActivityOption, ActivityType } from '../types';
 
 const NewActivityModal = ({
   activity,
-  hide,
+  onSubmit,
 }: {
   activity: string;
-  hide: () => void;
+  onSubmit: (newVal: ActivityOption) => void;
 }) => {
   const [activityName, setActivityName] = useState(activity);
-  const [activityType, setActivityType] = useState('Neutral');
+  const [activityType, setActivityType] = useState<ActivityType>('Neutral');
 
-  const activityTypeOptions = [
+  const activityTypeOptions: ActivityType[] = [
     'Neutral',
     'Productive',
     'Very Productive',
@@ -18,13 +19,11 @@ const NewActivityModal = ({
     'Very Distracting',
   ];
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const submitForm = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // TODO Submit inputs
-    console.log('Name: ', activityName);
-    console.log('Type: ', activityType);
+    // Submit inputs
     // Hide modal
-    hide();
+    onSubmit({ name: activityName, type: activityType });
     // Clear inputs
     setActivityName('');
     setActivityType('Neutral');
@@ -36,7 +35,7 @@ const NewActivityModal = ({
       <div className="fixed top-0 left-2/3 overflow-y-hidden z-10 right-0 bottom-0 bg-white">
         <div className="mt-12 px-5">
           <h3 className="text-3xl uppercase font-bold">Create new activity</h3>
-          <form onSubmit={onSubmit}>
+          <form onSubmit={submitForm}>
             <label className="uppercase font-light mt-5 block">
               Activity Name:
               <input
@@ -57,7 +56,7 @@ const NewActivityModal = ({
               id="activitySelector"
               value={activityType}
               className="mt-1 mb-5 block w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-              onChange={(e) => setActivityType(e.target.value)}
+              onChange={(e) => setActivityType(e.target.value as ActivityType)}
             >
               {activityTypeOptions.map((type) => (
                 <option value={type} key={type}>
