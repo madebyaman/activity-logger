@@ -45,9 +45,16 @@ const Home: NextPage = () => {
 
   // It gets called when user submits form to create a new activity.
   const onSubmitNewActivity = (newActivity: Activity) => {
+    // Hide activity modal
+    setActivityModalState({ ...activityModalState, showModal: false });
     // 1. Add the new activity
     setActivityOptions([...activityOptions, newActivity]);
     // 2. Update the selectedActivity for that Block.
+    console.log(
+      'Updating activity',
+      newActivity,
+      activityModalState.currentBlockId
+    );
     updatedActivityOfBlock(activityModalState.currentBlockId, newActivity);
   };
 
@@ -107,6 +114,7 @@ const Home: NextPage = () => {
           activityOptions={activityOptions}
           setNewActivityName={changeNewActivityNameAndShowNewActivityModal}
           onUpdate={updatedActivityOfBlock}
+          blocks={timeLog}
         />
         {/* Grid Table */}
       </div>

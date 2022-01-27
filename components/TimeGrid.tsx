@@ -1,5 +1,5 @@
-import { Activity } from '../types';
-import initialTimeLog, { noOfBlocksPerHour } from '../utils/initialState';
+import { Activity, TimeLog } from '../types';
+import { noOfBlocksPerHour } from '../utils/initialState';
 import Block from './Block';
 
 // Sleep hours = hours which we don't need to keep a track of.
@@ -15,10 +15,12 @@ const TimeGrid = ({
   activityOptions,
   setNewActivityName,
   onUpdate,
+  blocks,
 }: {
   activityOptions: Activity[];
   setNewActivityName: (input: string, blockId: string) => void;
   onUpdate: (blockId: string, newActivity: Activity | null) => void;
+  blocks: TimeLog[];
 }) => {
   return (
     <div className="mt-10">
@@ -57,10 +59,10 @@ const TimeGrid = ({
                 {currentHour}
               </h3>
               {/* Inside each hour, render its blocks */}
-              {initialTimeLog
+              {blocks
                 // 1. Show blocks only for currentHour
                 .filter(({ hour }) => hour === currentHour)
-                .map(({ block, blockId, activity }) => {
+                .map(({ blockId, activity }) => {
                   return (
                     <div
                       key={blockId}
