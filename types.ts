@@ -20,3 +20,11 @@ export type TimeLog = {
   hour: number;
   lastUpdated?: Date;
 };
+
+export type BlocksPerHour = 1 | 2 | 4;
+
+export type UserPreferences = {
+  sleepFrom: number;
+  sleepTo: number;
+  noOfBlocksPerHour: BlocksPerHour;
+};

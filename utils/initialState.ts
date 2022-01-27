@@ -4,11 +4,10 @@ import { TimeLog } from '../types';
 // Initialize a blank state to start tracking activities
 // Why did I use two loops? One for initializing state and other for rendering state
 // B/c I don't want to reinitialize initial state every time react re-renders the component. This would create lot of overhead problem.
-let initialTimeLog: TimeLog[] = [];
 
-export const noOfBlocksPerHour = 2;
+export default function timeBlocks(noOfBlocksPerHour: number) {
+  let initialTimeLog: TimeLog[] = [];
 
-(function () {
   Array.from(Array(24).keys()).map((hour) => {
     Array.from(Array(noOfBlocksPerHour).keys()).map((block) => {
       let fromMinutes;
@@ -36,6 +35,5 @@ export const noOfBlocksPerHour = 2;
       });
     });
   });
-})();
-
-export default initialTimeLog;
+  return initialTimeLog;
+}

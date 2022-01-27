@@ -1,15 +1,20 @@
 import type { NextPage } from 'next';
 import moment from 'moment';
-import initialTimeLog from '../utils/initialState';
+import timeBlocks from '../utils/initialState';
 import { AiOutlinePieChart, AiOutlineTool } from 'react-icons/ai';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import NewActivityModal from '../components/NewActivityModal';
 import { Activity, TimeLog } from '../types';
 import TimeGrid from '../components/TimeGrid';
 import { v4 } from 'uuid';
+import Link from 'next/link';
+import { UserPreferencesContext } from './_app';
 
 const Home: NextPage = () => {
-  const [timeLog, setTimeLog] = useState<TimeLog[]>(initialTimeLog);
+  const { userPreferences } = useContext(UserPreferencesContext);
+  const [timeLog, setTimeLog] = useState<TimeLog[]>(
+    timeBlocks(userPreferences.noOfBlocksPerHour)
+  );
   const [activityOptions, setActivityOptions] = useState<Activity[]>([
     { label: 'Development', type: 'Very Productive', value: v4() },
     { label: 'Running', type: 'Productive', value: v4() },
@@ -95,24 +100,29 @@ const Home: NextPage = () => {
             {moment().format('LL')}
           </h2>
           {/* Today's date */}
-          <button
-            aria-label="User preferences"
-            className="bg-gray-600 rounded-full p-2 text-white"
-          >
-            {/* These buttons are not responsive. They kind of stretch once gone below the display size. */}
-            <AiOutlineTool size={28} />
-          </button>
-          <button
-            aria-label="Reports"
-            className="ml-4 bg-gray-600 rounded-full p-2 text-white"
-          >
-            <AiOutlinePieChart size={28} />
-          </button>
+          <Link href={'/preferences'}>
+            <a
+              aria-label="User preferences"
+              className="bg-gray-600 rounded-full p-2 text-white"
+            >
+              {/* These buttons are not responsive. They kind of stretch once gone below the display size. */}
+              <AiOutlineTool size={28} />
+            </a>
+          </Link>
+          <Link href="/">
+            <a
+              aria-label="Reports"
+              className="ml-4 bg-gray-600 rounded-full p-2 text-white"
+            >
+              <AiOutlinePieChart size={28} />
+            </a>
+          </Link>
           {/* Preferences */}
           {/* Reports */}
         </div>
         <TimeGrid
           activityOptions={activityOptions}
+          userPreferences={userPreferences}
           setNewActivityName={changeNewActivityNameAndShowNewActivityModal}
           onUpdate={updatedActivityOfBlock}
           blocks={timeLog}
