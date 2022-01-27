@@ -69,6 +69,7 @@ const Home: NextPage = () => {
         return {
           ...block,
           activity: newActivity || undefined,
+          lastUpdated: new Date(Date.now()),
         };
       });
       if (updatedBlock.length === 1) {

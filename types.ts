@@ -18,4 +18,5 @@ export type TimeLog = {
   block: number;
   blockId: string;
   hour: number;
+  lastUpdated?: Date;
 };

@@ -1,6 +1,8 @@
+import { time } from 'console';
 import { Activity, TimeLog } from '../types';
 import { noOfBlocksPerHour } from '../utils/initialState';
 import Block from './Block';
+import { allowBlockToEdit } from '../utils/block';
 
 // Sleep hours = hours which we don't need to keep a track of.
 const sleepHours = {
@@ -44,37 +46,54 @@ const TimeGrid = ({
           }
         })
         // Map for each hour and show as one column
-        .map((currentHour) => {
+        .map((rederingHour) => {
           const gridColumns = {
             1: 'md:grid-cols-3',
             2: 'md:grid-cols-5',
             4: 'md:grid-cols-9',
           }; // This is to make sure purge css works correctly
+          const sortBlocks = (a: TimeLog, b: TimeLog) => {
+            if (a.from < b.from) return -1;
+            if (a.from > b.from) return 1;
+            return 0;
+          };
           return (
             <div
-              key={currentHour}
+              key={rederingHour}
               className={`grid grid-cols-3 ${gridColumns[noOfBlocksPerHour]}`}
             >
               <h3 className="font-sans text-4xl place-self-center font-bold">
-                {currentHour}
+                {rederingHour}
               </h3>
               {/* Inside each hour, render its blocks */}
               {blocks
-                // 1. Show blocks only for currentHour
-                .filter(({ hour }) => hour === currentHour)
-                .map(({ blockId, activity }) => {
+                // 1. Show blocks only for hour currently being rendered.
+                .filter(({ hour }) => hour === rederingHour)
+                .sort(sortBlocks)
+                .map((timeBlock) => {
+                  const { block, blockId, activity } = timeBlock;
                   return (
                     <div
                       key={blockId}
-                      className="px-3 py-6 bg-slate-50 border-r grid place-content-center col-span-2 col-start-2 md:col-start-auto"
+                      className={`min-w-full h-28 px-3 py-6 bg-slate-50 grid place-content-center col-span-2 col-start-2 md:col-start-auto ${
+                        block !== noOfBlocksPerHour - 1 && 'border-r'
+                      }`}
                     >
-                      <Block
-                        id={blockId}
-                        activityOptions={activityOptions}
-                        activity={activity}
-                        setNewActivityName={setNewActivityName}
-                        onUpdate={onUpdate}
-                      />
+                      {allowBlockToEdit(timeBlock) ? (
+                        <Block
+                          id={blockId}
+                          activityOptions={activityOptions}
+                          activity={activity}
+                          setNewActivityName={setNewActivityName}
+                          onUpdate={onUpdate}
+                        />
+                      ) : // show activity label if it is there
+                      activity ? (
+                        <p>{activity.label}</p>
+                      ) : (
+                        // show 'No activity` else
+                        <p>No activity</p>
+                      )}
                     </div>
                   );
                 })}
