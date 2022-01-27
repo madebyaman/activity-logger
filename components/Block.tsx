@@ -1,6 +1,7 @@
 import { OnChangeValue } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import { Activity } from '../types';
+import { blockTypeColors } from './TimeGrid';
 
 // PROPS
 // 1. activityOptions to show activity options
@@ -37,14 +38,28 @@ const Block = ({
     onUpdate(id, newVal);
   };
 
+  const formatOptionLabel = ({ label, type }: Activity) => {
+    return (
+      <div className="flex items-center">
+        <span
+          className={`w-3 h-3 mr-2 inline-block rounded-full ${blockTypeColors[type]}`}
+        ></span>
+        <p className="font-light text-gray-700">{label}</p>
+      </div>
+    );
+  };
+
   return (
     <div>
       <CreatableSelect
+        placeholder="Select an activity"
         instanceId="select-activity"
+        className="font-light text-gray-700"
         onCreateOption={createNewOptions}
         value={selectedActivity}
         onChange={handleSelectChange}
         options={activityOptions}
+        formatOptionLabel={formatOptionLabel}
         isClearable
       />
       {/* Why NewActivityModal is located here? */}

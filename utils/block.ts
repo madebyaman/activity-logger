@@ -1,7 +1,7 @@
 import { TimeLog } from '../types';
 
 const ALLOWBLOCKEDITBEFOREHOURS = 2;
-const MINUTESBEFORELASTUPDATE = 5;
+const MINUTESBEFORELASTUPDATE = 1;
 
 export function allowBlockToEdit(block: TimeLog): Boolean {
   const timeRightNow = new Date(Date.now());

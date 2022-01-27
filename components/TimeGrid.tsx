@@ -1,4 +1,3 @@
-import { time } from 'console';
 import { Activity, TimeLog } from '../types';
 import { noOfBlocksPerHour } from '../utils/initialState';
 import Block from './Block';
@@ -8,6 +7,14 @@ import { allowBlockToEdit } from '../utils/block';
 const sleepHours = {
   from: 21,
   to: 5,
+};
+
+export const blockTypeColors = {
+  Neutral: 'bg-gray-500',
+  Productive: 'bg-green-300',
+  'Very Productive': `bg-green-600`,
+  Distracting: `bg-orange-400`,
+  'Very Distracting': `bg-red-700`,
 };
 
 // PROPS
@@ -62,7 +69,7 @@ const TimeGrid = ({
               key={rederingHour}
               className={`grid grid-cols-3 ${gridColumns[noOfBlocksPerHour]}`}
             >
-              <h3 className="font-sans text-4xl place-self-center font-bold">
+              <h3 className="font-sans text-4xl place-self-center">
                 {rederingHour}
               </h3>
               {/* Inside each hour, render its blocks */}
@@ -89,10 +96,19 @@ const TimeGrid = ({
                         />
                       ) : // show activity label if it is there
                       activity ? (
-                        <p>{activity.label}</p>
+                        <div className="flex items-center">
+                          <span
+                            className={`w-3 h-3 mr-2 inline-block rounded-full ${
+                              blockTypeColors[activity.type]
+                            }`}
+                          ></span>
+                          <p className="font-light text-gray-700">
+                            {activity.label}
+                          </p>
+                        </div>
                       ) : (
-                        // show 'No activity` else
-                        <p>No activity</p>
+                        // else show nothing
+                        ''
                       )}
                     </div>
                   );
