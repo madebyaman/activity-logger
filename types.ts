@@ -5,15 +5,17 @@ export type ActivityType =
   | 'Distracting'
   | 'Very Distracting';
 
-export type ActivityOption = {
-  name: string;
+export type Activity = {
+  label: string;
   type: ActivityType;
+  value: string;
 };
 
 export type TimeLog = {
   from: Date;
   to: Date;
-  activity?: ActivityOption;
-  hour: number;
+  activity?: Activity;
   block: number;
+  blockId: string;
+  hour: number;
 };

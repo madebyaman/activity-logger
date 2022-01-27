@@ -1,46 +1,40 @@
-import { useState } from 'react';
 import { OnChangeValue } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
-import { ActivityOption, ActivityType } from '../types';
+import { Activity } from '../types';
 
-type ActivitySelectOption = {
-  readonly label: string;
-  readonly value: string;
-  readonly type: ActivityType;
-};
-
-// Accepts 2 props
+// PROPS
 // 1. activityOptions to show activity options
 // 2. `setNewActivityName` func to update newActivityName state in parent which sends it to `NewActivityModal` so it comes pre-filled with whatever user has typed in when clicking create new option
+// 3. `selectedActivity` prop to get selected activity for a given block
+// 4. `updateSelectedActivity` prop to updated selected activity for that block
+// QUESTION: Why `selectedActivity` and `updatedSelectedActivity` are not localized for this component? B/c
+// 1. We need to get, send the selected activity from database. In doing it once state gets initiliazed we are saving db costs.
+// 2. Once we create a new activity using the modal, we need to set that new activity as selected activity for that block.
 const Block = ({
   activityOptions,
   setNewActivityName,
+  activity,
+  id,
+  onUpdate,
 }: {
-  activityOptions: ActivityOption[];
-  setNewActivityName: (input: string) => void;
+  activityOptions: Activity[];
+  setNewActivityName: (input: string, blockId: string) => void;
+  activity: Activity | undefined;
+  id: string;
+  onUpdate: (blockId: string, newActivity: Activity | null) => void;
 }) => {
-  const [selectedActivity, setSelectedActivity] =
-    useState<ActivitySelectOption | null>(null);
-
-  const options: ActivitySelectOption[] = activityOptions.map((activity) => {
-    return {
-      label: activity.name,
-      value: activity.name.toLowerCase(),
-      type: activity.type,
-    };
-  });
+  const selectedActivity = activity;
 
   // what happens when user selects `Create New Option` option
   const createNewOptions = (input: string) => {
     // We should set the input to `newActivityName` so it gets passed to `NewActivityModal`.
-    setNewActivityName(input);
+    setNewActivityName(input, id);
   };
 
   // What happens when `CreatableSelect` changes
-  const handleSelectChange = (
-    newVal: OnChangeValue<ActivitySelectOption, false>
-  ) => {
-    setSelectedActivity(newVal);
+  const handleSelectChange = (newVal: OnChangeValue<Activity, false>) => {
+    // setSelectedActivity(newVal);
+    onUpdate(id, newVal);
   };
 
   return (
@@ -50,7 +44,7 @@ const Block = ({
         onCreateOption={createNewOptions}
         value={selectedActivity}
         onChange={handleSelectChange}
-        options={options}
+        options={activityOptions}
         isClearable
       />
       {/* Why NewActivityModal is located here? */}

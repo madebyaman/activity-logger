@@ -1,12 +1,13 @@
 import { FormEvent, useState } from 'react';
-import { ActivityOption, ActivityType } from '../types';
+import { v4 } from 'uuid';
+import { Activity, ActivityType } from '../types';
 
 const NewActivityModal = ({
   activity,
   onSubmit,
 }: {
   activity: string;
-  onSubmit: (newVal: ActivityOption) => void;
+  onSubmit: (newVal: Activity) => void;
 }) => {
   const [activityName, setActivityName] = useState(activity);
   const [activityType, setActivityType] = useState<ActivityType>('Neutral');
@@ -23,7 +24,7 @@ const NewActivityModal = ({
     e.preventDefault();
     // Submit inputs
     // Hide modal
-    onSubmit({ name: activityName, type: activityType });
+    onSubmit({ label: activityName, type: activityType, value: v4() });
     // Clear inputs
     setActivityName('');
     setActivityType('Neutral');
