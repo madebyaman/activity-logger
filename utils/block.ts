@@ -20,9 +20,8 @@ export function allowBlockToEdit(block: TimeLog): Boolean {
   // 5. OR  block.activity updated within 5 minutes.
   let ifUpdatedWithinLastMinutes: Boolean = false;
   if (block.lastUpdated) {
-    ifUpdatedWithinLastMinutes = block.lastUpdated < timeFiveMinutesBefore;
+    ifUpdatedWithinLastMinutes = block.lastUpdated > timeFiveMinutesBefore;
   }
-  console.log('Block id:', block.blockId, ifUpdatedWithinLastMinutes);
 
   return (
     block.to < timeRightNow &&
