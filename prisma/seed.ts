@@ -9,12 +9,12 @@ const run = async () => {
   // await Promise.all(
   //   activitiesData.map(async (activity) => {
   //     return prisma.activity.upsert({
-  //       where: { /* userId matches current userId */},
+  //       where: { userEmail: 'user@test.com' },
   //       update: {},
   //       create: {
   //         name: activity.name,
   //         type: activity.type,
-  //         userId: user
+  //         userEmail: 'user@test.com',
   //       },
   //     });
   //   })
@@ -29,6 +29,21 @@ const run = async () => {
       password: bcrypt.hashSync('password', salt),
     },
   });
+
+  const activities = await prisma.activity.findMany({});
+  await Promise.all(
+    activitiesData.map((act) => {
+      return prisma.activity.create({
+        data: {
+          name: act.name,
+          type: act.type,
+          user: {
+            connect: { id: user.id },
+          },
+        },
+      });
+    })
+  );
 };
 
 run()
