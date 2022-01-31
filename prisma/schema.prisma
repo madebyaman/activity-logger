@@ -12,19 +12,23 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  email     String   @unique
+  id        Int        @id @default(autoincrement())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  email     String     @unique
   password  String
+  logs      Log[]
+  activity  Activity[]
 }
 
 model Activity {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  label     String
-  Type      String
+  name      String
+  type      String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
   Log       Log[]
 }
 
@@ -34,7 +38,10 @@ model Log {
   updatedAt  DateTime @updatedAt
   from       DateTime
   to         DateTime
+  date       DateTime
   activity   Activity @relation(fields: [activityId], references: [id])
   hour       Int
   activityId Int
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
 }
