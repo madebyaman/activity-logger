@@ -18,8 +18,8 @@ model User {
   email     String     @unique
   password  String
   activity  Activity[]
-  DailyLog  DailyLog[]
   Profile   Profile[]
+  Log       Log[]
 }
 
 model Activity {
@@ -31,21 +31,6 @@ model Activity {
   user      User     @relation(fields: [userId], references: [id])
   userId    Int
   Log       Log[]
-}
-
-// So dailyLog will have date, logs, userID
-// logs will have hour, from, to, activity
-// So this way, we will have unique date and can get logs for any date.
-
-model DailyLog {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  date      String   @unique
-  // Why string and not datetime? B/c new Date() gives a unique date with milliseconds. Storing it in string as `dd/mm/yyy` will allow me to compare these value easily.
-  user      User     @relation(fields: [userId], references: [id])
-  userId    Int
-  log       Log[]
 }
 
 model Profile {
@@ -67,7 +52,9 @@ model Log {
   to         DateTime
   hour       Int
   activity   Activity? @relation(fields: [activityId], references: [id])
-  date       DailyLog  @relation(fields: [dailyLogId], references: [id])
-  activityId Int
-  dailyLogId Int
+  activityId Int?
+  date       String
+  // Why string and not datetime? B/c new Date() gives a unique date with milliseconds. Storing it in string as `dd/mm/yyy` will allow me to compare these value easily.
+  user       User      @relation(fields: [userId], references: [id])
+  userId     Int
 }

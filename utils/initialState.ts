@@ -16,7 +16,7 @@ export const getDateString = (date: Date = new Date()) => {
   return mm + '/' + dd + '/' + yyyy;
 };
 
-export default function timeBlocks(noOfBlocksPerHour: number) {
+export default function timeBlocks(noOfBlocksPerHour: number = 4) {
   let initialTimeLog: TimeLog[] = [];
 
   Array.from(Array(24).keys()).map((hour) => {
