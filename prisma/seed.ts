@@ -1,10 +1,8 @@
-import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import { env } from 'process';
 import initialState, { getDateString } from '../utils/initialState';
 import { activitiesData } from './activitiesData';
-
-const prisma = new PrismaClient();
+import prisma from '../utils/prisma';
 
 const run = async () => {
   if (!env['TEST_EMAIL'] || !env['TEST_PASSWORD']) {
