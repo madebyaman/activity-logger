@@ -1,3 +1,5 @@
+import { NextPage } from 'next';
+
 export type ActivityType =
   | 'Neutral'
   | 'Productive'
@@ -27,4 +29,8 @@ export type UserPreferences = {
   sleepFrom: number;
   sleepTo: number;
   noOfBlocksPerHour: BlocksPerHour;
+};
+
+export type NextPageWithoutAuth = NextPage & {
+  protectedRoute?: Boolean;
 };

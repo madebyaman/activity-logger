@@ -1,8 +1,8 @@
 import Link from 'next/link';
-import { NextPage } from 'next/types';
 import { useState } from 'react';
+import { NextPageWithoutAuth } from '../types';
 
-const Signup: NextPage = () => {
+const Signup: NextPageWithoutAuth = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -86,5 +86,7 @@ const Signup: NextPage = () => {
     </div>
   );
 };
+
+Signup.protectedRoute = false;
 
 export default Signup;
