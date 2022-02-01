@@ -1,20 +1,26 @@
 import { useRouter } from 'next/router';
 import { FC, FormEvent, useState } from 'react';
 import { auth } from '../utils/auth';
+import VisuallyHidden from '@reach/visually-hidden';
 
 const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({ mode }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
   const router = useRouter();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
-    await auth(mode, { email, password });
+    const res = await auth(mode, { email, password });
     // After auth, backend should attach a cookie if fetch is successful, or else should send an error json
     setIsLoading(false);
-    router.push('/');
+    if (res.status === 401 && mode === 'signin') {
+      setError('Email or password is wrong');
+    } else {
+      router.push('/');
+    }
   };
 
   return (
@@ -55,6 +61,7 @@ const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({ mode }) => {
       </div>
 
       <div>
+        {error && <div>{error}</div>}
         <button
           type="submit"
           className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -65,7 +72,7 @@ const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({ mode }) => {
                 className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full"
                 role="status"
               >
-                <span className="visually-hidden">Loading...</span>
+                <VisuallyHidden>Loading...</VisuallyHidden>
               </div>
             </div>
           ) : mode === 'signin' ? (
