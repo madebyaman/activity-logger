@@ -54,7 +54,7 @@ const Block = ({
       <CreatableSelect
         placeholder="Select an activity"
         instanceId="select-activity"
-        className="font-light text-gray-700"
+        className="font-light text-gray-700 border-0"
         onCreateOption={createNewOptions}
         value={selectedActivity}
         onChange={handleSelectChange}
