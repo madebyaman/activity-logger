@@ -30,14 +30,16 @@ function MyApp({ Component, pageProps }: ComponentPropsWithoutAuth) {
   if (Component.protectedRoute === false) {
     return <Component {...pageProps} />;
   } else {
-    <UserPreferencesContext.Provider
-      value={{
-        userPreferences: userPreferences,
-        setUserPreferences: setUserPreferences,
-      }}
-    >
-      <Component {...pageProps} />
-    </UserPreferencesContext.Provider>;
+    return (
+      <UserPreferencesContext.Provider
+        value={{
+          userPreferences: userPreferences,
+          setUserPreferences: setUserPreferences,
+        }}
+      >
+        <Component {...pageProps} />
+      </UserPreferencesContext.Provider>
+    );
   }
 }
 
