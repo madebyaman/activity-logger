@@ -18,7 +18,7 @@ export default async function signup(
         time: Date.now(),
         id: user.id,
       },
-      'hello',
+      process.env.PRIVATE_KEY || 'secret',
       { expiresIn: '8h' }
     );
 
