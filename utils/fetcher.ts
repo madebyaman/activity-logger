@@ -13,12 +13,12 @@ export async function fetcher(
     },
     body: JSON.stringify(data),
   });
-  if (res.status > 200 && res.status < 299) {
+  if (res.status >= 200 && res.status <= 299) {
     /**
      * Successful responses are only between 200 - 299
      * URL: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
      */
     return await res.json();
   }
-  throw new Error();
+  throw new Error(res.statusText);
 }

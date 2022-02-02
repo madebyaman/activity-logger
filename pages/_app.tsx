@@ -1,7 +1,14 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
-import { createContext, Dispatch, SetStateAction, useState } from 'react';
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react';
 import { NextPageWithoutAuth, UserPreferences } from '../types';
+import { useProfile } from '../utils/hooks';
 
 type ComponentPropsWithoutAuth = AppProps & {
   Component: NextPageWithoutAuth;
@@ -10,7 +17,7 @@ type ComponentPropsWithoutAuth = AppProps & {
 // Why userPreferences in app.tsx?
 // B/c userPreferences like sleep timings and no of blocks per hour will change the application. So better to store it as context
 const initialUserPreferences: UserPreferences = {
-  sleepFrom: 21,
+  sleepFrom: 20,
   sleepTo: 6,
   noOfBlocksPerHour: 2,
 };

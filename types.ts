@@ -23,12 +23,10 @@ export type TimeLog = {
   lastUpdated?: Date;
 };
 
-export type BlocksPerHour = 1 | 2 | 4;
-
 export type UserPreferences = {
   sleepFrom: number;
   sleepTo: number;
-  noOfBlocksPerHour: BlocksPerHour;
+  noOfBlocksPerHour: number;
 };
 
 export type NextPageWithoutAuth = NextPage & {

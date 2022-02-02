@@ -27,8 +27,9 @@ export const validateRoute = (
       try {
         const { id } = jwt.verify(
           token,
-          process.env.SECRET_KEY || 'string'
+          process.env.PRIVATE_KEY || 'string'
         ) as JwtPayload;
+
         user = await prisma.user.findUnique({
           where: { id },
         });

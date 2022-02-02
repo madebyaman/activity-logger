@@ -2,19 +2,29 @@ import type { NextPage } from 'next';
 import moment from 'moment';
 import timeBlocks from '../utils/initialState';
 import { AiOutlinePieChart, AiOutlineTool } from 'react-icons/ai';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import NewActivityModal from '../components/NewActivityModal';
 import { Activity, TimeLog } from '../types';
 import TimeGrid from '../components/TimeGrid';
 import { v4 } from 'uuid';
 import Link from 'next/link';
 import { UserPreferencesContext } from './_app';
+import { useProfile } from '../utils/hooks';
 
 const Home: NextPage = () => {
-  const { userPreferences } = useContext(UserPreferencesContext);
+  const { userPreferences, setUserPreferences } = useContext(
+    UserPreferencesContext
+  );
+  const { profile } = useProfile();
   const [timeLog, setTimeLog] = useState<TimeLog[]>(
     timeBlocks(userPreferences.noOfBlocksPerHour)
   );
+
+  useEffect(() => {
+    if (profile && setUserPreferences) {
+      setUserPreferences(profile);
+    }
+  }, [profile, setUserPreferences]);
   const [activityOptions, setActivityOptions] = useState<Activity[]>([
     { label: 'Development', type: 'Very Productive', value: v4() },
     { label: 'Running', type: 'Productive', value: v4() },
