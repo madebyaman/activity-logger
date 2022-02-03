@@ -9,43 +9,32 @@ import TimeGrid from '../components/TimeGrid';
 import { v4 } from 'uuid';
 import Link from 'next/link';
 import { UserPreferencesContext } from './_app';
-import { useProfile } from '../utils/hooks';
+import { useActivities, useLogs, useProfile } from '../utils/hooks';
 
 const Home: NextPage = () => {
   const { userPreferences, setUserPreferences } = useContext(
     UserPreferencesContext
   );
   const { profile } = useProfile();
-  const [timeLog, setTimeLog] = useState<TimeLog[]>(
-    timeBlocks(userPreferences.noOfBlocksPerHour)
-  );
+  const { logs } = useLogs();
+  const { activities } = useActivities();
 
   useEffect(() => {
     if (profile && setUserPreferences) {
       setUserPreferences(profile);
     }
   }, [profile, setUserPreferences]);
-  const [activityOptions, setActivityOptions] = useState<Activity[]>([
-    { label: 'Development', type: 'Very Productive', value: v4() },
-    { label: 'Running', type: 'Productive', value: v4() },
-    { label: 'Reading', type: 'Productive', value: v4() },
-    { label: 'Designing', type: 'Productive', value: v4() },
-    { label: 'YouTube', type: 'Very Distracting', value: v4() },
-    { label: 'Playing', type: 'Neutral', value: v4() },
-    { label: 'Netflix', type: 'Very Distracting', value: v4() },
-    { label: 'Eating', type: 'Neutral', value: v4() },
-    { label: 'Driving', type: 'Distracting', value: v4() },
-  ]);
+
   const [activityModalState, setActivityModalState] = useState({
     name: '',
     showModal: false,
-    currentBlockId: '',
+    currentBlockId: 0,
   });
 
   // This func gets called by `PickActivityDropdown` when someone clicks the option to create new option
   const changeNewActivityNameAndShowNewActivityModal = (
     input: string,
-    blockId: string
+    blockId: number
   ) => {
     // Here we should do 3 things
     // 1. Update new activity name so it is pre-filled in new activity modal
@@ -63,22 +52,17 @@ const Home: NextPage = () => {
     // Hide activity modal
     setActivityModalState({ ...activityModalState, showModal: false });
     // 1. Add the new activity
-    setActivityOptions([...activityOptions, newActivity]);
+    // setActivityOptions([...activityOptions, newActivity]);
     // 2. Update the selectedActivity for that Block.
-    console.log(
-      'Updating activity',
-      newActivity,
-      activityModalState.currentBlockId
-    );
     updatedActivityOfBlock(activityModalState.currentBlockId, newActivity);
   };
 
   // TODO udpate selected activity method
   const updatedActivityOfBlock = (
-    blockId: string,
+    blockId: number,
     newActivity: Activity | null
   ) => {
-    const blockToUpdate = timeLog.filter((block) => block.blockId === blockId);
+    const blockToUpdate = logs.filter((block) => block.id === blockId);
     if (blockToUpdate.length === 1) {
       const updatedBlock: TimeLog[] = blockToUpdate.map((block) => {
         return {

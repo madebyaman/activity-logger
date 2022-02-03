@@ -8,9 +8,9 @@ export type ActivityType =
   | 'Very Distracting';
 
 export type Activity = {
-  label: string;
+  name: string;
   type: ActivityType;
-  value: string;
+  id: string;
 };
 
 export type TimeLog = {
