@@ -1,7 +1,7 @@
 /**
  * Hooks for Data fetching like user, activities, and logs
  */
-import { DailyLog, Log, Profile, User } from '@prisma/client';
+import { Log, Profile, User } from '@prisma/client';
 import useSWR from 'swr';
 import { Activity } from '../types';
 import { fetcher } from './fetcher';
@@ -53,19 +53,6 @@ export const useProfile = () => {
 
   return {
     profile: data as Profile,
-    isLoading: !error && !data,
-    isError: error,
-  };
-};
-
-/**
- * Function to fetch daily log for today from api route
- */
-export const useDailyLog = () => {
-  const { data, error } = useSWR('/dailyLog', fetcher);
-
-  return {
-    dailyLog: data as DailyLog,
     isLoading: !error && !data,
     isError: error,
   };

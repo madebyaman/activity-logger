@@ -1,6 +1,4 @@
 // Initialize a blank state to start tracking activities
-// Why did I use two loops? One for initializing state and other for rendering state
-// B/c I don't want to reinitialize initial state every time react re-renders the component. This would create lot of overhead problem.
 
 type TimeLog = {
   from: Date;

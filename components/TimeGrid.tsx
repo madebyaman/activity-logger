@@ -1,9 +1,8 @@
-import { Activity, TimeLog, UserPreferences } from '../types';
 import Block from './Block';
-import { allowBlockToEdit } from '../utils/block';
 import { useContext } from 'react';
 import { UserPreferencesContext } from '../pages/_app';
-import { useDailyLog, useLogs } from '../utils/hooks';
+import { useLogs } from '../utils/hooks';
+import { Log } from '@prisma/client';
 
 export const blockTypeColors = {
   Neutral: 'bg-gray-500',
@@ -28,7 +27,7 @@ const TimeGrid = ({
   const { userPreferences, setUserPreferences } = useContext(
     UserPreferencesContext
   );
-  const { sleepFrom, sleepTo } = userPreferences;
+  const { sleepFrom, sleepTo, blocksPerHour } = userPreferences;
   const { logs, isLoading, isError } = useLogs();
 
   // This is to make sure purge css works correctly in Tailwind
@@ -55,11 +54,19 @@ const TimeGrid = ({
   /**
    * Sort function to sort blocks by start time.
    */
-  const sortBlocks = (a: TimeLog, b: TimeLog) => {
+  const sortBlocks = (a: Log, b: Log) => {
     if (a.from < b.from) return -1;
     if (a.from > b.from) return 1;
     return 0;
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error!</div>;
+  }
 
   return (
     <div className="mt-10">
@@ -78,42 +85,24 @@ const TimeGrid = ({
                 {rederingHour}
               </h3>
               {/* Inside each hour, render its blocks */}
-              {blocks
+              {logs
                 .filter(({ hour }) => hour === rederingHour)
                 .sort(sortBlocks)
                 .map((timeBlock) => {
-                  const { block, blockId, activity } = timeBlock;
+                  const { id, to } = timeBlock;
                   return (
                     <div
-                      key={blockId}
+                      key={id}
                       className={`min-w-full h-28 px-3 py-6 bg-slate-50 grid place-content-center col-span-2 col-start-2 md:col-start-auto ${
-                        block !== noOfBlocksPerHour - 1 && 'border-r'
+                        to.getMinutes() !== 60 && 'border-r'
                       }`}
                     >
-                      {allowBlockToEdit(timeBlock) ? (
-                        <Block
-                          id={blockId}
-                          activityOptions={activityOptions}
-                          activity={activity}
-                          setNewActivityName={setNewActivityName}
-                          onUpdate={onUpdate}
-                        />
-                      ) : // show activity label if it is there
-                      activity ? (
-                        <div className="flex items-center">
-                          <span
-                            className={`w-3 h-3 mr-2 inline-block rounded-full ${
-                              blockTypeColors[activity.type]
-                            }`}
-                          ></span>
-                          <p className="font-light text-gray-700">
-                            {activity.label}
-                          </p>
-                        </div>
-                      ) : (
-                        // else show nothing
-                        ''
-                      )}
+                      <Block
+                        id={id}
+                        activityId={timeBlock.activityId}
+                        onAddActivity={onAdd}
+                        onUpdate={onUpdate}
+                      />
                     </div>
                   );
                 })}

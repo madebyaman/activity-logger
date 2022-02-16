@@ -15,36 +15,32 @@ export default validateRoute(async (req, res, user) => {
   }
   // Put Logs for today
   const date = getDateString();
-  // Find dailyLog table with today's entry and update if not there.
-  const todaysLog = await prisma.dailyLog.upsert({
-    where: { date: date },
-    update: {},
-    create: {
-      date,
-      user: {
-        connect: { id: user.id },
-      },
-      blocksPerHour: 4,
-    },
-  });
 
   // Find logs for today
-  const logs = await prisma.log.findMany({ where: { dailyLogId: date } });
+  const logs = await prisma.log.findMany({ where: { date: date } });
+
+  // Find `blocksPerHour` from user profile.
+  const profile = await prisma.profile.findUnique({
+    where: { userId: user.id },
+  });
+
+  let blocksPerHour = 4;
+  if (profile) {
+    blocksPerHour = profile.blocksPerHour;
+  }
 
   // Only if there are no logs for today, create new logs.
   if (!logs.length) {
     await Promise.all(
-      initialState(todaysLog.blocksPerHour).map(({ from, to, hour }) => {
+      initialState(blocksPerHour).map(({ from, to, hour }) => {
         return prisma.log.create({
           data: {
             from,
             hour,
             to,
+            date,
             User: {
               connect: { id: user.id },
-            },
-            DailyLog: {
-              connect: { date: todaysLog.date },
             },
           },
         });

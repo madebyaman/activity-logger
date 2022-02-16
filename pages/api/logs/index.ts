@@ -7,7 +7,7 @@ import { validateRoute } from '../../../utils/validateRoute';
  */
 export default validateRoute(async (req, res, user) => {
   const logs = await prisma.log.findMany({
-    where: { userId: user.id, dailyLogId: getDateString(new Date()) },
+    where: { userId: user.id, date: getDateString(new Date()) },
   });
   return res.json(logs || []);
 });

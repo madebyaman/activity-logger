@@ -26,6 +26,7 @@ export type TimeLog = {
 export type UserPreferences = {
   sleepFrom: number;
   sleepTo: number;
+  blocksPerHour: 1 | 2 | 4;
 };
 
 export type NextPageWithoutAuth = NextPage & {

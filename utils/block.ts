@@ -1,9 +1,9 @@
-import { TimeLog } from '../types';
+import { Log } from '@prisma/client';
 
 const ALLOWBLOCKEDITBEFOREHOURS = 2;
 const MINUTESBEFORELASTUPDATE = 1;
 
-export function allowBlockToEdit(block: TimeLog): Boolean {
+export function allowBlockToEdit(block: Log): Boolean {
   const timeRightNow = new Date(Date.now());
   const timeTwoHoursBefore = new Date(Date.now());
   timeTwoHoursBefore.setHours(
@@ -19,14 +19,14 @@ export function allowBlockToEdit(block: TimeLog): Boolean {
   // 4. OR !block.activity
   // 5. OR  block.activity updated within 5 minutes.
   let ifUpdatedWithinLastMinutes: Boolean = false;
-  if (block.lastUpdated) {
-    ifUpdatedWithinLastMinutes = block.lastUpdated > timeFiveMinutesBefore;
+  if (block.updatedAt) {
+    ifUpdatedWithinLastMinutes = block.updatedAt > timeFiveMinutesBefore;
   }
 
   return (
     block.to < timeRightNow &&
     (block.to > timeTwoHoursBefore ||
-      !block.activity ||
+      !block.activityId ||
       ifUpdatedWithinLastMinutes)
   );
 }
