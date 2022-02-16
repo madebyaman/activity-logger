@@ -1,9 +1,24 @@
+import { ActivityType } from '../types';
+
+type AddActivityData = {
+  name: string;
+  type: ActivityType;
+};
+
+type UpdateLog = {
+  logId: number;
+  activityId: number;
+};
 /**
  * Wrapper of native `fetch` function. It returns data or an error.
  */
 export async function fetcher(
   url: string,
-  data: { email: string; password: string } | undefined = undefined
+  data:
+    | AddActivityData
+    | UpdateLog
+    | { email: string; password: string }
+    | undefined = undefined
 ) {
   const res = await fetch(`${window.location.origin}/api${url}`, {
     method: data ? 'POST' : 'GET',

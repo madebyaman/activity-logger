@@ -1,7 +1,5 @@
 import bcrypt from 'bcrypt';
 import { env } from 'process';
-import initialState from '../utils/initialState';
-import { getDateString } from '../utils/getDateString';
 import { activitiesData } from './activitiesData';
 import prisma from '../utils/prisma';
 
@@ -48,47 +46,12 @@ const run = async () => {
     create: {
       sleepFrom: 22,
       sleepTo: 6,
-      user: {
-        connect: { id: user.id },
-      },
-    },
-  });
-
-  // Put Logs for today
-  const date = getDateString();
-  // Find today's logs
-  const todaysLog = await prisma.dailyLog.upsert({
-    where: { date: date },
-    update: {},
-    create: {
-      date,
-      user: {
-        connect: { id: user.id },
-      },
       blocksPerHour: 4,
+      user: {
+        connect: { id: user.id },
+      },
     },
   });
-
-  const logs = await prisma.log.findMany({ where: { dailyLogId: date } });
-  if (!logs.length) {
-    await Promise.all(
-      initialState().map(({ from, to, hour }) => {
-        return prisma.log.create({
-          data: {
-            from,
-            hour,
-            to,
-            User: {
-              connect: { id: user.id },
-            },
-            DailyLog: {
-              connect: { date: todaysLog.date },
-            },
-          },
-        });
-      })
-    );
-  }
 };
 
 run()

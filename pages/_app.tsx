@@ -32,6 +32,13 @@ function MyApp({ Component, pageProps }: ComponentPropsWithoutAuth) {
   const [userPreferences, setUserPreferences] = useState(
     initialUserPreferences
   );
+  const { profile } = useProfile();
+
+  useEffect(() => {
+    if (profile) {
+      setUserPreferences(profile);
+    }
+  }, [profile]);
 
   if (Component.protectedRoute === false) {
     return <Component {...pageProps} />;

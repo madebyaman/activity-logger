@@ -1,83 +1,53 @@
 import type { NextPage } from 'next';
 import moment from 'moment';
-import timeBlocks from '../utils/initialState';
 import { AiOutlinePieChart, AiOutlineTool } from 'react-icons/ai';
 import { useContext, useEffect, useState } from 'react';
 import NewActivityModal from '../components/NewActivityModal';
 import { Activity, TimeLog } from '../types';
 import TimeGrid from '../components/TimeGrid';
-import { v4 } from 'uuid';
 import Link from 'next/link';
-import { UserPreferencesContext } from './_app';
-import { useActivities, useLogs, useProfile } from '../utils/hooks';
+import { addActivity } from '../utils/addActivity';
+import { updateLog } from '../utils/updateLog';
 
 const Home: NextPage = () => {
-  const { userPreferences, setUserPreferences } = useContext(
-    UserPreferencesContext
-  );
-  const { profile } = useProfile();
-  const { logs } = useLogs();
-  const { activities } = useActivities();
-
-  useEffect(() => {
-    if (profile && setUserPreferences) {
-      setUserPreferences(profile);
-    }
-  }, [profile, setUserPreferences]);
-
   const [activityModalState, setActivityModalState] = useState({
     name: '',
     showModal: false,
     currentBlockId: 0,
   });
+  // This is used to refresh TimeGrid component, so we can see the latest data.
+  const [timeGridKey, setTimeGridKey] = useState(0);
 
-  // This func gets called by `PickActivityDropdown` when someone clicks the option to create new option
-  const changeNewActivityNameAndShowNewActivityModal = (
-    input: string,
-    blockId: number
-  ) => {
-    // Here we should do 3 things
-    // 1. Update new activity name so it is pre-filled in new activity modal
-    // 2. show activity modal
-    // 3. set current blockid
+  /**
+   * When someone clicks the option to create new activity, we update `activityModalState` to show modal.
+   * @param input Name of the activity
+   * @param id Current block id, which called the modal. When a new activity is added, using this id, we update the current block.
+   */
+  const addingNewActivity = (input: string, id: number) => {
     setActivityModalState({
       name: input,
       showModal: true,
-      currentBlockId: blockId,
+      currentBlockId: id,
     });
   };
 
-  // It gets called when user submits form to create a new activity.
-  const onSubmitNewActivity = (newActivity: Activity) => {
+  /**
+   * When a new activity is submitted
+   * @param param0 Activity added
+   */
+  const onSubmitNewActivity = async ({ name, type }: Activity) => {
     // Hide activity modal
     setActivityModalState({ ...activityModalState, showModal: false });
     // 1. Add the new activity
-    // setActivityOptions([...activityOptions, newActivity]);
+    const activity = await addActivity(name, type);
     // 2. Update the selectedActivity for that Block.
-    updatedActivityOfBlock(activityModalState.currentBlockId, newActivity);
+    updatedActivityOfBlock(activityModalState.currentBlockId, activity.id);
   };
 
-  // TODO udpate selected activity method
-  const updatedActivityOfBlock = (
-    blockId: number,
-    newActivity: Activity | null
-  ) => {
-    const blockToUpdate = logs.filter((block) => block.id === blockId);
-    if (blockToUpdate.length === 1) {
-      const updatedBlock: TimeLog[] = blockToUpdate.map((block) => {
-        return {
-          ...block,
-          activity: newActivity || undefined,
-          lastUpdated: new Date(Date.now()),
-        };
-      });
-      if (updatedBlock.length === 1) {
-        const removedBlockFromTimeLog = timeLog.filter(
-          (block) => block.blockId !== blockId
-        );
-        setTimeLog([...removedBlockFromTimeLog, ...updatedBlock]);
-      }
-    }
+  const updatedActivityOfBlock = (blockId: number, activityId: number) => {
+    updateLog(blockId, activityId);
+    // Now refresh the TimeGrid component using setTimeGridKey
+    setTimeGridKey((val) => val + 1);
   };
 
   return (
@@ -115,11 +85,9 @@ const Home: NextPage = () => {
           {/* Reports */}
         </div>
         <TimeGrid
-          activityOptions={activityOptions}
-          userPreferences={userPreferences}
-          setNewActivityName={changeNewActivityNameAndShowNewActivityModal}
+          onAdd={addingNewActivity}
           onUpdate={updatedActivityOfBlock}
-          blocks={timeLog}
+          key={timeGridKey}
         />
         {/* Grid Table */}
       </div>

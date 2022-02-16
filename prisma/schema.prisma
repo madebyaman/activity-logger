@@ -19,7 +19,6 @@ model User {
   password  String
   activity  Activity[]
   Profile   Profile[]
-  DailyLog  DailyLog[]
   Log       Log[]
 }
 
@@ -35,25 +34,14 @@ model Activity {
 }
 
 model Profile {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  sleepFrom Int
-  sleepTo   Int
-  user      User     @relation(fields: [userId], references: [id])
-  userId    Int      @unique
-}
-
-model DailyLog {
   id            Int      @id @default(autoincrement())
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-  date          String   @unique
-  // Why string and not datetime? B/c new Date() gives a unique date with milliseconds. Storing it in string as `dd/mm/yyy` will allow me to compare these value easily.
+  sleepFrom     Int
+  sleepTo       Int
   blocksPerHour Int
-  logs          Log[]
   user          User     @relation(fields: [userId], references: [id])
-  userId        Int
+  userId        Int      @unique
 }
 
 model Log {
@@ -63,10 +51,9 @@ model Log {
   from       DateTime
   to         DateTime
   hour       Int
+  date       String
   activity   Activity? @relation(fields: [activityId], references: [id])
   activityId Int?
-  DailyLog   DailyLog? @relation(fields: [dailyLogId], references: [date])
-  dailyLogId String?
   User       User?     @relation(fields: [userId], references: [id])
   userId     Int?
 }

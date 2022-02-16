@@ -7,8 +7,8 @@ import { validateRoute } from '../../../utils/validateRoute';
  * 2. activityId: The id of the activity to update the log entry with
  */
 export default validateRoute(async (req, res, user) => {
-  // If method is not put, throw error
-  if (req.method !== 'PUT') {
+  // If method is not post, throw error
+  if (req.method !== 'POST') {
     res.status(405);
     res.json({ error: 'Method not allowed' });
     return;
