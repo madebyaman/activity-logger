@@ -19,7 +19,6 @@ type ComponentPropsWithoutAuth = AppProps & {
 const initialUserPreferences: UserPreferences = {
   sleepFrom: 20,
   sleepTo: 6,
-  noOfBlocksPerHour: 2,
 };
 
 export const UserPreferencesContext = createContext<{

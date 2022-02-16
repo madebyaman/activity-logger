@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import { env } from 'process';
-import initialState, { getDateString } from '../utils/initialState';
+import initialState from '../utils/initialState';
+import { getDateString } from '../utils/getDateString';
 import { activitiesData } from './activitiesData';
 import prisma from '../utils/prisma';
 
@@ -40,12 +41,11 @@ const run = async () => {
     );
   }
 
-  // Create User Profile with noOfBlocksPerHour, Sleep timing etc.
+  // Create User Profile with Sleep timing
   const profile = await prisma.profile.upsert({
     where: { userId: user.id },
     update: {},
     create: {
-      noOfBlocksPerHour: 4,
       sleepFrom: 22,
       sleepTo: 6,
       user: {
@@ -56,8 +56,20 @@ const run = async () => {
 
   // Put Logs for today
   const date = getDateString();
-  // Put logs for today, ONLY IF there are no logs for today
-  const logs = await prisma.log.findMany({ where: { date: date } });
+  // Find today's logs
+  const todaysLog = await prisma.dailyLog.upsert({
+    where: { date: date },
+    update: {},
+    create: {
+      date,
+      user: {
+        connect: { id: user.id },
+      },
+      blocksPerHour: 4,
+    },
+  });
+
+  const logs = await prisma.log.findMany({ where: { dailyLogId: date } });
   if (!logs.length) {
     await Promise.all(
       initialState().map(({ from, to, hour }) => {
@@ -66,9 +78,11 @@ const run = async () => {
             from,
             hour,
             to,
-            date,
-            user: {
+            User: {
               connect: { id: user.id },
+            },
+            DailyLog: {
+              connect: { date: todaysLog.date },
             },
           },
         });
