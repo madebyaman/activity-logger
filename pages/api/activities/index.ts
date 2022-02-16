@@ -1,5 +1,5 @@
-import prisma from '../../utils/prisma';
-import { validateRoute } from '../../utils/validateRoute';
+import prisma from '../../../utils/prisma';
+import { validateRoute } from '../../../utils/validateRoute';
 
 /**
  * Calls `validateRoute` function and return activities[] or error.
