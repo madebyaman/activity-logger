@@ -1,8 +1,8 @@
 import Link from 'next/link';
-import { NextPageWithoutAuth } from '../types';
 import AuthForm from '../components/AuthForm';
+import { NextPage } from 'next';
 
-const Signin: NextPageWithoutAuth = () => {
+const Signin: NextPage = () => {
   return (
     <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
@@ -24,7 +24,5 @@ const Signin: NextPageWithoutAuth = () => {
     </div>
   );
 };
-
-Signin.protectedRoute = false;
 
 export default Signin;

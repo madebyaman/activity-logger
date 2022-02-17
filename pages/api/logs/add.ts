@@ -7,12 +7,6 @@ import { validateRoute } from '../../../utils/validateRoute';
  * This function is used to add new log enties to the database.
  */
 export default validateRoute(async (req, res, user) => {
-  // Check if request is 'POST'
-  if (req.method !== 'POST') {
-    res.status(405);
-    res.json({ error: 'Method not allowed' });
-    return;
-  }
   // Put Logs for today
   const date = getDateString();
 

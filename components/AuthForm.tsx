@@ -13,13 +13,17 @@ const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({ mode }) => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
-    const res = await auth(mode, { email, password });
-    // After auth, backend should attach a cookie if fetch is successful, or else should send an error json
-    setIsLoading(false);
-    if (res.status === 401 && mode === 'signin') {
-      setError('Email or password is wrong');
-    } else {
-      router.push('/');
+    try {
+      const res = await auth(mode, { email, password });
+      // After auth, backend should attach a cookie if fetch is successful, or else should send an error json
+      setIsLoading(false);
+      if (res.status === 401 && mode === 'signin') {
+        setError('Email or password is wrong');
+      } else {
+        router.push('/');
+      }
+    } catch (err) {
+      console.error(err);
     }
   };
 

@@ -1,10 +1,9 @@
-import { NextPage } from 'next';
 import Link from 'next/link';
 import { useContext } from 'react';
-import { BlocksPerHour, UserPreferences } from '../types';
-import { UserPreferencesContext } from './_app';
+import { UserPreferencesContext } from '../components/ProfileContext';
+import { BlocksPerHourType, NextPageWithAuth } from '../types';
 
-const UserPreferences: NextPage = () => {
+const Preferences: NextPageWithAuth = () => {
   const { userPreferences, setUserPreferences } = useContext(
     UserPreferencesContext
   );
@@ -76,11 +75,11 @@ const UserPreferences: NextPage = () => {
       <label>
         Number of Blocks Per Hour
         <select
-          value={userPreferences.noOfBlocksPerHour}
+          value={userPreferences.blocksPerHour}
           onChange={(e) =>
             setUserPreferences({
               ...userPreferences,
-              noOfBlocksPerHour: +e.target.value as BlocksPerHour,
+              blocksPerHour: +e.target.value as BlocksPerHourType,
             })
           }
         >
@@ -96,4 +95,6 @@ const UserPreferences: NextPage = () => {
   );
 };
 
-export default UserPreferences;
+Preferences.protectedRoute = false;
+
+export default Preferences;

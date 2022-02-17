@@ -1,15 +1,14 @@
-import type { NextPage } from 'next';
 import moment from 'moment';
 import { AiOutlinePieChart, AiOutlineTool } from 'react-icons/ai';
-import { useContext, useEffect, useState } from 'react';
+import { useState } from 'react';
 import NewActivityModal from '../components/NewActivityModal';
-import { Activity, TimeLog } from '../types';
+import { Activity, NextPageWithAuth } from '../types';
 import TimeGrid from '../components/TimeGrid';
 import Link from 'next/link';
 import { addActivity } from '../utils/addActivity';
 import { updateLog } from '../utils/updateLog';
 
-const Home: NextPage = () => {
+const Home: NextPageWithAuth = () => {
   const [activityModalState, setActivityModalState] = useState({
     name: '',
     showModal: false,
@@ -100,5 +99,7 @@ const Home: NextPage = () => {
     </div>
   );
 };
+
+Home.protectedRoute = true;
 
 export default Home;
