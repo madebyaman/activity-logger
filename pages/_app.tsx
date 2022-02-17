@@ -1,21 +1,21 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
-import { NextPageWithoutAuth } from '../types';
+import { NextPageWithAuth } from '../types';
 import ProfileContext from '../components/ProfileContext';
 
-type ComponentPropsWithoutAuth = AppProps & {
-  Component: NextPageWithoutAuth;
+type ComponentPropsWithAuth = AppProps & {
+  Component: NextPageWithAuth;
 };
 
-function MyApp({ Component, pageProps }: ComponentPropsWithoutAuth) {
-  if (Component.protectedRoute === false) {
-    return <Component {...pageProps} />;
-  } else {
+function MyApp({ Component, pageProps }: ComponentPropsWithAuth) {
+  if (Component.protectedRoute) {
     return (
       <ProfileContext>
         <Component {...pageProps} />
       </ProfileContext>
     );
+  } else {
+    return <Component {...pageProps} />;
   }
 }
 

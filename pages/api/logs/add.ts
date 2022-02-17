@@ -7,10 +7,9 @@ import { validateRoute } from '../../../utils/validateRoute';
  * This function is used to add new log enties to the database.
  */
 export default validateRoute(async (req, res, user) => {
-  // Put Logs for today
-  const date = getDateString();
-
+  console.log('validated route');
   // Find logs for today
+  const date = getDateString();
   const logs = await prisma.log.findMany({ where: { date: date } });
 
   // Find `blocksPerHour` from user profile.
@@ -20,10 +19,12 @@ export default validateRoute(async (req, res, user) => {
 
   let blocksPerHour = 4;
   if (profile) {
+    console.log('profile foudn');
     blocksPerHour = profile.blocksPerHour;
   }
 
   // Only if there are no logs for today, create new logs.
+  console.log(logs);
   if (!logs.length) {
     await Promise.all(
       initialState(blocksPerHour).map(({ from, to, hour }) => {
@@ -41,4 +42,6 @@ export default validateRoute(async (req, res, user) => {
       })
     );
   }
+
+  return res.json(logs);
 });

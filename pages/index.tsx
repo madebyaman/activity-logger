@@ -44,6 +44,7 @@ const Home: NextPageWithAuth = () => {
   };
 
   const updatedActivityOfBlock = (blockId: number, activityId: number) => {
+    console.log('updatedActivityOfBlock', blockId, activityId);
     updateLog(blockId, activityId);
     // Now refresh the TimeGrid component using setTimeGridKey
     setTimeGridKey((val) => val + 1);

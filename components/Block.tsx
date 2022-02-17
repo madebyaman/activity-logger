@@ -21,9 +21,9 @@ const Block = ({
   onUpdate: (blockId: number, activityId: number) => void;
 }) => {
   const { activities, isLoading, isError } = useActivities();
-  const selectedActivity = activities.find(
-    (activity) => Number(activity.id) === activityId
-  );
+  const selectedActivity =
+    activities &&
+    activities.find((activity) => Number(activity.id) === activityId);
 
   const createNewOptions = (input: string) => {
     onAddActivity(input, id);

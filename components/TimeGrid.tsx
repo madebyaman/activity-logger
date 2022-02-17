@@ -1,8 +1,9 @@
 import Block from './Block';
-import { useContext } from 'react';
-import { UserPreferencesContext } from '../pages/_app';
+import { useContext, useEffect } from 'react';
 import { useLogs } from '../utils/hooks';
 import { Log } from '@prisma/client';
+import { UserPreferencesContext } from './ProfileContext';
+import { fetcher } from '../utils/fetcher';
 
 export const blockTypeColors = {
   Neutral: 'bg-gray-500',
@@ -24,11 +25,27 @@ const TimeGrid = ({
   onAdd: (input: string, blockId: number) => void;
   onUpdate: (blockId: number, activityId: number) => void;
 }) => {
-  const { userPreferences, setUserPreferences } = useContext(
-    UserPreferencesContext
-  );
+  const { userPreferences } = useContext(UserPreferencesContext);
   const { sleepFrom, sleepTo, blocksPerHour } = userPreferences;
   const { logs, isLoading, isError } = useLogs();
+
+  useEffect(() => {
+    // To stop fetching once component is unmounted.
+    let isSubscribed = true;
+    console.log('running use effect hook');
+
+    if (logs && !logs.length && !isLoading && !isError && isSubscribed) {
+      (async function () {
+        // First send post request to /api/logs/add
+        console.log('sending fetch request to load logs');
+        await fetcher('/logs/add');
+      })();
+    }
+
+    return () => {
+      isSubscribed = false;
+    };
+  }, [logs, isError, isLoading]);
 
   // This is to make sure purge css works correctly in Tailwind
   const gridColumns = {
@@ -75,18 +92,18 @@ const TimeGrid = ({
         // But eliminate sleep hours.
         .filter(filterBlocks)
         // Map for each hour and show as one column
-        .map((rederingHour) => {
+        .map((currentHour) => {
           return (
             <div
-              key={rederingHour}
+              key={currentHour}
               className={`grid grid-cols-3 ${gridColumns[blocksPerHour]}`}
             >
               <h3 className="font-sans text-4xl place-self-center">
-                {rederingHour}
+                {currentHour}
               </h3>
               {/* Inside each hour, render its blocks */}
               {logs
-                .filter(({ hour }) => hour === rederingHour)
+                .filter(({ hour }) => hour === currentHour)
                 .sort(sortBlocks)
                 .map((timeBlock) => {
                   const { id, to } = timeBlock;
@@ -94,7 +111,7 @@ const TimeGrid = ({
                     <div
                       key={id}
                       className={`min-w-full h-28 px-3 py-6 bg-slate-50 grid place-content-center col-span-2 col-start-2 md:col-start-auto ${
-                        to.getMinutes() !== 60 && 'border-r'
+                        new Date(`${to}`).getMinutes() !== 60 && 'border-r'
                       }`}
                     >
                       <Block

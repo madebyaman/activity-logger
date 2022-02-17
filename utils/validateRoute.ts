@@ -34,9 +34,12 @@ export const validateRoute = (
           where: { id },
         });
         if (!user) {
-          throw new Error('User not found');
+          res.status(401);
+          res.json({ error: 'User not found' });
+          return;
         }
       } catch (e) {
+        console.log('token not valid');
         res.status(401);
         res.json({ error: 'Not authorized' });
         return;
@@ -44,6 +47,7 @@ export const validateRoute = (
 
       return handler(req, res, user);
     }
+    console.log('token not found');
     res.status(401);
     res.json({ error: 'Not authorized' });
     return;

@@ -35,5 +35,4 @@ export async function fetcher(
      */
     return await res.json();
   }
-  throw new Error(res.statusText);
 }
