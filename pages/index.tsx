@@ -3,10 +3,11 @@ import { AiOutlinePieChart, AiOutlineTool } from 'react-icons/ai';
 import { useState } from 'react';
 import NewActivityModal from '../components/NewActivityModal';
 import { Activity, NextPageWithAuth } from '../types';
-import TimeGrid from '../components/TimeGrid';
+import TimeGrid from '../components/dashboard/TimeGrid';
 import Link from 'next/link';
 import { addActivity } from '../utils/addActivity';
 import { updateLog } from '../utils/updateLog';
+import { RecoilRoot } from 'recoil';
 
 const Home: NextPageWithAuth = () => {
   const [activityModalState, setActivityModalState] = useState({
@@ -44,14 +45,13 @@ const Home: NextPageWithAuth = () => {
   };
 
   const updatedActivityOfBlock = (blockId: number, activityId: number) => {
-    console.log('updatedActivityOfBlock', blockId, activityId);
     updateLog(blockId, activityId);
     // Now refresh the TimeGrid component using setTimeGridKey
     setTimeGridKey((val) => val + 1);
   };
 
   return (
-    <div>
+    <RecoilRoot>
       <div
         className={`max-w-screen-lg w-11/12 px-4 mx-auto ${
           activityModalState.showModal &&
@@ -97,7 +97,7 @@ const Home: NextPageWithAuth = () => {
           onSubmit={onSubmitNewActivity}
         />
       )}
-    </div>
+    </RecoilRoot>
   );
 };
 

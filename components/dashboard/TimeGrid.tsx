@@ -1,9 +1,11 @@
-import Block from './Block';
-import { useContext, useEffect } from 'react';
-import { useLogs } from '../utils/hooks';
+import Block from '../Block';
+import { useContext, useEffect, useState } from 'react';
 import { Log } from '@prisma/client';
-import { UserPreferencesContext } from './ProfileContext';
-import { fetcher } from '../utils/fetcher';
+import { UserPreferencesContext } from '../ProfileContext';
+import { fetcher } from '../../utils/fetcher';
+import { useRecoilState } from 'recoil';
+import { blockState } from './blockState';
+import useLoading from '../../hooks/useLoading';
 
 export const blockTypeColors = {
   Neutral: 'bg-gray-500',
@@ -27,25 +29,36 @@ const TimeGrid = ({
 }) => {
   const { userPreferences } = useContext(UserPreferencesContext);
   const { sleepFrom, sleepTo, blocksPerHour } = userPreferences;
-  const { logs, isLoading, isError } = useLogs();
+
+  const [blockRefreshKey, setBlockRefreshKey] = useState(0);
+  const [blocks, setBlocks] = useRecoilState(blockState);
+  const { state, dispatch } = useLoading();
 
   useEffect(() => {
     // To stop fetching once component is unmounted.
     let isSubscribed = true;
-    console.log('running use effect hook');
 
-    if (logs && !logs.length && !isLoading && !isError && isSubscribed) {
+    if (!blocks.length && isSubscribed) {
       (async function () {
+        dispatch({ type: 'LOADING' });
         // First send post request to /api/logs/add
-        console.log('sending fetch request to load logs');
-        await fetcher('/logs/add');
+        try {
+          const logs = (await fetcher('/api/logs')) as Log[];
+          if (logs) {
+            setBlocks(logs);
+          }
+        } catch (error) {
+          dispatch({ type: 'ERROR', payload: 'Error fetching block state' });
+        } finally {
+          dispatch({ type: 'LOADED' });
+        }
       })();
     }
 
     return () => {
       isSubscribed = false;
     };
-  }, [logs, isError, isLoading]);
+  }, [blocks, setBlocks, dispatch]);
 
   // This is to make sure purge css works correctly in Tailwind
   const gridColumns = {
@@ -77,11 +90,11 @@ const TimeGrid = ({
     return 0;
   };
 
-  if (isLoading) {
+  if (state.status === 'LOADING') {
     return <div>Loading...</div>;
   }
 
-  if (isError) {
+  if (state.status === 'ERROR') {
     return <div>Error!</div>;
   }
 
@@ -102,27 +115,29 @@ const TimeGrid = ({
                 {currentHour}
               </h3>
               {/* Inside each hour, render its blocks */}
-              {logs
-                .filter(({ hour }) => hour === currentHour)
-                .sort(sortBlocks)
-                .map((timeBlock) => {
-                  const { id, to } = timeBlock;
-                  return (
-                    <div
-                      key={id}
-                      className={`min-w-full h-28 px-3 py-6 bg-slate-50 grid place-content-center col-span-2 col-start-2 md:col-start-auto ${
-                        new Date(`${to}`).getMinutes() !== 60 && 'border-r'
-                      }`}
-                    >
-                      <Block
-                        id={id}
-                        activityId={timeBlock.activityId}
-                        onAddActivity={onAdd}
-                        onUpdate={onUpdate}
-                      />
-                    </div>
-                  );
-                })}
+              {blocks.length &&
+                blocks
+                  .filter(({ hour }) => hour === currentHour)
+                  .sort(sortBlocks)
+                  .map((timeBlock) => {
+                    const { id, to } = timeBlock;
+                    return (
+                      <div
+                        key={id}
+                        className={`min-w-full h-28 px-3 py-6 bg-slate-50 grid place-content-center col-span-2 col-start-2 md:col-start-auto ${
+                          new Date(`${to}`).getMinutes() !== 60 && 'border-r'
+                        }`}
+                      >
+                        <Block
+                          id={id}
+                          activityId={timeBlock.activityId}
+                          onAddActivity={onAdd}
+                          onUpdate={onUpdate}
+                          key={blockRefreshKey}
+                        />
+                      </div>
+                    );
+                  })}
             </div>
           );
         })}

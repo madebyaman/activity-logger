@@ -2,7 +2,7 @@ import { Activity } from '@prisma/client';
 import { OnChangeValue } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import { useActivities } from '../utils/hooks';
-import { blockTypeColors } from './TimeGrid';
+import { blockTypeColors } from './dashboard/TimeGrid';
 
 // PROPS
 // 1. `onAddActivity` func to call when adding a new activity.
@@ -62,7 +62,7 @@ const Block = ({
         onCreateOption={createNewOptions}
         getOptionLabel={(option) => option.name}
         getOptionValue={(option) => option.id.toString()}
-        value={selectedActivity || null}
+        value={selectedActivity || undefined}
         onChange={handleSelectChange}
         formatOptionLabel={formatOptionLabel}
         isClearable
