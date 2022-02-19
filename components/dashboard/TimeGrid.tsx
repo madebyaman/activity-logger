@@ -6,6 +6,7 @@ import { useRecoilState } from 'recoil';
 import { blockState } from './blockState';
 import ActivitiesFetchWrapper from './ActivitiesFetchWrapper';
 import { useBlocks } from '../../utils/hooks';
+import { allowBlockEdit } from './allowBlockEdit';
 
 export const blockTypeColors = {
   Neutral: 'bg-gray-500',
@@ -33,6 +34,7 @@ const TimeGrid = ({
 
   const [blocks, setBlocks] = useRecoilState(blockState);
 
+  // Update the blocks when no blocks found.
   useEffect(() => {
     if (!blocks.length && !isLoading && !isError) {
       setBlocks(newBlocks);
@@ -108,12 +110,16 @@ const TimeGrid = ({
                               new Date(`${to}`).getMinutes() !== 0 && 'border-r'
                             }`}
                           >
-                            <Block
-                              id={id}
-                              activityId={timeBlock.activityId}
-                              onAddActivity={onAdd}
-                              onUpdate={onUpdate}
-                            />
+                            {allowBlockEdit(to) ? (
+                              <Block
+                                id={id}
+                                activityId={timeBlock.activityId}
+                                onAddActivity={onAdd}
+                                onUpdate={onUpdate}
+                              />
+                            ) : (
+                              'Untitled'
+                            )}
                           </div>
                         );
                       })}
