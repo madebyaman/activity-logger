@@ -1,54 +1,47 @@
 import { Activity } from '@prisma/client';
+import { useEffect, useState } from 'react';
 import { OnChangeValue } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
-import { useRecoilState } from 'recoil';
-import { ActivityType } from '../../types';
 import { useActivities } from '../../utils/hooks';
-import { updateBlockActivity } from '../../utils/updateLog';
-import { blockState } from './blockState';
 import { blockTypeColors } from './TimeGrid';
 
 // PROPS
 // 1. `onAddActivity` func to call when adding a new activity.
-// 3. `id` of the current block.
-// 3. `activityId` prop to updated selected activity for that block
+// 2. `activityId` prop to updated selected activity for that block
+// 3. `onUpdate` func to call when updating activity for a block.
+// 4. `id` of the current block.
 const Block = ({
   onAddActivity,
   activityId,
+  onUpdate,
   id,
 }: {
   onAddActivity: (input: string, blockId: number) => void;
+  onUpdate: (blockId: number, activityId: number) => Promise<void>;
   activityId: number | null;
   id: number;
 }) => {
   const { activities, isLoading, isError } = useActivities();
-  const selectedActivity =
-    activities &&
-    activities.find((activity) => Number(activity.id) === activityId);
-  const [blocks, setBlocks] = useRecoilState(blockState);
+  const [selectedActivity, setSelectedActivity] = useState<
+    Activity | undefined
+  >(undefined);
+
+  useEffect(() => {
+    if (activities && activityId) {
+      setSelectedActivity(
+        activities.find((activity) => Number(activity.id) === activityId)
+      );
+    }
+  }, [activities, activityId]);
 
   const createNewOptions = (input: string) => {
     onAddActivity(input, id);
   };
 
-  // What happens when `CreatableSelect` changes
-  const handleSelectChange = (newVal: OnChangeValue<Activity, false>) => {
-    // setSelectedActivity(newVal);
+  // What happens when a new option is selected.
+  const handleSelectChange = async (newVal: OnChangeValue<Activity, false>) => {
     if (!newVal) return;
-    try {
-      updateBlockActivity(id, newVal.id);
-      // Update local state
-      const newBlocks = blocks.map((block) => {
-        if (block.id === id) {
-          return { ...block, activityId: newVal.id };
-        } else {
-          return block;
-        }
-      });
-      setBlocks(newBlocks);
-    } catch (e) {
-      console.log(e);
-    }
+    onUpdate(id, newVal.id);
   };
 
   const formatOptionLabel = ({ name, type }: Activity) => {

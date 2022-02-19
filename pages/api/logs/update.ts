@@ -28,7 +28,7 @@ export default validateRoute(async (req, res, user) => {
 
   // Get a log with the id, and update it.
   const log = await prisma.log.update({
-    where: { id: req.body.logId },
+    where: { id: req.body.blockId },
     data: {
       activity: { connect: { id: activity.id } },
     },

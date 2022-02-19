@@ -22,8 +22,10 @@ export const blockTypeColors = {
  */
 const TimeGrid = ({
   onAdd,
+  onUpdate,
 }: {
   onAdd: (input: string, blockId: number) => void;
+  onUpdate: (blockId: number, activityId: number) => Promise<void>;
 }) => {
   const { userPreferences } = useContext(UserPreferencesContext);
   const { sleepFrom, sleepTo, blocksPerHour } = userPreferences;
@@ -41,7 +43,6 @@ const TimeGrid = ({
         // First send post request to /api/logs/add
         try {
           const logs = (await fetcher('/logs')) as Log[];
-          console.log('logs', logs);
           if (logs) {
             setBlocks(logs);
           }
@@ -123,13 +124,14 @@ const TimeGrid = ({
                         <div
                           key={id}
                           className={`min-w-full h-28 px-3 py-6 bg-slate-50 grid place-content-center col-span-2 col-start-2 md:col-start-auto ${
-                            new Date(`${to}`).getMinutes() !== 60 && 'border-r'
+                            new Date(`${to}`).getMinutes() !== 0 && 'border-r'
                           }`}
                         >
                           <Block
                             id={id}
                             activityId={timeBlock.activityId}
                             onAddActivity={onAdd}
+                            onUpdate={onUpdate}
                           />
                         </div>
                       );

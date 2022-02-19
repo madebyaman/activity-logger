@@ -6,7 +6,7 @@ type AddActivityData = {
 };
 
 type UpdateLog = {
-  logId: number;
+  blockId: number;
   activityId: number;
 };
 /**

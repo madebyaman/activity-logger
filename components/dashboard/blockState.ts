@@ -1,5 +1,5 @@
 import { Log } from '@prisma/client';
-import { atom, RecoilState } from 'recoil';
+import { atom } from 'recoil';
 
 const defaultBlocks: Log[] = [];
 
