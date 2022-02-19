@@ -1,7 +1,7 @@
 /**
  * Hooks for Data fetching like user, activities, and logs
  */
-import { Profile, User, Activity } from '@prisma/client';
+import { Log, Profile, User, Activity } from '@prisma/client';
 import useSWR from 'swr';
 import { fetcher } from './fetcher';
 
@@ -26,6 +26,19 @@ export const useActivities = () => {
 
   return {
     activities: data as Activity[],
+    isLoading: !error && !data,
+    isError: error,
+  };
+};
+
+/**
+ * Function to fetch logs data from api route
+ */
+export const useBlocks = () => {
+  const { data, error } = useSWR('/logs', fetcher);
+
+  return {
+    blocks: data as Log[],
     isLoading: !error && !data,
     isError: error,
   };

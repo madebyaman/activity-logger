@@ -2,11 +2,10 @@ import Block from './Block';
 import { useContext, useEffect } from 'react';
 import { Log } from '@prisma/client';
 import { UserPreferencesContext } from '../ProfileContext';
-import { fetcher } from '../../utils/fetcher';
 import { useRecoilState } from 'recoil';
 import { blockState } from './blockState';
-import useLoading from '../../hooks/useLoading';
 import ActivitiesFetchWrapper from './ActivitiesFetchWrapper';
+import { useBlocks } from '../../utils/hooks';
 
 export const blockTypeColors = {
   Neutral: 'bg-gray-500',
@@ -30,35 +29,15 @@ const TimeGrid = ({
 }) => {
   const { userPreferences } = useContext(UserPreferencesContext);
   const { sleepFrom, sleepTo, blocksPerHour } = userPreferences;
+  const { blocks: newBlocks, isLoading, isError } = useBlocks();
 
   const [blocks, setBlocks] = useRecoilState(blockState);
-  const { state, dispatch } = useLoading();
 
   useEffect(() => {
-    // To stop fetching once component is unmounted.
-    let isSubscribed = true;
-
-    if (!blocks.length && isSubscribed) {
-      (async function () {
-        dispatch({ type: 'LOADING' });
-        // First send post request to /api/logs/add
-        try {
-          const logs = (await fetcher('/logs')) as Log[];
-          if (logs) {
-            setBlocks(logs);
-          }
-        } catch (error) {
-          dispatch({ type: 'ERROR', payload: 'Error fetching block state' });
-        } finally {
-          dispatch({ type: 'LOADED' });
-        }
-      })();
+    if (!blocks.length && !isLoading && !isError) {
+      setBlocks(newBlocks);
     }
-
-    return () => {
-      isSubscribed = false;
-    };
-  }, [blocks, setBlocks, dispatch]);
+  }, [blocks.length, isError, isLoading, newBlocks, setBlocks]);
 
   // This is to make sure purge css works correctly in Tailwind
   const gridColumns = {
@@ -90,11 +69,11 @@ const TimeGrid = ({
     return 0;
   };
 
-  if (state.status === 'LOADING') {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  if (state.status === 'ERROR') {
+  if (isError) {
     return <div>Error!</div>;
   }
 
