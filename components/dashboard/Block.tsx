@@ -2,7 +2,8 @@ import { Activity } from '@prisma/client';
 import { useEffect, useState } from 'react';
 import { OnChangeValue } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
-import { useActivities } from '../../utils/hooks';
+import { useRecoilState } from 'recoil';
+import { activitiesState } from './activitiesState';
 import { blockTypeColors } from './TimeGrid';
 
 // PROPS
@@ -21,7 +22,7 @@ const Block = ({
   activityId: number | null;
   id: number;
 }) => {
-  const { activities, isLoading, isError } = useActivities();
+  const [activities, setActivities] = useRecoilState(activitiesState);
   const [selectedActivity, setSelectedActivity] = useState<
     Activity | undefined
   >(undefined);
@@ -44,6 +45,9 @@ const Block = ({
     onUpdate(id, newVal.id);
   };
 
+  /**
+   * Formats how the options should be displayed by react-select.
+   */
   const formatOptionLabel = ({ name, type }: Activity) => {
     return (
       <div className="flex items-center">
@@ -55,27 +59,22 @@ const Block = ({
     );
   };
 
-  if (isError) {
-    return <p>Error</p>;
-  }
-
   return (
-    <div>
+    <>
       <CreatableSelect
         options={activities}
         placeholder="Select an activity"
-        isLoading={isLoading}
         instanceId="select-activity"
         className="font-light text-gray-700 border-0"
         onCreateOption={createNewOptions}
         getOptionLabel={(option) => option.name}
         getOptionValue={(option) => option.id.toString()}
-        value={selectedActivity || undefined}
+        value={selectedActivity}
         onChange={handleSelectChange}
         formatOptionLabel={formatOptionLabel}
         isClearable
       />
-    </div>
+    </>
   );
 };
 

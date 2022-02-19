@@ -1,11 +1,12 @@
 import Block from './Block';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { Log } from '@prisma/client';
 import { UserPreferencesContext } from '../ProfileContext';
 import { fetcher } from '../../utils/fetcher';
 import { useRecoilState } from 'recoil';
 import { blockState } from './blockState';
 import useLoading from '../../hooks/useLoading';
+import ActivitiesFetchWrapper from './ActivitiesFetchWrapper';
 
 export const blockTypeColors = {
   Neutral: 'bg-gray-500',
@@ -99,47 +100,49 @@ const TimeGrid = ({
 
   return (
     <div className="mt-10">
-      {/* Create array of [1, .. 23] */}
-      {blocks.length
-        ? Array.from(Array(24).keys())
-            // But eliminate sleep hours.
-            .filter(filterBlocks)
-            // Map for each hour and show as one column
-            .map((currentHour) => {
-              return (
-                <div
-                  key={currentHour}
-                  className={`grid grid-cols-3 ${gridColumns[blocksPerHour]}`}
-                >
-                  <h3 className="font-sans text-4xl place-self-center">
-                    {currentHour}
-                  </h3>
-                  {/* Inside each hour, render its blocks */}
-                  {blocks
-                    .filter(({ hour }) => hour === currentHour)
-                    .sort(sortBlocks)
-                    .map((timeBlock) => {
-                      const { id, to } = timeBlock;
-                      return (
-                        <div
-                          key={id}
-                          className={`min-w-full h-28 px-3 py-6 bg-slate-50 grid place-content-center col-span-2 col-start-2 md:col-start-auto ${
-                            new Date(`${to}`).getMinutes() !== 0 && 'border-r'
-                          }`}
-                        >
-                          <Block
-                            id={id}
-                            activityId={timeBlock.activityId}
-                            onAddActivity={onAdd}
-                            onUpdate={onUpdate}
-                          />
-                        </div>
-                      );
-                    })}
-                </div>
-              );
-            })
-        : 'No blocks found'}
+      <ActivitiesFetchWrapper>
+        {/* Create array of [1, .. 23] */}
+        {blocks.length
+          ? Array.from(Array(24).keys())
+              // But eliminate sleep hours.
+              .filter(filterBlocks)
+              // Map for each hour and show as one column
+              .map((currentHour) => {
+                return (
+                  <div
+                    key={currentHour}
+                    className={`grid grid-cols-3 ${gridColumns[blocksPerHour]}`}
+                  >
+                    <h3 className="font-sans text-4xl place-self-center">
+                      {currentHour}
+                    </h3>
+                    {/* Inside each hour, render its blocks */}
+                    {blocks
+                      .filter(({ hour }) => hour === currentHour)
+                      .sort(sortBlocks)
+                      .map((timeBlock) => {
+                        const { id, to } = timeBlock;
+                        return (
+                          <div
+                            key={id}
+                            className={`min-w-full h-28 px-3 py-6 bg-slate-50 grid place-content-center col-span-2 col-start-2 md:col-start-auto ${
+                              new Date(`${to}`).getMinutes() !== 0 && 'border-r'
+                            }`}
+                          >
+                            <Block
+                              id={id}
+                              activityId={timeBlock.activityId}
+                              onAddActivity={onAdd}
+                              onUpdate={onUpdate}
+                            />
+                          </div>
+                        );
+                      })}
+                  </div>
+                );
+              })
+          : 'No blocks found'}
+      </ActivitiesFetchWrapper>
     </div>
   );
 };
