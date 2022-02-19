@@ -1,29 +1,31 @@
 import { Activity } from '@prisma/client';
 import { OnChangeValue } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
-import { useActivities } from '../utils/hooks';
-import { blockTypeColors } from './dashboard/TimeGrid';
+import { useRecoilState } from 'recoil';
+import { ActivityType } from '../../types';
+import { useActivities } from '../../utils/hooks';
+import { updateBlockActivity } from '../../utils/updateLog';
+import { blockState } from './blockState';
+import { blockTypeColors } from './TimeGrid';
 
 // PROPS
 // 1. `onAddActivity` func to call when adding a new activity.
-// 2. `onUpdate` func to call when updating activity for a block.
-// 3. `id` of the block.
+// 3. `id` of the current block.
 // 3. `activityId` prop to updated selected activity for that block
 const Block = ({
   onAddActivity,
   activityId,
   id,
-  onUpdate,
 }: {
   onAddActivity: (input: string, blockId: number) => void;
   activityId: number | null;
   id: number;
-  onUpdate: (blockId: number, activityId: number) => void;
 }) => {
   const { activities, isLoading, isError } = useActivities();
   const selectedActivity =
     activities &&
     activities.find((activity) => Number(activity.id) === activityId);
+  const [blocks, setBlocks] = useRecoilState(blockState);
 
   const createNewOptions = (input: string) => {
     onAddActivity(input, id);
@@ -33,7 +35,20 @@ const Block = ({
   const handleSelectChange = (newVal: OnChangeValue<Activity, false>) => {
     // setSelectedActivity(newVal);
     if (!newVal) return;
-    onUpdate(id, newVal.id);
+    try {
+      updateBlockActivity(id, newVal.id);
+      // Update local state
+      const newBlocks = blocks.map((block) => {
+        if (block.id === id) {
+          return { ...block, activityId: newVal.id };
+        } else {
+          return block;
+        }
+      });
+      setBlocks(newBlocks);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const formatOptionLabel = ({ name, type }: Activity) => {

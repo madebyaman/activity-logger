@@ -6,8 +6,8 @@ import { Activity, NextPageWithAuth } from '../types';
 import TimeGrid from '../components/dashboard/TimeGrid';
 import Link from 'next/link';
 import { addActivity } from '../utils/addActivity';
-import { updateLog } from '../utils/updateLog';
 import { RecoilRoot } from 'recoil';
+import { updateBlockActivity } from '../utils/updateLog';
 
 const Home: NextPageWithAuth = () => {
   const [activityModalState, setActivityModalState] = useState({
@@ -15,8 +15,6 @@ const Home: NextPageWithAuth = () => {
     showModal: false,
     currentBlockId: 0,
   });
-  // This is used to refresh TimeGrid component, so we can see the latest data.
-  const [timeGridKey, setTimeGridKey] = useState(0);
 
   /**
    * When someone clicks the option to create new activity, we update `activityModalState` to show modal.
@@ -41,13 +39,7 @@ const Home: NextPageWithAuth = () => {
     // 1. Add the new activity
     const activity = await addActivity(name, type);
     // 2. Update the selectedActivity for that Block.
-    updatedActivityOfBlock(activityModalState.currentBlockId, activity.id);
-  };
-
-  const updatedActivityOfBlock = (blockId: number, activityId: number) => {
-    updateLog(blockId, activityId);
-    // Now refresh the TimeGrid component using setTimeGridKey
-    setTimeGridKey((val) => val + 1);
+    updateBlockActivity(activityModalState.currentBlockId, activity.id);
   };
 
   return (
@@ -84,11 +76,7 @@ const Home: NextPageWithAuth = () => {
           {/* Preferences */}
           {/* Reports */}
         </div>
-        <TimeGrid
-          onAdd={addingNewActivity}
-          onUpdate={updatedActivityOfBlock}
-          key={timeGridKey}
-        />
+        <TimeGrid onAdd={addingNewActivity} />
         {/* Grid Table */}
       </div>
       {activityModalState.showModal && (

@@ -1,9 +1,8 @@
 /**
  * Hooks for Data fetching like user, activities, and logs
  */
-import { Log, Profile, User } from '@prisma/client';
+import { Log, Profile, User, Activity } from '@prisma/client';
 import useSWR from 'swr';
-import { Activity } from '../types';
 import { fetcher } from './fetcher';
 
 /**

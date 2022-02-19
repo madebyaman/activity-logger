@@ -1,4 +1,4 @@
-import Block from '../Block';
+import Block from './Block';
 import { useContext, useEffect, useState } from 'react';
 import { Log } from '@prisma/client';
 import { UserPreferencesContext } from '../ProfileContext';
@@ -22,15 +22,12 @@ export const blockTypeColors = {
  */
 const TimeGrid = ({
   onAdd,
-  onUpdate,
 }: {
   onAdd: (input: string, blockId: number) => void;
-  onUpdate: (blockId: number, activityId: number) => void;
 }) => {
   const { userPreferences } = useContext(UserPreferencesContext);
   const { sleepFrom, sleepTo, blocksPerHour } = userPreferences;
 
-  const [blockRefreshKey, setBlockRefreshKey] = useState(0);
   const [blocks, setBlocks] = useRecoilState(blockState);
   const { state, dispatch } = useLoading();
 
@@ -43,7 +40,8 @@ const TimeGrid = ({
         dispatch({ type: 'LOADING' });
         // First send post request to /api/logs/add
         try {
-          const logs = (await fetcher('/api/logs')) as Log[];
+          const logs = (await fetcher('/logs')) as Log[];
+          console.log('logs', logs);
           if (logs) {
             setBlocks(logs);
           }
@@ -101,46 +99,45 @@ const TimeGrid = ({
   return (
     <div className="mt-10">
       {/* Create array of [1, .. 23] */}
-      {Array.from(Array(24).keys())
-        // But eliminate sleep hours.
-        .filter(filterBlocks)
-        // Map for each hour and show as one column
-        .map((currentHour) => {
-          return (
-            <div
-              key={currentHour}
-              className={`grid grid-cols-3 ${gridColumns[blocksPerHour]}`}
-            >
-              <h3 className="font-sans text-4xl place-self-center">
-                {currentHour}
-              </h3>
-              {/* Inside each hour, render its blocks */}
-              {blocks.length &&
-                blocks
-                  .filter(({ hour }) => hour === currentHour)
-                  .sort(sortBlocks)
-                  .map((timeBlock) => {
-                    const { id, to } = timeBlock;
-                    return (
-                      <div
-                        key={id}
-                        className={`min-w-full h-28 px-3 py-6 bg-slate-50 grid place-content-center col-span-2 col-start-2 md:col-start-auto ${
-                          new Date(`${to}`).getMinutes() !== 60 && 'border-r'
-                        }`}
-                      >
-                        <Block
-                          id={id}
-                          activityId={timeBlock.activityId}
-                          onAddActivity={onAdd}
-                          onUpdate={onUpdate}
-                          key={blockRefreshKey}
-                        />
-                      </div>
-                    );
-                  })}
-            </div>
-          );
-        })}
+      {blocks.length
+        ? Array.from(Array(24).keys())
+            // But eliminate sleep hours.
+            .filter(filterBlocks)
+            // Map for each hour and show as one column
+            .map((currentHour) => {
+              return (
+                <div
+                  key={currentHour}
+                  className={`grid grid-cols-3 ${gridColumns[blocksPerHour]}`}
+                >
+                  <h3 className="font-sans text-4xl place-self-center">
+                    {currentHour}
+                  </h3>
+                  {/* Inside each hour, render its blocks */}
+                  {blocks
+                    .filter(({ hour }) => hour === currentHour)
+                    .sort(sortBlocks)
+                    .map((timeBlock) => {
+                      const { id, to } = timeBlock;
+                      return (
+                        <div
+                          key={id}
+                          className={`min-w-full h-28 px-3 py-6 bg-slate-50 grid place-content-center col-span-2 col-start-2 md:col-start-auto ${
+                            new Date(`${to}`).getMinutes() !== 60 && 'border-r'
+                          }`}
+                        >
+                          <Block
+                            id={id}
+                            activityId={timeBlock.activityId}
+                            onAddActivity={onAdd}
+                          />
+                        </div>
+                      );
+                    })}
+                </div>
+              );
+            })
+        : 'No blocks found'}
     </div>
   );
 };
