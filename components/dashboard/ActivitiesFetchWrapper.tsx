@@ -1,5 +1,6 @@
 import { ReactNode, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
+import { ActivitySelect, ActivityType } from '../../types';
 import { useActivities } from '../../utils/hooks';
 import { activitiesState } from './activitiesState';
 
@@ -15,7 +16,14 @@ const ActivitiesFetchWrapper = ({ children }: { children: ReactNode }) => {
       !isLoading &&
       !isError
     ) {
-      setActivities(fetchedActivities);
+      const mappedActivities: ActivitySelect[] = fetchedActivities.map(
+        (activity) => ({
+          label: activity.name,
+          value: activity.id,
+          type: activity.type as ActivityType,
+        })
+      );
+      setActivities(mappedActivities);
     }
   }, [activities, fetchedActivities, isError, isLoading, setActivities]);
 

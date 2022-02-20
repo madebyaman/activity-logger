@@ -7,20 +7,10 @@ export type ActivityType =
   | 'Distracting'
   | 'Very Distracting';
 
-export type Activity = {
-  name: string;
+export type ActivitySelect = {
+  label: string;
   type: ActivityType;
-  id: string;
-};
-
-export type TimeLog = {
-  from: Date;
-  to: Date;
-  activity?: Activity;
-  block: number;
-  blockId: string;
-  hour: number;
-  lastUpdated?: Date;
+  value: number;
 };
 
 export type BlocksPerHourType = 1 | 2 | 4;
