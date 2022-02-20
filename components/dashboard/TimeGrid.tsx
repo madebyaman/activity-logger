@@ -22,10 +22,8 @@ export const blockTypeColors = {
  * 2. `onUpdate`: Func to call when updating activity for a block.
  */
 const TimeGrid = ({
-  onAdd,
   onUpdate,
 }: {
-  onAdd: (input: string, blockId: number) => void;
   onUpdate: (blockId: number, activityId: number) => Promise<void>;
 }) => {
   const { userPreferences } = useContext(UserPreferencesContext);
@@ -106,7 +104,7 @@ const TimeGrid = ({
                         return (
                           <div
                             key={id}
-                            className={`min-w-full h-28 px-3 py-6 bg-slate-50 grid col-span-2 col-start-2 md:col-start-auto ${
+                            className={`w-full place-content-center h-28 px-3 py-6 bg-slate-50 grid col-span-2 col-start-2 md:col-start-auto ${
                               new Date(`${to}`).getMinutes() !== 0 && 'border-r'
                             }`}
                           >
@@ -114,7 +112,6 @@ const TimeGrid = ({
                               <Block
                                 id={id}
                                 activityId={timeBlock.activityId}
-                                onAddActivity={onAdd}
                                 onUpdate={onUpdate}
                               />
                             ) : (

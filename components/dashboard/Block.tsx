@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { OnChangeValue } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { ActivitySelect, ActivityType } from '../../types';
 import { activitiesState } from './activitiesState';
+import { modalState } from './modal/modalState';
 import { blockTypeColors } from './TimeGrid';
 
 // PROPS
@@ -12,12 +13,10 @@ import { blockTypeColors } from './TimeGrid';
 // 3. `onUpdate` func to call when updating activity for a block.
 // 4. `id` of the current block.
 const Block = ({
-  onAddActivity,
   activityId,
   onUpdate,
   id,
 }: {
-  onAddActivity: (input: string, blockId: number) => void;
   onUpdate: (blockId: number, activityId: number) => Promise<void>;
   activityId: number | null;
   id: number;
@@ -26,6 +25,7 @@ const Block = ({
   const [selectedActivity, setSelectedActivity] = useState<
     ActivitySelect | undefined
   >(undefined);
+  const setModalState = useSetRecoilState(modalState);
 
   useEffect(() => {
     if (activities && activityId) {
@@ -36,7 +36,7 @@ const Block = ({
   }, [activities, activityId]);
 
   const createNewOptions = (input: string) => {
-    onAddActivity(input, id);
+    setModalState({ name: input, showModal: true, currentBlockId: id });
   };
 
   // What happens when a new option is selected.
@@ -62,14 +62,27 @@ const Block = ({
         <span
           className={`w-3 h-3 mr-2 inline-block rounded-full ${blockTypeColors[type]}`}
         ></span>
-        <span className="font-light text-gray-700">{label}</span>
+        <span>{label}</span>
       </div>
     );
+  };
+
+  const customStyles = {
+    option: (provided, state) => ({
+      ...provided,
+      background: state.isSelected ? '#262626' : '#ffffff',
+      color: state.isSelected ? '#f9fafb' : '#374151',
+      padding: '0.5rem 1rem',
+      ':hover': {
+        background: !state.isSelected && '#f3f4f6',
+      },
+    }),
   };
 
   return (
     <>
       <CreatableSelect
+        styles={customStyles}
         options={activities}
         placeholder="Pick your activity"
         instanceId="select-activity"
