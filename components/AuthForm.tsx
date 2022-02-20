@@ -68,22 +68,10 @@ const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({ mode }) => {
         {error && <div>{error}</div>}
         <button
           type="submit"
+          disabled={isLoading}
           className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
-          {isLoading ? (
-            <div className="flex justify-center items-center">
-              <div
-                className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full"
-                role="status"
-              >
-                <VisuallyHidden>Loading...</VisuallyHidden>
-              </div>
-            </div>
-          ) : mode === 'signin' ? (
-            'Sign in'
-          ) : (
-            'Sign up'
-          )}
+          {isLoading ? 'Loading...' : mode === 'signin' ? 'Sign in' : 'Sign up'}
         </button>
       </div>
     </form>
