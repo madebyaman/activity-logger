@@ -80,7 +80,7 @@ const TimeGrid = ({
   }
 
   return (
-    <div className="mt-10">
+    <div className="mt-20">
       <ActivitiesFetchWrapper>
         {/* Create array of [1, .. 23] */}
         {blocks.length
@@ -106,7 +106,7 @@ const TimeGrid = ({
                         return (
                           <div
                             key={id}
-                            className={`min-w-full h-28 px-3 py-6 bg-slate-50 grid place-content-center col-span-2 col-start-2 md:col-start-auto ${
+                            className={`min-w-full h-28 px-3 py-6 bg-slate-50 grid col-span-2 col-start-2 md:col-start-auto ${
                               new Date(`${to}`).getMinutes() !== 0 && 'border-r'
                             }`}
                           >

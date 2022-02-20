@@ -3,6 +3,12 @@ import { useContext } from 'react';
 import { UserPreferencesContext } from '../components/ProfileContext';
 import { BlocksPerHourType, NextPageWithAuth } from '../types';
 
+/**
+ * Some Ideas for Tomorrow:
+ * 1. When sleepTo is very close, show a message like "Ghosh what are you sleepy head?"
+ * 2. Push notification option
+ */
+
 const Preferences: NextPageWithAuth = () => {
   const { userPreferences, setUserPreferences } = useContext(
     UserPreferencesContext

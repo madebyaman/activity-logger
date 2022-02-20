@@ -63,16 +63,16 @@ const Block = ({
     <>
       <CreatableSelect
         options={activities}
-        placeholder="Select an activity"
+        placeholder="Pick your activity"
         instanceId="select-activity"
         className="font-light text-gray-700 border-0"
         onCreateOption={createNewOptions}
         getOptionLabel={(option) => option.name}
-        getOptionValue={(option) => option.id.toString()}
+        // getOptionValue={(option) => option.id.toString()}
         value={selectedActivity}
         onChange={handleSelectChange}
         formatOptionLabel={formatOptionLabel}
-        isClearable
+        formatCreateLabel={(input) => `New activity: ${input}`}
       />
     </>
   );
