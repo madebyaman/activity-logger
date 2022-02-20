@@ -14,7 +14,7 @@ import {
 import FlashMessageWrapper from '../components/FlashMessage/FlashMessageWrapper';
 import { flashMessageState } from '../components/FlashMessage/state';
 
-const HomeComponent = () => {
+const Home: NextPageWithAuth = () => {
   const [modal, setModal] = useRecoilState(modalState);
   const [blocks, setBlocks] = useRecoilState(blockState);
   const [flashMessages, setFlashMessages] = useRecoilState(flashMessageState);
@@ -39,7 +39,15 @@ const HomeComponent = () => {
       if (modal.currentBlockId)
         updateBlock(modal.currentBlockId, newActivity.id);
     } catch (e) {
-      console.error('Error adding new activity', e);
+      setFlashMessages([
+        ...flashMessages,
+        {
+          title: 'Error adding new activity',
+          message:
+            'There was a network error while adding a new activity. Try to refresh the page.',
+          type: 'error',
+        },
+      ]);
     }
   };
 
@@ -50,17 +58,7 @@ const HomeComponent = () => {
    */
   const updateBlock = async (blockId: number, activityId: number) => {
     // 1. Update local state
-    const newBlocks = blocks.map((block) => {
-      if (block.id === activityId) {
-        return {
-          ...block,
-          activityId,
-        };
-      } else {
-        return block;
-      }
-    });
-    setBlocks(newBlocks);
+    updateLocalBlock(blockId, activityId);
 
     try {
       await updateBlockActivity(blockId, activityId);
@@ -76,18 +74,27 @@ const HomeComponent = () => {
         },
       ]);
       //2. Reset the local state
-      const newBlocks = blocks.map((block) => {
-        if (block.id === activityId) {
-          return {
-            ...block,
-            activityId: null,
-          };
-        } else {
-          return block;
-        }
-      });
-      setBlocks(newBlocks);
+      updateLocalBlock(blockId, null);
     }
+  };
+
+  /**
+   * This function updates the local state with the `activityId`
+   * @param blockId Block id to be updated
+   * @param activityId activity Id to update with.
+   */
+  const updateLocalBlock = (blockId: number, activityId: number | null) => {
+    const newBlocks = blocks.map((block) => {
+      if (block.id === blockId) {
+        return {
+          ...block,
+          activityId,
+        };
+      } else {
+        return block;
+      }
+    });
+    setBlocks(newBlocks);
   };
 
   return (
@@ -130,14 +137,6 @@ const HomeComponent = () => {
       <Modal onSubmit={onSubmitNewActivity} />
       <FlashMessageWrapper />
     </div>
-  );
-};
-
-const Home: NextPageWithAuth = () => {
-  return (
-    <RecoilRoot>
-      <HomeComponent />
-    </RecoilRoot>
   );
 };
 

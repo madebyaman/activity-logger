@@ -1,29 +1,34 @@
 import { useRouter } from 'next/router';
 import { FC, FormEvent, useState } from 'react';
+import { useRecoilState } from 'recoil';
 import { auth } from '../utils/auth';
-import VisuallyHidden from '@reach/visually-hidden';
+import { flashMessageState } from './FlashMessage/state';
 
 const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({ mode }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [flashMessages, setFlashMessages] = useRecoilState(flashMessageState);
   const router = useRouter();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const res = await auth(mode, { email, password });
-      // After auth, backend should attach a cookie if fetch is successful, or else should send an error json
-      setIsLoading(false);
-      if (res.status === 401 && mode === 'signin') {
-        setError('Email or password is wrong');
-      } else {
-        router.push('/');
-      }
+      await auth(mode, { email, password });
+      router.push('/');
     } catch (err) {
-      console.error(err);
+      setFlashMessages([
+        ...flashMessages,
+        {
+          title: 'Error submitting form',
+          message:
+            'Something went wrong while submitting your form. Refresh the page and try again.',
+          type: 'error',
+        },
+      ]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -65,7 +70,6 @@ const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({ mode }) => {
       </div>
 
       <div>
-        {error && <div>{error}</div>}
         <button
           type="submit"
           disabled={isLoading}

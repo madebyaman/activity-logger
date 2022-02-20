@@ -2,6 +2,7 @@ import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import { NextPageWithAuth } from '../types';
 import ProfileContext from '../components/ProfileContext';
+import { RecoilRoot } from 'recoil';
 
 type ComponentPropsWithAuth = AppProps & {
   Component: NextPageWithAuth;
@@ -11,11 +12,17 @@ function MyApp({ Component, pageProps }: ComponentPropsWithAuth) {
   if (Component.protectedRoute) {
     return (
       <ProfileContext>
-        <Component {...pageProps} />
+        <RecoilRoot>
+          <Component {...pageProps} />
+        </RecoilRoot>
       </ProfileContext>
     );
   } else {
-    return <Component {...pageProps} />;
+    return (
+      <RecoilRoot>
+        <Component {...pageProps} />
+      </RecoilRoot>
+    );
   }
 }
 
