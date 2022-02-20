@@ -11,14 +11,17 @@ import {
   addActivity,
   updateBlockActivity,
 } from '../components/dashboard/utils';
+import FlashMessageWrapper from '../components/FlashMessage/FlashMessageWrapper';
+import { flashMessageState } from '../components/FlashMessage/state';
 
 const HomeComponent = () => {
   const [modal, setModal] = useRecoilState(modalState);
   const [blocks, setBlocks] = useRecoilState(blockState);
+  const [flashMessages, setFlashMessages] = useRecoilState(flashMessageState);
 
   /**
    * When a new activity is submitted
-   * @param param0 New Activity to be added
+   * @param Object New Activity to be added
    */
   const onSubmitNewActivity = async ({
     name,
@@ -46,19 +49,44 @@ const HomeComponent = () => {
    * @param activityId Activity id to update with.
    */
   const updateBlock = async (blockId: number, activityId: number) => {
+    // 1. Update local state
+    const newBlocks = blocks.map((block) => {
+      if (block.id === activityId) {
+        return {
+          ...block,
+          activityId,
+        };
+      } else {
+        return block;
+      }
+    });
+    setBlocks(newBlocks);
+
     try {
-      const updatedBlock = await updateBlockActivity(blockId, activityId);
-      // Update local state
+      await updateBlockActivity(blockId, activityId);
+    } catch (e) {
+      // 1. Show warning flash message
+      setFlashMessages([
+        ...flashMessages,
+        {
+          title: 'Error updating block',
+          message:
+            'Something went wrong. There was an network error while updating the block. Please try again.',
+          type: 'warning',
+        },
+      ]);
+      //2. Reset the local state
       const newBlocks = blocks.map((block) => {
-        if (block.id === updatedBlock.id) {
-          return updatedBlock;
+        if (block.id === activityId) {
+          return {
+            ...block,
+            activityId: null,
+          };
         } else {
           return block;
         }
       });
       setBlocks(newBlocks);
-    } catch (e) {
-      console.log(e);
     }
   };
 
@@ -100,6 +128,7 @@ const HomeComponent = () => {
       </div>
       {/* Modal */}
       <Modal onSubmit={onSubmitNewActivity} />
+      <FlashMessageWrapper />
     </div>
   );
 };
