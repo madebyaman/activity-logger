@@ -1,12 +1,13 @@
-import Block from './Block';
 import { useContext, useEffect } from 'react';
 import { Log } from '@prisma/client';
-import { UserPreferencesContext } from '../ProfileContext';
 import { useRecoilState } from 'recoil';
-import { blockState } from './blockState';
+
+import { UserPreferencesContext } from '../ProfileContext';
+import Block from './Block';
 import ActivitiesFetchWrapper from './ActivitiesFetchWrapper';
 import { useBlocks } from '../../utils/hooks';
-import { allowBlockEdit } from './allowBlockEdit';
+import { blockState } from './state';
+import { allowBlockEdit } from './utils';
 
 export const blockTypeColors = {
   Neutral: 'bg-gray-500',
@@ -104,7 +105,7 @@ const TimeGrid = ({
                         return (
                           <div
                             key={id}
-                            className={`w-full place-content-center h-28 px-3 py-6 bg-slate-50 grid col-span-2 col-start-2 md:col-start-auto ${
+                            className={`min-w-full h-28 px-3 py-6 bg-slate-50 grid col-span-2 col-start-2 md:col-start-auto ${
                               new Date(`${to}`).getMinutes() !== 0 && 'border-r'
                             }`}
                           >

@@ -1,7 +1,7 @@
 import { FormEvent, useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { ActivityType } from '../../../types';
-import { modalState } from './modalState';
+import { ActivityType } from '../../types';
+import { modalState } from './state';
 
 const Modal = ({
   onSubmit,

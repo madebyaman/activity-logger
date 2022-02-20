@@ -2,7 +2,7 @@ import { ReactNode, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import { ActivitySelect, ActivityType } from '../../types';
 import { useActivities } from '../../utils/hooks';
-import { activitiesState } from './activitiesState';
+import { activitiesState } from './state';
 
 // Fetches activities and puts them in the state.
 const ActivitiesFetchWrapper = ({ children }: { children: ReactNode }) => {

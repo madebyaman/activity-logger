@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { OnChangeValue } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+
 import { ActivitySelect, ActivityType } from '../../types';
-import { activitiesState } from './activitiesState';
-import { modalState } from './modal/modalState';
+import { activitiesState, modalState } from './state';
 import { blockTypeColors } from './TimeGrid';
 
 // PROPS
@@ -21,7 +21,7 @@ const Block = ({
   activityId: number | null;
   id: number;
 }) => {
-  const [activities, setActivities] = useRecoilState(activitiesState);
+  const activities = useRecoilValue(activitiesState);
   const [selectedActivity, setSelectedActivity] = useState<
     ActivitySelect | undefined
   >(undefined);
@@ -68,7 +68,7 @@ const Block = ({
   };
 
   const customStyles = {
-    option: (provided, state) => ({
+    option: (provided: any, state: { isSelected: any }) => ({
       ...provided,
       background: state.isSelected ? '#262626' : '#ffffff',
       color: state.isSelected ? '#f9fafb' : '#374151',
@@ -76,6 +76,10 @@ const Block = ({
       ':hover': {
         background: !state.isSelected && '#f3f4f6',
       },
+    }),
+    menu: (provided: any, state: any) => ({
+      ...provided,
+      top: '40px',
     }),
   };
 

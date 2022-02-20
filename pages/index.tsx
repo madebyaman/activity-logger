@@ -1,14 +1,16 @@
 import moment from 'moment';
 import { AiOutlinePieChart, AiOutlineTool } from 'react-icons/ai';
-import TimeGrid from '../components/dashboard/TimeGrid';
-import Link from 'next/link';
-import { addActivity } from '../utils/addActivity';
 import { RecoilRoot, useRecoilState } from 'recoil';
-import { updateBlockActivity } from '../utils/updateLog';
-import { blockState } from '../components/dashboard/blockState';
+import Link from 'next/link';
+
+import TimeGrid from '../components/dashboard/TimeGrid';
 import { ActivityType, NextPageWithAuth } from '../types';
-import { modalState } from '../components/dashboard/modal/modalState';
 import Modal from '../components/dashboard/modal';
+import { blockState, modalState } from '../components/dashboard/state';
+import {
+  addActivity,
+  updateBlockActivity,
+} from '../components/dashboard/utils';
 
 const HomeComponent = () => {
   const [modal, setModal] = useRecoilState(modalState);
