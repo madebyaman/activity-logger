@@ -4,26 +4,23 @@ import { UserPreferencesContext } from '../components/ProfileContext';
 import { BlocksPerHourType, NextPageWithAuth } from '../types';
 
 /**
- * Some Ideas for Tomorrow:
- * 1. When sleepTo is very close, show a message like "Ghosh what are you sleepy head?"
- * 2. Push notification option
+ * Returns array of {value, label} of all hour options.
  */
+const hourOptions = Array.from(Array(24).keys()).map((hour) => {
+  const AMOrPM = hour >= 12 ? 'PM' : 'AM';
+  const stringHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
+  return {
+    value: hour,
+    label: `${stringHour} ${AMOrPM}`,
+  };
+});
 
 const Preferences: NextPageWithAuth = () => {
   const { userPreferences, setUserPreferences } = useContext(
     UserPreferencesContext
   );
 
-  const hourOptions = Array.from(Array(24).keys()).map((hour) => {
-    const AMOrPM = hour >= 12 ? 'PM' : 'AM';
-    const stringHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
-    return {
-      value: hour,
-      label: `${stringHour} ${AMOrPM}`,
-    };
-  });
-
-  if (!setUserPreferences) {
+  if (!userPreferences) {
     return <div></div>;
   }
 

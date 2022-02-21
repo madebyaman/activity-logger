@@ -11,6 +11,7 @@
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "dependencies": {
+    "@headlessui/react": "^1.5.0",
     "@prisma/client": "3.8.1",
     "@reach/visually-hidden": "^0.16.0",
     "bcrypt": "^5.0.1",
