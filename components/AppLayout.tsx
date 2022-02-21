@@ -1,32 +1,41 @@
-import { Fragment, ReactNode } from 'react';
+import { Fragment, ReactNode, useContext } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { AiOutlineClose, AiOutlineMenu, AiOutlineUser } from 'react-icons/ai';
 import { RecoilRoot } from 'recoil';
-import ProfileContext from './ProfileContext';
+import ProfileContext, { UserPreferencesContext } from './ProfileContext';
 import FlashMessageWrapper from './FlashMessage/FlashMessageWrapper';
 import moment from 'moment';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-
-const user = {
-  name: 'Tom Cook',
-  email: 'tom@example.com',
-};
-const navigation = [
-  { name: 'Dashboard', href: '/', current: true },
-  { name: 'Reports', href: '#', current: false }, // TODO
-];
-const userNavigation = [
-  { name: 'Settings', href: '/preferences' },
-  { name: 'Sign out', href: '#' }, // TODO
-];
+import { fetcher } from '../utils/fetcher';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
 export default function AppLayout({ children }: { children: ReactNode }) {
+  const { userPreferences } = useContext(UserPreferencesContext);
+  const user = {
+    name: userPreferences.firstName + ' ' + userPreferences.lastName,
+  };
   const router = useRouter();
+
+  const logout = async () => {
+    const res = await fetcher('/logout');
+    if (res) {
+      router.push('/signin');
+    }
+  };
+
+  const navigation = [
+    { name: 'Dashboard', href: '/', current: true },
+    { name: 'Reports', href: '#', current: false }, // TODO
+  ];
+
+  const userNavigation = [
+    { name: 'Settings', href: '/preferences' },
+    { name: 'Sign out', href: '#', onclick: logout },
+  ];
 
   return (
     <ProfileContext>
@@ -95,6 +104,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                                           active ? 'bg-gray-100' : '',
                                           'block px-4 py-2 text-sm text-gray-700'
                                         )}
+                                        onClick={item.onclick || undefined}
                                       >
                                         {item.name}
                                       </a>
@@ -154,9 +164,6 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                       <div className="ml-3">
                         <div className="text-base font-medium leading-none text-white">
                           {user.name}
-                        </div>
-                        <div className="text-sm font-medium leading-none text-gray-400">
-                          {user.email}
                         </div>
                       </div>
                     </div>
