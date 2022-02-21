@@ -19,6 +19,8 @@ export type UserPreferences = {
   sleepFrom: number;
   sleepTo: number;
   blocksPerHour: BlocksPerHourType;
+  firstName: string | null;
+  lastName: string | null;
 };
 
 export type NextPageWithAuth = NextPage & {

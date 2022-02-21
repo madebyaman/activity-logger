@@ -1,4 +1,4 @@
-import { ActivityType } from '../types';
+import { ActivityType, UserPreferences } from '../types';
 
 type AddActivityData = {
   name: string;
@@ -15,6 +15,7 @@ type UpdateLog = {
 export async function fetcher(
   url: string,
   data:
+    | UserPreferences
     | AddActivityData
     | UpdateLog
     | { email: string; password: string }

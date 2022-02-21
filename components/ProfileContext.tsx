@@ -13,6 +13,8 @@ const initialUserPreferences: UserPreferences = {
   sleepFrom: 20,
   sleepTo: 6,
   blocksPerHour: 4,
+  firstName: null,
+  lastName: null,
 };
 
 export const UserPreferencesContext = createContext<{
@@ -34,6 +36,8 @@ export default function ProfileContext({ children }: { children: ReactNode }) {
         sleepFrom: profile.sleepFrom,
         sleepTo: profile.sleepTo,
         blocksPerHour: profile.blocksPerHour as BlocksPerHourType,
+        firstName: profile.firstName,
+        lastName: profile.lastName,
       });
     }
   }, [profile]);

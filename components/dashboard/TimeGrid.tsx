@@ -8,6 +8,7 @@ import ActivitiesFetchWrapper from './ActivitiesFetchWrapper';
 import { useBlocks } from '../../utils/hooks';
 import { blockState } from './state';
 import { allowBlockEdit } from './utils';
+import { convertNumberToHourFormat } from '../../utils/convertNumberToHour';
 
 export const blockTypeColors = {
   Neutral: 'bg-gray-500',
@@ -94,7 +95,7 @@ const TimeGrid = ({
                     className={`grid grid-cols-3 ${gridColumns[blocksPerHour]}`}
                   >
                     <h3 className="font-sans text-4xl place-self-center">
-                      {currentHour}
+                      {convertNumberToHourFormat(currentHour)}
                     </h3>
                     {/* Inside each hour, render its blocks */}
                     {blocks

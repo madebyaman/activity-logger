@@ -20,27 +20,36 @@ export default validateRoute(async (req, res, user) => {
     blocksPerHour = profile.blocksPerHour;
   }
 
-  if (logs.length) {
+  if (logs.length === blocksPerHour * 24) {
+    console.log('ideal logs found');
     // If logs found, return them
     return res.json(logs);
-  } else {
-    // Else, add logs for today based on blocksPerHour.
-    await Promise.all(
-      initialState(blocksPerHour).map(({ from, to, hour }) => {
-        return prisma.log.create({
-          data: {
-            from,
-            hour,
-            to,
-            date,
-            User: {
-              connect: { id: user.id },
-            },
-          },
-        });
-      })
-    );
-    const newLogs = await prisma.log.findMany({ where: { date: date } });
-    return res.json(newLogs);
+  } else if (logs.length) {
+    console.log('not ideal logs found');
+    // Clear out the logs that are found. B/c it is not of ideal size.
+    await prisma.log.deleteMany({
+      where: {
+        date: date,
+      },
+    });
   }
+  console.log('adding new logs');
+  // Then, add logs for today based on blocksPerHour.
+  await Promise.all(
+    initialState(blocksPerHour).map(({ from, to, hour }) => {
+      return prisma.log.create({
+        data: {
+          from,
+          hour,
+          to,
+          date,
+          User: {
+            connect: { id: user.id },
+          },
+        },
+      });
+    })
+  );
+  const newLogs = await prisma.log.findMany({ where: { date: date } });
+  return res.json(newLogs);
 });
