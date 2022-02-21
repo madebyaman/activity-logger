@@ -99,36 +99,10 @@ const Home: NextPageWithAuth = () => {
   return (
     <div>
       <div
-        className={`max-w-screen-lg w-11/12 px-4 mx-auto ${
+        className={`${
           modal.showModal && 'overflow-hidden blur-sm fixed pointer-events-none'
         }`}
       >
-        <div className="flex mt-10">
-          {/* Flex */}
-          <h2 className="flex-1 text-4xl font-sans uppercase font-black">
-            {moment().format('LL')}
-          </h2>
-          {/* Today's date */}
-          <Link href={'/preferences'}>
-            <a
-              aria-label="User preferences"
-              className="bg-gray-600 rounded-full p-2 text-white"
-            >
-              {/* These buttons are not responsive. They kind of stretch once gone below the display size. */}
-              <AiOutlineTool size={28} />
-            </a>
-          </Link>
-          <Link href="/">
-            <a
-              aria-label="Reports"
-              className="ml-4 bg-gray-600 rounded-full p-2 text-white"
-            >
-              <AiOutlinePieChart size={28} />
-            </a>
-          </Link>
-          {/* Preferences */}
-          {/* Reports */}
-        </div>
         <TimeGrid onUpdate={updateBlock} />
         {/* Grid Table */}
       </div>

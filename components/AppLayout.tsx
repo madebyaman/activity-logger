@@ -1,29 +1,24 @@
-/* This example requires Tailwind CSS v2.0+ */
 import { Fragment, ReactNode } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
-import {
-  AiOutlineBell,
-  AiOutlineClose,
-  AiOutlineMenu,
-  AiOutlineUser,
-} from 'react-icons/ai';
+import { AiOutlineClose, AiOutlineMenu, AiOutlineUser } from 'react-icons/ai';
 import { RecoilRoot } from 'recoil';
 import ProfileContext from './ProfileContext';
 import FlashMessageWrapper from './FlashMessage/FlashMessageWrapper';
+import moment from 'moment';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const user = {
   name: 'Tom Cook',
   email: 'tom@example.com',
-  imageUrl:
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 };
 const navigation = [
-  { name: 'Dashboard', href: '#', current: true },
-  { name: 'Reports', href: '#', current: false },
+  { name: 'Dashboard', href: '/', current: true },
+  { name: 'Reports', href: '#', current: false }, // TODO
 ];
 const userNavigation = [
-  { name: 'Settings', href: '#' },
-  { name: 'Sign out', href: '#' },
+  { name: 'Settings', href: '/preferences' },
+  { name: 'Sign out', href: '#' }, // TODO
 ];
 
 function classNames(...classes: string[]) {
@@ -31,6 +26,8 @@ function classNames(...classes: string[]) {
 }
 
 export default function AppLayout({ children }: { children: ReactNode }) {
+  const router = useRouter();
+
   return (
     <ProfileContext>
       <RecoilRoot>
@@ -46,43 +43,37 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                       </div>
                       <div className="hidden md:block">
                         <div className="ml-10 flex items-baseline space-x-4">
-                          {navigation.map((item) => (
-                            <a
-                              key={item.name}
-                              href={item.href}
-                              className={classNames(
-                                item.current
-                                  ? 'bg-gray-900 text-white'
-                                  : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                                'px-3 py-2 rounded-md text-sm font-medium'
-                              )}
-                              aria-current={item.current ? 'page' : undefined}
-                            >
-                              {item.name}
-                            </a>
-                          ))}
+                          {navigation.map((item) => {
+                            const isCurrent = router.pathname === item.href;
+                            return (
+                              <Link key={item.name} href={item.href}>
+                                <a
+                                  className={classNames(
+                                    isCurrent
+                                      ? 'bg-gray-900 text-white'
+                                      : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                                    'px-3 py-2 rounded-md text-sm font-medium'
+                                  )}
+                                  aria-current={
+                                    item.current ? 'page' : undefined
+                                  }
+                                >
+                                  {item.name}
+                                </a>
+                              </Link>
+                            );
+                          })}
                         </div>
                       </div>
                     </div>
                     <div className="hidden md:block">
                       <div className="ml-4 flex items-center md:ml-6">
-                        <button
-                          type="button"
-                          className="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-                        >
-                          <span className="sr-only">View notifications</span>
-                          <AiOutlineBell
-                            className="h-6 w-6"
-                            aria-hidden="true"
-                          />
-                        </button>
-
                         {/* Profile dropdown */}
                         <Menu as="div" className="ml-3 relative">
                           <div>
                             <Menu.Button className="max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                               <span className="sr-only">Open user menu</span>
-                              <AiOutlineUser className="h-8 w-8 text-white" />
+                              <AiOutlineUser className="border-2 border-gray-400 rounded-full p-1 h-8 w-8 text-gray-400" />
                             </Menu.Button>
                           </div>
                           <Transition
@@ -98,15 +89,16 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                               {userNavigation.map((item) => (
                                 <Menu.Item key={item.name}>
                                   {({ active }) => (
-                                    <a
-                                      href={item.href}
-                                      className={classNames(
-                                        active ? 'bg-gray-100' : '',
-                                        'block px-4 py-2 text-sm text-gray-700'
-                                      )}
-                                    >
-                                      {item.name}
-                                    </a>
+                                    <Link href={item.href}>
+                                      <a
+                                        className={classNames(
+                                          active ? 'bg-gray-100' : '',
+                                          'block px-4 py-2 text-sm text-gray-700'
+                                        )}
+                                      >
+                                        {item.name}
+                                      </a>
+                                    </Link>
                                   )}
                                 </Menu.Item>
                               ))}
@@ -157,7 +149,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                   <div className="pt-4 pb-3 border-t border-gray-700">
                     <div className="flex items-center px-5">
                       <div className="flex-shrink-0">
-                        <AiOutlineUser className="h-10 w-10 text-white" />
+                        <AiOutlineUser className="rounded-full p-1 h-8 w-8 text-gray-400" />
                       </div>
                       <div className="ml-3">
                         <div className="text-base font-medium leading-none text-white">
@@ -167,13 +159,6 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                           {user.email}
                         </div>
                       </div>
-                      <button
-                        type="button"
-                        className="ml-auto bg-gray-800 flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-                      >
-                        <span className="sr-only">View notifications</span>
-                        <AiOutlineBell className="h-6 w-6" aria-hidden="true" />
-                      </button>
                     </div>
                     <div className="mt-3 px-2 space-y-1">
                       {userNavigation.map((item) => (
@@ -195,11 +180,17 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 
           <header className="bg-white shadow">
             <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-              <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+              <h1 className="text-3xl font-bold text-gray-900">
+                {router.pathname === '/'
+                  ? moment().format('LL')
+                  : router.pathname === '/preferences'
+                  ? 'Preferences'
+                  : 'Reports'}
+              </h1>
             </div>
           </header>
           <main>
-            <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
               {/* Replace with your content */}
               {children}
               {/* /End replace */}
