@@ -3,7 +3,7 @@ import { atom } from 'recoil';
 type DefaultState = {
   message: string;
   title: string;
-  type: 'error' | 'warning';
+  type: 'error' | 'warning' | 'success';
 };
 
 const defaultState: DefaultState[] = [];

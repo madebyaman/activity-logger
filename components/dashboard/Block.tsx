@@ -22,16 +22,18 @@ const Block = ({
   id: number;
 }) => {
   const activities = useRecoilValue(activitiesState);
-  const [selectedActivity, setSelectedActivity] = useState<
-    ActivitySelect | undefined
-  >(undefined);
+  const [selectedActivity, setSelectedActivity] =
+    useState<ActivitySelect | null>(null);
   const setModalState = useSetRecoilState(modalState);
 
   useEffect(() => {
-    if (activities && activityId) {
-      setSelectedActivity(
-        activities.find((activity) => Number(activity.value) === activityId)
-      );
+    if (!activityId) setSelectedActivity(null);
+
+    if (activities) {
+      const newSelectedActivity =
+        activities.find((activity) => Number(activity.value) === activityId) ||
+        null;
+      setSelectedActivity(newSelectedActivity);
     }
   }, [activities, activityId]);
 

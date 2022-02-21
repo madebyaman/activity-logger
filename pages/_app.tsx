@@ -3,6 +3,7 @@ import type { AppProps } from 'next/app';
 import { NextPageWithAuth } from '../types';
 import ProfileContext from '../components/ProfileContext';
 import { RecoilRoot } from 'recoil';
+import FlashMessageWrapper from '../components/FlashMessage/FlashMessageWrapper';
 
 type ComponentPropsWithAuth = AppProps & {
   Component: NextPageWithAuth;
@@ -14,6 +15,7 @@ function MyApp({ Component, pageProps }: ComponentPropsWithAuth) {
       <ProfileContext>
         <RecoilRoot>
           <Component {...pageProps} />
+          <FlashMessageWrapper />
         </RecoilRoot>
       </ProfileContext>
     );
@@ -21,6 +23,7 @@ function MyApp({ Component, pageProps }: ComponentPropsWithAuth) {
     return (
       <RecoilRoot>
         <Component {...pageProps} />
+        <FlashMessageWrapper />
       </RecoilRoot>
     );
   }

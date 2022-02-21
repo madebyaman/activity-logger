@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
 import prisma from '../../utils/prisma';
 
-export default async function signup(
+export default async function signin(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -36,6 +36,5 @@ export default async function signup(
     return res.json(user);
   }
   res.status(401);
-  res.json({ error: 'User already exists' });
-  return;
+  res.json({ error: "User doesn't exist" });
 }

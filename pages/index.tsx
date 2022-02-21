@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { AiOutlinePieChart, AiOutlineTool } from 'react-icons/ai';
-import { RecoilRoot, useRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import Link from 'next/link';
 
 import TimeGrid from '../components/dashboard/TimeGrid';
@@ -11,7 +11,6 @@ import {
   addActivity,
   updateBlockActivity,
 } from '../components/dashboard/utils';
-import FlashMessageWrapper from '../components/FlashMessage/FlashMessageWrapper';
 import { flashMessageState } from '../components/FlashMessage/state';
 
 const Home: NextPageWithAuth = () => {
@@ -135,7 +134,6 @@ const Home: NextPageWithAuth = () => {
       </div>
       {/* Modal */}
       <Modal onSubmit={onSubmitNewActivity} />
-      <FlashMessageWrapper />
     </div>
   );
 };

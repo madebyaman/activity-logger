@@ -15,7 +15,30 @@ const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({ mode }) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await auth(mode, { email, password });
+      const res = await auth(mode, { email, password });
+      // res will be undefined if status is not between 200 and 300.
+      if (res) {
+        router.push('/');
+        setFlashMessages([
+          ...flashMessages,
+          {
+            title: 'Success',
+            message: `You have successfully ${
+              mode === 'signin' ? 'logged in' : 'signed up'
+            }`,
+            type: 'success',
+          },
+        ]);
+      } else {
+        setFlashMessages([
+          ...flashMessages,
+          {
+            title: 'Error',
+            message: 'Your email or password is incorrect. Please try again.',
+            type: 'error',
+          },
+        ]);
+      }
       router.push('/');
     } catch (err) {
       setFlashMessages([
