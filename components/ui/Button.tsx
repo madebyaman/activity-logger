@@ -1,53 +1,42 @@
-import { ReactNode } from 'react';
+import { Children, ReactNode } from 'react';
+import { classNames } from '../../utils';
 
-type ButtonType = 'outline' | 'disabled' | 'iconButton';
+type ButtonType = 'outline' | 'disabled';
 
 interface ButtonPropsInterface {
   buttonType?: ButtonType;
-  icon?: ReactNode;
-  buttonName: string;
+  children: ReactNode;
 }
 
-const baseButtonStyles =
-  'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline';
-const disabledButtonStyles = baseButtonStyles + ' cursor-not-allowed';
+const baseButtonStyles = 'font-bold py-2 px-4 rounded';
+const defaultButtonStyles =
+  baseButtonStyles +
+  ' ' +
+  'bg-blue-500 hover:bg-blue-700 text-white focus:outline-none focus:shadow-outline';
+const disabledButtonStyles =
+  baseButtonStyles + ' bg-blue-500 text-white opacity-50 cursor-not-allowed';
 const outlineButtonStyles =
   baseButtonStyles +
-  ' bg-transparent hover:bg-blue-500 text-blue-700 hover:text-white border-blue-500 hover:border-transparent';
-const iconButtonStyles = baseButtonStyles + ' inline-flex items-center';
+  ' bg-transparent hover:bg-blue-500 text-blue-700 hover:text-white border border-blue-500 hover:border-transparent';
 
 export const Button = ({
-  buttonName,
-  icon,
+  children,
   buttonType,
   ...rest
 }: ButtonPropsInterface) => {
-  switch (buttonType) {
-    case 'disabled':
-      return (
-        <button className={disabledButtonStyles} type="button">
-          {buttonName}
-        </button>
-      );
-    case 'outline':
-      return (
-        <button className={outlineButtonStyles} type="button">
-          {buttonName}
-        </button>
-      );
-
-    case 'iconButton':
-      return (
-        <button className={iconButtonStyles} type="button">
-          {icon}
-          {buttonName}
-        </button>
-      );
-    default:
-      return (
-        <button className={baseButtonStyles} type="button">
-          {buttonName}
-        </button>
-      );
-  }
+  return (
+    <button
+      className={classNames(
+        buttonType === 'disabled'
+          ? disabledButtonStyles
+          : buttonType === 'outline'
+          ? outlineButtonStyles
+          : defaultButtonStyles,
+        Children.count(children) > 1 ? 'inline-flex items-center' : ''
+      )}
+      type="button"
+    >
+      {children}
+    </button>
+  );
 };
