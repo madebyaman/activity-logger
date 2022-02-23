@@ -8,10 +8,7 @@ import moment from 'moment';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { fetcher } from '../utils/fetcher';
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
-}
+import { classNames } from '../utils';
 
 export default function AppLayout({ children }: { children: ReactNode }) {
   const { userPreferences } = useContext(UserPreferencesContext);
