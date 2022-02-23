@@ -3,7 +3,7 @@ import type { AppProps } from 'next/app';
 import { NextPageWithAuth } from '../types';
 import { RecoilRoot } from 'recoil';
 import FlashMessageWrapper from '../components/FlashMessage/FlashMessageWrapper';
-import AppLayout from '../components/AppLayout';
+import { AppLayout } from '../components/ui/AppLayout';
 
 type ComponentPropsWithAuth = AppProps & {
   Component: NextPageWithAuth;
@@ -12,7 +12,7 @@ type ComponentPropsWithAuth = AppProps & {
 function MyApp({ Component, pageProps }: ComponentPropsWithAuth) {
   if (Component.protectedRoute) {
     return (
-      <AppLayout>
+      <AppLayout userName="Aman">
         <Component {...pageProps} />
       </AppLayout>
     );
