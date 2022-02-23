@@ -1,10 +1,20 @@
-import { Children, ReactNode } from 'react';
+import {
+  ButtonHTMLAttributes,
+  Children,
+  DetailedHTMLProps,
+  ReactNode,
+} from 'react';
 import { classNames } from '../../utils';
 
 type ButtonType = 'outline' | 'disabled';
 
-interface ButtonPropsInterface {
+interface ButtonPropsInterface
+  extends DetailedHTMLProps<
+    ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  > {
   buttonType?: ButtonType;
+  classes?: string;
   children: ReactNode;
 }
 
@@ -22,11 +32,14 @@ const outlineButtonStyles =
 export const Button = ({
   children,
   buttonType,
+  classes,
   ...rest
 }: ButtonPropsInterface) => {
   return (
     <button
+      {...rest}
       className={classNames(
+        classes || '',
         buttonType === 'disabled'
           ? disabledButtonStyles
           : buttonType === 'outline'
