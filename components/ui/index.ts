@@ -4,3 +4,6 @@ export { Label } from './Label';
 export { Select } from './Select';
 export { Option } from './Option';
 export { Heading } from './Headings';
+export { TextLink } from './TextLink';
+export { FlashMessage } from './FlashMessage';
+export { CenteredLayout } from './CenteredLayout';

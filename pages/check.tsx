@@ -1,9 +1,18 @@
-import { Button, Select, TextInput, Option, Heading } from '../components/ui';
+import {
+  Button,
+  Select,
+  TextInput,
+  Option,
+  Heading,
+  TextLink,
+  FlashMessage,
+  CenteredLayout,
+} from '../components/ui';
 import { Label } from '../components/ui/Label';
 
 const CheckComponents = () => {
   return (
-    <div className="container my-0 mx-auto mt-4">
+    <CenteredLayout>
       <Heading type="h1">Check components</Heading>
       <Label htmlFor="name" labelName="Name" />
       <TextInput id="name" />
@@ -26,7 +35,15 @@ const CheckComponents = () => {
         <Option>New Jersey</Option>
         <Option>New Hampshire</Option>
       </Select>
-    </div>
+      <Heading type="h2">Link Component</Heading>
+      <TextLink href="https://www.google.com">Google</TextLink>
+      <Heading type="h2">Flash Message</Heading>
+      <FlashMessage
+        message="Something not ideal might be happening"
+        title="Be warned"
+        type="success"
+      />
+    </CenteredLayout>
   );
 };
 
