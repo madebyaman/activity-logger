@@ -1,18 +1,15 @@
-import { Fragment, ReactNode, useState } from 'react';
+import { Fragment, ReactNode } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { AiOutlineClose, AiOutlineMenu, AiOutlineUser } from 'react-icons/ai';
 import moment from 'moment';
 import Link from 'next/link';
 import { classNames } from '../../utils';
 import { useRouter } from 'next/router';
+import { useRecoilValue } from 'recoil';
+import { profileState } from '../user';
 
-export const AppLayout = ({
-  children,
-  userName,
-}: {
-  children: ReactNode;
-  userName: string;
-}) => {
+export const AppLayout = ({ children }: { children: ReactNode }) => {
+  const profile = useRecoilValue(profileState);
   const router = useRouter();
 
   const navigation = [
@@ -151,7 +148,7 @@ export const AppLayout = ({
                   </div>
                   <div className="ml-3">
                     <div className="text-base font-medium leading-none text-white">
-                      {userName}
+                      {profile.firstName + ' ' + profile.lastName}
                     </div>
                   </div>
                 </div>

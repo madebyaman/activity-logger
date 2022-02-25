@@ -1,17 +1,11 @@
 import { NextPage } from 'next';
 
-export type ActivityType =
+export type ActivityTypes =
   | 'Neutral'
   | 'Productive'
   | 'Very Productive'
   | 'Distracting'
   | 'Very Distracting';
-
-export type ActivitySelect = {
-  label: string;
-  type: ActivityType;
-  value: number;
-};
 
 export type BlocksPerHourType = 1 | 2 | 4;
 
@@ -25,4 +19,24 @@ export type UserPreferences = {
 
 export type NextPageWithAuth = NextPage & {
   protectedRoute: Boolean;
+};
+
+export type SigninProps = {
+  email: string;
+  password: string;
+};
+
+export type SignupProps = SigninProps & {
+  firstName: string;
+  lastName: string;
+};
+
+export type AuthSigninProps = {
+  mode: 'signin';
+  body: SigninProps;
+};
+
+export type AuthSignupProps = {
+  mode: 'signup';
+  body: SignupProps;
 };

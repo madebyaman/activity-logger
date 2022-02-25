@@ -1,35 +1,23 @@
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Log } from '@prisma/client';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
-import { UserPreferencesContext } from '../ProfileContext';
-import Block from './Block';
-import ActivitiesFetchWrapper from './ActivitiesFetchWrapper';
-import { useBlocks } from '../../utils/hooks';
+import { useBlocks } from './useBlocks';
 import { blockState } from './state';
-import { allowBlockEdit } from './utils';
-import { convertNumberToHourFormat } from '../../utils/convertNumberToHour';
-
-export const blockTypeColors = {
-  Neutral: 'bg-gray-500',
-  Productive: 'bg-green-300',
-  'Very Productive': `bg-green-600`,
-  Distracting: `bg-orange-400`,
-  'Very Distracting': `bg-red-700`,
-};
+import { showBlock } from './utils';
+import { convertNumberToHour } from '../../utils';
+import { profileState } from '../user';
+import { ShowBlock } from './ShowBlock';
+import { ActivitiesWrapper } from '../activities';
 
 /**
  * PROPS
  * 1. `onAdd`: Func to call when adding a new activity.
  * 2. `onUpdate`: Func to call when updating activity for a block.
  */
-const TimeGrid = ({
-  onUpdate,
-}: {
-  onUpdate: (blockId: number, activityId: number) => Promise<void>;
-}) => {
-  const { userPreferences } = useContext(UserPreferencesContext);
-  const { sleepFrom, sleepTo, blocksPerHour } = userPreferences;
+const TimeGrid = ({}) => {
+  const profile = useRecoilValue(profileState);
+  const { sleepFrom, sleepTo, blocksPerHour } = profile;
   const { blocks: newBlocks, isLoading, isError } = useBlocks();
 
   const [blocks, setBlocks] = useRecoilState(blockState);
@@ -80,14 +68,14 @@ const TimeGrid = ({
   }
 
   return (
-    <div className="mt-20">
-      <ActivitiesFetchWrapper>
+    <ActivitiesWrapper>
+      <div className="mt-20">
         {/* Create array of [1, .. 23] */}
         {blocks.length
           ? Array.from(Array(24).keys())
               // But eliminate sleep hours.
               .filter(filterBlocks)
-              // Map for each hour and show as one column
+              // Map for each hour
               .map((currentHour) => {
                 return (
                   <div
@@ -95,14 +83,14 @@ const TimeGrid = ({
                     className={`grid grid-cols-3 ${gridColumns[blocksPerHour]}`}
                   >
                     <h3 className="font-sans text-4xl place-self-center">
-                      {convertNumberToHourFormat(currentHour)}
+                      {convertNumberToHour(currentHour)}
                     </h3>
                     {/* Inside each hour, render its blocks */}
                     {blocks
                       .filter(({ hour }) => hour === currentHour)
                       .sort(sortBlocks)
                       .map((timeBlock) => {
-                        const { id, to } = timeBlock;
+                        const { id, to, activityId } = timeBlock;
                         return (
                           <div
                             key={id}
@@ -110,14 +98,10 @@ const TimeGrid = ({
                               new Date(`${to}`).getMinutes() !== 0 && 'border-r'
                             }`}
                           >
-                            {allowBlockEdit(to) ? (
-                              <Block
-                                id={id}
-                                activityId={timeBlock.activityId}
-                                onUpdate={onUpdate}
-                              />
+                            {showBlock(to) ? (
+                              <ShowBlock id={id} activityId={activityId} />
                             ) : (
-                              'Untitled'
+                              ''
                             )}
                           </div>
                         );
@@ -126,8 +110,8 @@ const TimeGrid = ({
                 );
               })
           : 'No blocks found'}
-      </ActivitiesFetchWrapper>
-    </div>
+      </div>
+    </ActivitiesWrapper>
   );
 };
 

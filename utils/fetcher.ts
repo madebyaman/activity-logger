@@ -1,4 +1,9 @@
-import { ActivityType, UserPreferences } from '../types';
+import {
+  ActivityType,
+  SigninProps,
+  SignupProps,
+  UserPreferences,
+} from '../types';
 
 type AddActivityData = {
   name: string;
@@ -18,7 +23,8 @@ export async function fetcher(
     | UserPreferences
     | AddActivityData
     | UpdateLog
-    | { email: string; password: string }
+    | SigninProps
+    | SignupProps
     | undefined = undefined
 ) {
   const res = await fetch(`${window.location.origin}/api${url}`, {

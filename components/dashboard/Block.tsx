@@ -4,8 +4,9 @@ import CreatableSelect from 'react-select/creatable';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { ActivitySelect, ActivityType } from '../../types';
-import { activitiesState, modalState } from './state';
-import { blockTypeColors } from './TimeGrid';
+import { modalState } from './state';
+import { blockTypeColors } from './Blocks';
+import { activitiesState } from '../activities/activitiesState';
 
 // PROPS
 // 1. `onAddActivity` func to call when adding a new activity.

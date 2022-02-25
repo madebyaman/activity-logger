@@ -10,20 +10,18 @@ type ComponentPropsWithAuth = AppProps & {
 };
 
 function MyApp({ Component, pageProps }: ComponentPropsWithAuth) {
-  if (Component.protectedRoute) {
-    return (
-      <AppLayout userName="Aman">
+  return (
+    <RecoilRoot>
+      {Component.protectedRoute ? (
+        <AppLayout>
+          <Component {...pageProps} />
+        </AppLayout>
+      ) : (
         <Component {...pageProps} />
-      </AppLayout>
-    );
-  } else {
-    return (
-      <RecoilRoot>
-        <Component {...pageProps} />
-        <FlashMessageWrapper />
-      </RecoilRoot>
-    );
-  }
+      )}
+      <FlashMessageWrapper />
+    </RecoilRoot>
+  );
 }
 
 export default MyApp;

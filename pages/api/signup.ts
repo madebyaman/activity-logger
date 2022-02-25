@@ -9,7 +9,7 @@ export default async function signup(
   res: NextApiResponse
 ) {
   const salt = bcrypt.genSaltSync();
-  const { email, password } = req.body;
+  const { email, password, firstName, lastName } = req.body;
 
   let user;
   try {
@@ -23,6 +23,19 @@ export default async function signup(
     res.status(401);
     res.json({ error: 'User already exists' });
     return;
+  }
+
+  // Update Profile with first name and last name
+  if (user) {
+    const updateProfile = await prisma.profile.update({
+      where: {
+        userId: user.id,
+      },
+      data: {
+        firstName,
+        lastName,
+      },
+    });
   }
 
   const token = jwt.sign(

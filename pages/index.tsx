@@ -1,9 +1,6 @@
-import moment from 'moment';
-import { AiOutlinePieChart, AiOutlineTool } from 'react-icons/ai';
 import { useRecoilState } from 'recoil';
-import Link from 'next/link';
 
-import TimeGrid from '../components/dashboard/TimeGrid';
+import TimeGrid from '../components/dashboard/Blocks';
 import { ActivityType, NextPageWithAuth } from '../types';
 import Modal from '../components/dashboard/modal';
 import { blockState, modalState } from '../components/dashboard/state';

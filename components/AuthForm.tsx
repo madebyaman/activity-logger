@@ -1,12 +1,22 @@
 import { useRouter } from 'next/router';
 import { FC, FormEvent, useState } from 'react';
 import { useRecoilState } from 'recoil';
+import { AuthSigninProps, AuthSignupProps } from '../types';
 import { auth } from '../utils/auth';
 import { flashMessageState } from './FlashMessage/state';
+import {
+  defaultButtonClasses,
+  disabledButtonClasses,
+  inputClasses,
+} from './ui';
 
-const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({ mode }) => {
+export const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({
+  mode = 'signin',
+}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [flashMessages, setFlashMessages] = useRecoilState(flashMessageState);
   const router = useRouter();
@@ -14,9 +24,29 @@ const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({ mode }) => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
+    const signInUserData: AuthSigninProps = {
+      mode: 'signin',
+      body: {
+        email,
+        password,
+      },
+    };
+
+    const signUpUserData: AuthSignupProps = {
+      mode: 'signup',
+      body: {
+        email,
+        password,
+        firstName,
+        lastName,
+      },
+    };
+
     try {
-      const res = await auth(mode, { email, password });
-      // res will be undefined if status is not between 200 and 300.
+      const res = await auth(
+        mode === 'signin' ? signInUserData : signUpUserData
+      );
+      // res will be undefined if status is not between 200 and 300. Defined in `fetcher.ts` file
       if (res) {
         router.push('/');
         setFlashMessages([
@@ -55,11 +85,44 @@ const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({ mode }) => {
     }
   };
 
+  const additionalInputClasses =
+    ' placeholder-gray-500 text-gray-900 sm:text-sm bg-gray-100 shadow-none my-1';
+
   return (
-    <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-      <div className="rounded-md shadow-sm -space-y-px">
-        <div>
-          <label htmlFor="email-address" className="sr-only">
+    <div className="max-w-sm">
+      <form className="space-y-6" onSubmit={handleSubmit}>
+        <div className="flex flex-col mt-4">
+          {mode === 'signup' && (
+            <>
+              <label className="sr-only" htmlFor="firstName">
+                First name
+              </label>
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                className={inputClasses + additionalInputClasses}
+                placeholder="First name"
+                required
+              />
+              <label className={'sr-only'} htmlFor="lastName">
+                Last name
+              </label>
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                className={inputClasses + additionalInputClasses}
+                placeholder="Last name"
+                required
+              />
+            </>
+          )}
+          <label htmlFor="email-address" className={'sr-only'}>
             Email address
           </label>
           <input
@@ -70,11 +133,9 @@ const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({ mode }) => {
             type="email"
             autoComplete="email"
             required
-            className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+            className={inputClasses + additionalInputClasses}
             placeholder="Email address"
           />
-        </div>
-        <div>
           <label htmlFor="password" className="sr-only">
             Password
           </label>
@@ -86,23 +147,26 @@ const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({ mode }) => {
             type="password"
             autoComplete="current-password"
             required
-            className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+            className={inputClasses + additionalInputClasses}
             placeholder="Password"
           />
         </div>
-      </div>
 
-      <div>
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          {isLoading ? 'Loading...' : mode === 'signin' ? 'Sign in' : 'Sign up'}
-        </button>
-      </div>
-    </form>
+        <div className="mt-2">
+          <button
+            type="submit"
+            className={`w-full ${
+              isLoading ? disabledButtonClasses : defaultButtonClasses
+            }`}
+          >
+            {isLoading
+              ? 'Loading...'
+              : mode === 'signin'
+              ? 'Sign in'
+              : 'Sign up'}
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
-
-export default AuthForm;

@@ -42,8 +42,8 @@ model Profile {
   blocksPerHour Int
   user          User     @relation(fields: [userId], references: [id])
   userId        Int      @unique
-  firstName     String?
-  lastName      String?
+  firstName     String
+  lastName      String
 }
 
 model Log {
