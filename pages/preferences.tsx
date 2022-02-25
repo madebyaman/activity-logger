@@ -1,8 +1,8 @@
 import { useContext } from 'react';
-import { UserPreferencesContext } from '../components/ProfileContext';
+import { useRecoilState } from 'recoil';
+import { profileState } from '../components/user';
 import { BlocksPerHourType, NextPageWithAuth } from '../types';
-import { convertNumberToHourFormat } from '../utils/convertNumberToHour';
-import { fetcher } from '../utils/fetcher';
+import { convertNumberToHour, fetcher } from '../utils';
 
 type HourOption = {
   value: number;
@@ -27,14 +27,12 @@ const sortHoursByDecreasingOrder = (a: HourOption, b: HourOption) => {
 const hourOptions = Array.from(Array(24).keys()).map((hour) => {
   return {
     value: hour,
-    label: convertNumberToHourFormat(hour),
+    label: convertNumberToHour(hour),
   };
 });
 
 const Preferences: NextPageWithAuth = () => {
-  const { userPreferences, setUserPreferences } = useContext(
-    UserPreferencesContext
-  );
+  const [userPreferences, setUserPreferences] = useRecoilState(profileState);
   const { sleepFrom, sleepTo, blocksPerHour, firstName, lastName } =
     userPreferences;
 

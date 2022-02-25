@@ -10,12 +10,7 @@ import { profileState } from '../user';
 import { ShowBlock } from './ShowBlock';
 import { ActivitiesWrapper } from '../activities';
 
-/**
- * PROPS
- * 1. `onAdd`: Func to call when adding a new activity.
- * 2. `onUpdate`: Func to call when updating activity for a block.
- */
-const TimeGrid = ({}) => {
+export const Blocks = ({}) => {
   const profile = useRecoilValue(profileState);
   const { sleepFrom, sleepTo, blocksPerHour } = profile;
   const { blocks: newBlocks, isLoading, isError } = useBlocks();
@@ -114,5 +109,3 @@ const TimeGrid = ({}) => {
     </ActivitiesWrapper>
   );
 };
-
-export default TimeGrid;

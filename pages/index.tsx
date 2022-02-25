@@ -1,14 +1,14 @@
 import { useRecoilState } from 'recoil';
 
-import TimeGrid from '../components/dashboard/Blocks';
-import { ActivityType, NextPageWithAuth } from '../types';
-import Modal from '../components/dashboard/modal';
+import { NextPageWithAuth } from '../types';
 import { blockState, modalState } from '../components/dashboard/state';
 import {
   addActivity,
   updateBlockActivity,
 } from '../components/dashboard/utils';
 import { flashMessageState } from '../components/FlashMessage/state';
+import { Activity } from '@prisma/client';
+import { Blocks } from '../components/dashboard';
 
 const Home: NextPageWithAuth = () => {
   const [modal, setModal] = useRecoilState(modalState);
@@ -24,7 +24,7 @@ const Home: NextPageWithAuth = () => {
     type,
   }: {
     name: string;
-    type: ActivityType;
+    type: Activity;
   }) => {
     // Hide activity modal
     setModal({ ...modal, showModal: false });
@@ -95,16 +95,12 @@ const Home: NextPageWithAuth = () => {
 
   return (
     <div>
-      <div
-        className={`${
-          modal.showModal && 'overflow-hidden blur-sm fixed pointer-events-none'
-        }`}
-      >
-        <TimeGrid onUpdate={updateBlock} />
+      <div>
+        <Blocks />
         {/* Grid Table */}
       </div>
       {/* Modal */}
-      <Modal onSubmit={onSubmitNewActivity} />
+      {/* <Modal onSubmit={onSubmitNewActivity} /> */}
     </div>
   );
 };

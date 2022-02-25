@@ -1,7 +1,5 @@
-import { getDateString } from '../../../utils/getDateString';
-import initialState from '../../../utils/initialState';
-import prisma from '../../../utils/prisma';
-import { validateRoute } from '../../../utils/validateRoute';
+import { validateRoute, getDateString, newBlocks } from '../../../utils';
+import prisma from '../../../prisma';
 
 /**
  * Calls `validateRoute` function and returns todays logs or [] if not found
@@ -35,21 +33,8 @@ export default validateRoute(async (req, res, user) => {
   }
   console.log('adding new logs');
   // Then, add logs for today based on blocksPerHour.
-  await Promise.all(
-    initialState(blocksPerHour).map(({ from, to, hour }) => {
-      return prisma.log.create({
-        data: {
-          from,
-          hour,
-          to,
-          date,
-          User: {
-            connect: { id: user.id },
-          },
-        },
-      });
-    })
-  );
-  const newLogs = await prisma.log.findMany({ where: { date: date } });
+  const newLogs = await prisma.log.createMany({
+    data: newBlocks(blocksPerHour),
+  });
   return res.json(newLogs);
 });

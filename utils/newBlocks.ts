@@ -1,13 +1,17 @@
 // Initialize a blank state to start tracking activities
 
+import { getDateString } from '.';
+
 type TimeLog = {
   from: Date;
   to: Date;
   hour: number;
+  date: string;
 };
 
-export default function timeBlocks(noOfBlocksPerHour: number = 4) {
+export const newBlocks = (noOfBlocksPerHour: number = 4) => {
   let initialTimeLog: TimeLog[] = [];
+  const date = getDateString(new Date());
 
   Array.from(Array(24).keys()).map((hour) => {
     Array.from(Array(noOfBlocksPerHour).keys()).map((block) => {
@@ -31,8 +35,9 @@ export default function timeBlocks(noOfBlocksPerHour: number = 4) {
         from,
         to,
         hour,
+        date,
       });
     });
   });
   return initialTimeLog;
-}
+};

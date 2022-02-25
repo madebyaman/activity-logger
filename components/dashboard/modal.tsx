@@ -1,23 +1,17 @@
+import { Activity } from '@prisma/client';
 import { FormEvent, useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { ActivityType } from '../../types';
 import { modalState } from './state';
 
 const Modal = ({
   onSubmit,
 }: {
-  onSubmit: ({
-    name,
-    type,
-  }: {
-    name: string;
-    type: ActivityType;
-  }) => Promise<void>;
+  onSubmit: ({ name, type }: { name: string; type: Activity }) => Promise<void>;
 }) => {
-  const [activityType, setActivityType] = useState<ActivityType>('Neutral');
+  const [activityType, setActivityType] = useState<Activity>('Neutral');
   const [modal, setModalState] = useRecoilState(modalState);
 
-  const activityTypeOptions: ActivityType[] = [
+  const activityTypeOptions: Activity[] = [
     'Neutral',
     'Productive',
     'Very Productive',

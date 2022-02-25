@@ -1,7 +1,7 @@
+import { Activity } from '@prisma/client';
 import { ReactNode, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 
-import { ActivitySelect, ActivityType } from '../../types';
 import { activitiesState } from './activitiesState';
 import { useActivities } from './useActivitiesHook';
 
@@ -17,13 +17,7 @@ export const ActivitiesWrapper = ({ children }: { children: ReactNode }) => {
       !isLoading &&
       !isError
     ) {
-      const mappedActivities: ActivitySelect[] = fetchedActivities.map(
-        (activity) => ({
-          label: activity.name,
-          value: activity.id,
-          type: activity.type as ActivityType,
-        })
-      );
+      const mappedActivities: Activity[] = fetchedActivities;
       setActivities(mappedActivities);
     }
   }, [activities, fetchedActivities, isError, isLoading, setActivities]);

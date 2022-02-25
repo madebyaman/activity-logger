@@ -1,6 +1,4 @@
 import { Activity } from '@prisma/client';
-import { useState } from 'react';
-import { ActivityType } from '../../types';
 import { fetcher } from '../../utils/fetcher';
 
 /**
@@ -11,7 +9,7 @@ import { fetcher } from '../../utils/fetcher';
  */
 export const addActivity = async (
   name: string,
-  type: ActivityType
+  type: Activity
 ): Promise<Activity> => {
   return await fetcher('/activities/add', { name, type });
 };

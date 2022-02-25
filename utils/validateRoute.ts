@@ -1,10 +1,8 @@
-/**
- * This file exports validateRoute function
- */
 import { User } from '@prisma/client';
 import jwt from 'jsonwebtoken';
 import { NextApiRequest, NextApiResponse } from 'next';
-import prisma from './prisma';
+
+import prisma from '../prisma';
 
 interface JwtPayload {
   id: number;

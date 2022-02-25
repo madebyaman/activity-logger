@@ -1,5 +1,5 @@
-import prisma from '../../../utils/prisma';
-import { validateRoute } from '../../../utils/validateRoute';
+import { validateRoute } from '../../../utils';
+import prisma from '../../../prisma';
 
 /**
  * Updates the activity for a log entry. This API route needs two parameters in req.body

@@ -3,9 +3,7 @@ import { OnChangeValue } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
-import { ActivitySelect, ActivityType } from '../../types';
 import { modalState } from './state';
-import { blockTypeColors } from './Blocks';
 import { activitiesState } from '../activities/activitiesState';
 
 // PROPS

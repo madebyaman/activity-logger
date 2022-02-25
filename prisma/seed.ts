@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import { env } from 'process';
 import { activitiesData } from './activitiesData';
-import prisma from '../utils/prisma';
+import prisma from '../prisma';
 
 const run = async () => {
   if (!env['TEST_EMAIL'] || !env['TEST_PASSWORD']) {
@@ -47,6 +47,8 @@ const run = async () => {
       sleepFrom: 22,
       sleepTo: 6,
       blocksPerHour: 4,
+      firstName: 'Aman',
+      lastName: 'Thakur',
       user: {
         connect: { id: user.id },
       },
