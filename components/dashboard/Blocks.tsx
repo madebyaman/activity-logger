@@ -3,7 +3,7 @@ import { Log } from '@prisma/client';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { useBlocks } from './useBlocks';
-import { blockState } from './state';
+import { blockState } from './blockState';
 import { showBlock } from './utils';
 import { convertNumberToHour } from '../../utils';
 import { profileState } from '../user';
@@ -64,7 +64,7 @@ export const Blocks = ({}) => {
 
   return (
     <ActivitiesWrapper>
-      <div className="mt-20">
+      <div className="mt-4">
         {/* Create array of [1, .. 23] */}
         {blocks.length
           ? Array.from(Array(24).keys())
@@ -85,16 +85,20 @@ export const Blocks = ({}) => {
                       .filter(({ hour }) => hour === currentHour)
                       .sort(sortBlocks)
                       .map((timeBlock) => {
-                        const { id, to, activityId } = timeBlock;
+                        const { id, to, activityId, notes } = timeBlock;
                         return (
                           <div
                             key={id}
-                            className={`min-w-full h-28 px-3 py-6 bg-slate-50 grid col-span-2 col-start-2 md:col-start-auto ${
+                            className={`min-w-full h-28 px-3 py-6 bg-slate-50 grid col-span-2 col-start-2 md:col-start-auto place-content-center ${
                               new Date(`${to}`).getMinutes() !== 0 && 'border-r'
                             }`}
                           >
                             {showBlock(to) ? (
-                              <ShowBlock id={id} activityId={activityId} />
+                              <ShowBlock
+                                id={id}
+                                activityId={activityId}
+                                notes={notes || ''}
+                              />
                             ) : (
                               ''
                             )}

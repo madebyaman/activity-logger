@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import { FlashMessage } from '../ui';
-import { flashMessageState } from './state';
+import { flashMessageState } from './flashMessageState';
 
 const FlashMessageWrapper = () => {
   const [flashMessages, setFlashMessages] = useRecoilState(flashMessageState);

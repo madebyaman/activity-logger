@@ -1,21 +1,15 @@
-import { Log } from '@prisma/client';
+import { Activity } from '@prisma/client';
 import { atom } from 'recoil';
-
-const defaultBlocks: Log[] = [];
-
-export const blockState = atom({
-  key: 'blockState',
-  default: defaultBlocks,
-});
 
 type ModalStateType = {
   showModal: boolean;
-  name: string;
+  notes: string;
   currentBlockId?: number;
+  activity?: Activity;
 };
 
 const defaultModalState: ModalStateType = {
-  name: '',
+  notes: '',
   showModal: false,
 };
 

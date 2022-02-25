@@ -3,6 +3,7 @@ import { SigninProps, SignupProps, UserPreferences } from '../types';
 type UpdateLog = {
   blockId: number;
   activityId: number;
+  notes: string;
 };
 /**
  * Wrapper of native `fetch` function. It returns data or an error.

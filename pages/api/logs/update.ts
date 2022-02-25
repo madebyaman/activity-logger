@@ -31,6 +31,7 @@ export default validateRoute(async (req, res, user) => {
     where: { id: req.body.blockId },
     data: {
       activity: { connect: { id: activity.id } },
+      notes: req.body.notes,
     },
   });
 

@@ -16,15 +16,13 @@ export const addActivity = async (
 
 /**
  * Update a block
- * @param blockId Id of the current block
- * @param activityId Id of the activity
- * @returns updated block
  */
-export const updateBlockActivity = async (
+export const updateBlock = async (
   blockId: number,
-  activityId: number
+  activityId: number,
+  notes: string
 ) => {
-  return await fetcher('/logs/update', { blockId, activityId });
+  return await fetcher('/logs/update', { blockId, activityId, notes });
 };
 
 /**

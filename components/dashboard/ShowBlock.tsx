@@ -1,7 +1,9 @@
 import { Activity } from '@prisma/client';
 import { useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { activitiesState } from '../activities';
+import { modalState } from '../modal/modalState';
+import { EditBlock } from './EditBlock';
 
 export const blockTypeColors = {
   Neutral: 'bg-gray-500',
@@ -14,31 +16,50 @@ export const blockTypeColors = {
 export const ShowBlock = ({
   activityId,
   id,
+  notes,
 }: {
   activityId: number | null;
   id: number;
+  notes: string;
 }) => {
-  const [activity, setActivity] = useState<Activity | null>(null);
+  const [activity, setActivity] = useState<Activity | undefined>();
+  const [showSlideOver, setSlideOver] = useState(false);
   const activities = useRecoilValue(activitiesState);
+  const [modal, setModal] = useRecoilState(modalState);
+
+  const handleClick = () => {
+    setModal({
+      showModal: true,
+      activity,
+      currentBlockId: id,
+      notes,
+    });
+  };
 
   useEffect(() => {
     if (activityId) {
       const selectedActivity = activities.find(
         (activity) => activity.id === activityId
       );
-      setActivity(selectedActivity || null);
+      setActivity(selectedActivity);
     }
   }, [activities, activityId]);
 
-  if (!activity) return <a>No activity</a>;
   return (
-    <a>
-      <span
-        className={`w-3 h-3 mr-2 inline-block rounded-full ${
-          blockTypeColors[activity.type]
-        }`}
-      ></span>
-      <span>{activity.name}</span>
-    </a>
+    <button className="flex flex-col" onClick={handleClick}>
+      {activity ? (
+        <>
+          <span
+            className={`w-3 h-3 mr-2 inline-block rounded-full ${
+              blockTypeColors[activity.type]
+            }`}
+          ></span>
+          <span>{activity.name}</span>
+        </>
+      ) : (
+        'No activity'
+      )}
+      {showSlideOver && <EditBlock id={id} activityId={activityId} />}
+    </button>
   );
 };
