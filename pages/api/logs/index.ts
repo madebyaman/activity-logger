@@ -1,10 +1,10 @@
 import { validateRoute, getDateString, newBlocks } from '../../../utils';
-import prisma from '../../../prisma';
+import prisma from '../../../utils/prisma';
 
 /**
  * Calls `validateRoute` function and returns todays logs or [] if not found
  */
-export default validateRoute(async (req, res, user) => {
+const getLogs = async (req, res, user) => {
   const date = getDateString();
   const logs = await prisma.log.findMany({ where: { date: date } });
 
@@ -37,4 +37,6 @@ export default validateRoute(async (req, res, user) => {
     data: newBlocks(blocksPerHour),
   });
   return res.json(newLogs);
-});
+};
+
+export default validateRoute(getLogs);

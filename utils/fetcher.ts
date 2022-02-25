@@ -1,14 +1,4 @@
-import {
-  ActivityType,
-  SigninProps,
-  SignupProps,
-  UserPreferences,
-} from '../types';
-
-type AddActivityData = {
-  name: string;
-  type: ActivityType;
-};
+import { SigninProps, SignupProps, UserPreferences } from '../types';
 
 type UpdateLog = {
   blockId: number;
@@ -21,7 +11,6 @@ export async function fetcher(
   url: string,
   data:
     | UserPreferences
-    | AddActivityData
     | UpdateLog
     | SigninProps
     | SignupProps

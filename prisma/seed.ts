@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import { env } from 'process';
 import { activitiesData } from './activitiesData';
-import prisma from '../prisma';
+import prisma from '../utils/prisma';
 
 const run = async () => {
   if (!env['TEST_EMAIL'] || !env['TEST_PASSWORD']) {
