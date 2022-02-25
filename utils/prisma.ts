@@ -7,7 +7,7 @@ declare global {
 
 let prisma: any;
 if (typeof window === 'undefined') {
-  prisma = global.prisma || new PrismaClient({ log: ['query'] });
+  prisma = global.prisma || new PrismaClient();
   if (process.env.NODE_ENV !== 'production') global.prisma = prisma;
 }
 

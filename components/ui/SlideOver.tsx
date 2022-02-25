@@ -1,22 +1,22 @@
-import { Fragment, ReactNode, useState } from 'react';
+import { Fragment, ReactNode } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { AiOutlineClose } from 'react-icons/ai';
 
 export const SlideOver = ({
   children,
   title,
+  onClose,
 }: {
   title: string;
   children: ReactNode;
+  onClose: () => void;
 }) => {
-  const [open, setOpen] = useState(true);
-
   return (
-    <Transition.Root show={open} as={Fragment}>
+    <Transition.Root show={true} as={Fragment}>
       <Dialog
         as="div"
         className="fixed inset-0 overflow-hidden"
-        onClose={() => setOpen(false)}
+        onClose={onClose}
       >
         <div className="absolute inset-0 overflow-hidden">
           <Transition.Child
@@ -54,7 +54,7 @@ export const SlideOver = ({
                     <button
                       type="button"
                       className="rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
-                      onClick={() => setOpen(false)}
+                      onClick={onClose}
                     >
                       <span className="sr-only">Close panel</span>
                       <AiOutlineClose className="h-6 w-6" aria-hidden="true" />

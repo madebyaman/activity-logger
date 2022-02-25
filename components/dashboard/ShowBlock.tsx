@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { activitiesState } from '../activities';
 import { modalState } from '../modal/modalState';
-import { EditBlock } from './EditBlock';
+import { EditBlock } from '../modal/EditBlock';
 
 export const blockTypeColors = {
   Neutral: 'bg-gray-500',
@@ -23,7 +23,6 @@ export const ShowBlock = ({
   notes: string;
 }) => {
   const [activity, setActivity] = useState<Activity | undefined>();
-  const [showSlideOver, setSlideOver] = useState(false);
   const activities = useRecoilValue(activitiesState);
   const [modal, setModal] = useRecoilState(modalState);
 
@@ -59,7 +58,6 @@ export const ShowBlock = ({
       ) : (
         'No activity'
       )}
-      {showSlideOver && <EditBlock id={id} activityId={activityId} />}
     </button>
   );
 };

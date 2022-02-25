@@ -9,7 +9,7 @@ type TimeLog = {
   date: string;
 };
 
-export const newBlocks = (noOfBlocksPerHour: number = 4) => {
+export const newBlocks = (noOfBlocksPerHour: number = 4): TimeLog[] => {
   let initialTimeLog: TimeLog[] = [];
   const date = getDateString(new Date());
 

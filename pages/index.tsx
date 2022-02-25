@@ -1,16 +1,8 @@
-import { useRecoilState } from 'recoil';
-
 import { NextPageWithAuth } from '../types';
-import { modalState } from '../components/dashboard/state';
-import { addActivity } from '../components/dashboard/utils';
-import { flashMessageState } from '../components/FlashMessage/flashMessageState';
-import { Activity } from '@prisma/client';
 import { Blocks } from '../components/dashboard';
+import { EditBlock } from '../components/modal/EditBlock';
 
 const Home: NextPageWithAuth = () => {
-  const [modal, setModal] = useRecoilState(modalState);
-  const [flashMessages, setFlashMessages] = useRecoilState(flashMessageState);
-
   /**
    * When a new activity is submitted
    * @param Object New Activity to be added
@@ -51,6 +43,7 @@ const Home: NextPageWithAuth = () => {
       </div>
       {/* Modal */}
       {/* <Modal onSubmit={onSubmitNewActivity} /> */}
+      <EditBlock />
     </div>
   );
 };
