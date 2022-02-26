@@ -3,7 +3,7 @@ import { FC, FormEvent, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { AuthSigninProps, AuthSignupProps } from '../types';
 import { auth } from '../utils/auth';
-import { flashMessageState } from './FlashMessage/state';
+import { flashMessageState } from './FlashMessage/flashMessageState';
 import {
   defaultButtonClasses,
   disabledButtonClasses,

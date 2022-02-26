@@ -1,28 +1,16 @@
-import { useEffect } from 'react';
 import { Log } from '@prisma/client';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 
 import { useBlocks } from './useBlocks';
-import { blockState } from './blockState';
 import { showBlock } from './utils';
 import { convertNumberToHour } from '../../utils';
 import { profileState } from '../user';
 import { ShowBlock } from './ShowBlock';
-import { ActivitiesWrapper } from '../activities';
 
 export const Blocks = ({}) => {
   const profile = useRecoilValue(profileState);
   const { sleepFrom, sleepTo, blocksPerHour } = profile;
-  const { blocks: newBlocks, isLoading, isError } = useBlocks();
-
-  const [blocks, setBlocks] = useRecoilState(blockState);
-
-  // Update the blocks when no blocks found.
-  useEffect(() => {
-    if (!blocks.length && !isLoading && !isError) {
-      setBlocks(newBlocks);
-    }
-  }, [blocks.length, isError, isLoading, newBlocks, setBlocks]);
+  const { blocks, isLoading, isError } = useBlocks();
 
   // This is to make sure purge css works correctly in Tailwind
   const gridColumns = {
@@ -63,53 +51,51 @@ export const Blocks = ({}) => {
   }
 
   return (
-    <ActivitiesWrapper>
-      <div className="mt-4">
-        {/* Create array of [1, .. 23] */}
-        {blocks.length
-          ? Array.from(Array(24).keys())
-              // But eliminate sleep hours.
-              .filter(filterBlocks)
-              // Map for each hour
-              .map((currentHour) => {
-                return (
-                  <div
-                    key={currentHour}
-                    className={`grid grid-cols-3 ${gridColumns[blocksPerHour]}`}
-                  >
-                    <h3 className="font-sans text-4xl place-self-center">
-                      {convertNumberToHour(currentHour)}
-                    </h3>
-                    {/* Inside each hour, render its blocks */}
-                    {blocks
-                      .filter(({ hour }) => hour === currentHour)
-                      .sort(sortBlocks)
-                      .map((timeBlock) => {
-                        const { id, to, activityId, notes } = timeBlock;
-                        return (
-                          <div
-                            key={id}
-                            className={`min-w-full h-28 px-3 py-6 bg-slate-50 grid col-span-2 col-start-2 md:col-start-auto place-content-center ${
-                              new Date(`${to}`).getMinutes() !== 0 && 'border-r'
-                            }`}
-                          >
-                            {showBlock(to) ? (
-                              <ShowBlock
-                                id={id}
-                                activityId={activityId}
-                                notes={notes || ''}
-                              />
-                            ) : (
-                              ''
-                            )}
-                          </div>
-                        );
-                      })}
-                  </div>
-                );
-              })
-          : 'No blocks found'}
-      </div>
-    </ActivitiesWrapper>
+    <div className="mt-4">
+      {/* Create array of [1, .. 23] */}
+      {blocks.length
+        ? Array.from(Array(24).keys())
+            // But eliminate sleep hours.
+            .filter(filterBlocks)
+            // Map for each hour
+            .map((currentHour) => {
+              return (
+                <div
+                  key={currentHour}
+                  className={`grid grid-cols-3 ${gridColumns[blocksPerHour]}`}
+                >
+                  <h3 className="font-sans text-4xl place-self-center">
+                    {convertNumberToHour(currentHour)}
+                  </h3>
+                  {/* Inside each hour, render its blocks */}
+                  {blocks
+                    .filter(({ hour }) => hour === currentHour)
+                    .sort(sortBlocks)
+                    .map((timeBlock) => {
+                      const { id, to, activityId, notes } = timeBlock;
+                      return (
+                        <div
+                          key={id}
+                          className={`min-w-full h-28 px-3 py-6 bg-slate-50 grid col-span-2 col-start-2 md:col-start-auto place-content-center ${
+                            new Date(`${to}`).getMinutes() !== 0 && 'border-r'
+                          }`}
+                        >
+                          {showBlock(to) ? (
+                            <ShowBlock
+                              id={id}
+                              activityId={activityId}
+                              notes={notes || ''}
+                            />
+                          ) : (
+                            ''
+                          )}
+                        </div>
+                      );
+                    })}
+                </div>
+              );
+            })
+        : 'No blocks found'}
+    </div>
   );
 };

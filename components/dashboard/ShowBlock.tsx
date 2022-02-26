@@ -1,9 +1,9 @@
 import { Activity } from '@prisma/client';
 import { useEffect, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { activitiesState } from '../activities';
+import { useRecoilState } from 'recoil';
+
 import { modalState } from '../modal/modalState';
-import { EditBlock } from '../modal/EditBlock';
+import { useActivities } from './useActivities';
 
 export const blockTypeColors = {
   Neutral: 'bg-gray-500',
@@ -23,7 +23,7 @@ export const ShowBlock = ({
   notes: string;
 }) => {
   const [activity, setActivity] = useState<Activity | undefined>();
-  const activities = useRecoilValue(activitiesState);
+  const { activities, isLoading, isError } = useActivities();
   const [modal, setModal] = useRecoilState(modalState);
 
   const handleClick = () => {
@@ -36,7 +36,7 @@ export const ShowBlock = ({
   };
 
   useEffect(() => {
-    if (activityId) {
+    if (activityId && activities) {
       const selectedActivity = activities.find(
         (activity) => activity.id === activityId
       );

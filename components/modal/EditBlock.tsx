@@ -1,4 +1,4 @@
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { flashMessageState } from '../FlashMessage/flashMessageState';
 
 import { modalState } from './modalState';
@@ -9,19 +9,23 @@ import {
   SlideOver,
 } from '../ui';
 import { updateBlock } from '../dashboard/utils';
-import { blockState } from '../dashboard/blockState';
-import { activitiesState } from '../activities';
+import { useActivities } from '../dashboard/useActivities';
+import { useBlocks } from '../dashboard/useBlocks';
+import { useSWRConfig } from 'swr';
+import { FormEvent } from 'react';
 
 export const EditBlock = () => {
   const [modal, setModal] = useRecoilState(modalState);
   const [flashMessages, setFlashMessages] = useRecoilState(flashMessageState);
-  const [blocks, setBlocks] = useRecoilState(blockState);
-  const activities = useRecoilValue(activitiesState);
+  const { activities } = useActivities();
+  const { blocks } = useBlocks();
+  const { mutate } = useSWRConfig();
 
   /**
    * It updates 'blockState' when a new activity is selected.
    */
-  const update = async () => {
+  const update = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (!modal.currentBlockId) return;
 
     // 1. Update local state
@@ -32,6 +36,7 @@ export const EditBlock = () => {
     try {
       if (modal.activity) {
         await updateBlock(modal.currentBlockId, modal.activity.id, modal.notes);
+        mutate('/api/blocks');
       }
     } catch (e) {
       // 1. Show warning flash message
@@ -46,6 +51,8 @@ export const EditBlock = () => {
       ]);
       //2. Reset the local state
       updateLocalBlock(null, '');
+    } finally {
+      setModal({ ...modal, showModal: false });
     }
   };
 
@@ -64,7 +71,7 @@ export const EditBlock = () => {
         return block;
       }
     });
-    setBlocks(newBlocks);
+    mutate('/api/blocks', newBlocks, false);
   };
 
   if (!modal.showModal) return null;
