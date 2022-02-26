@@ -1,10 +1,10 @@
 import { Activity } from '@prisma/client';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 
-import { modalState } from '../modal/modalState';
 import { useActivities } from '../../utils';
 import { ActivityTypes } from '../../types';
+import { ModalContext } from '../modal';
 
 export const blockTypeColors = {
   Neutral: 'bg-gray-500',
@@ -25,9 +25,11 @@ export const Block = ({
 }) => {
   const [activity, setActivity] = useState<Activity | undefined>();
   const { activities, isLoading, isError } = useActivities();
-  const [modal, setModal] = useRecoilState(modalState);
+  const { modalState: modal, setModalState: setModal } =
+    useContext(ModalContext);
 
   const handleClick = () => {
+    if (!setModal) return;
     setModal({
       showModal: true,
       activity,

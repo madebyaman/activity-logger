@@ -1,9 +1,8 @@
 import { useRecoilState } from 'recoil';
 import { useSWRConfig } from 'swr';
-import { FormEvent } from 'react';
+import { FormEvent, useContext } from 'react';
 
 import { flashMessageState } from '../FlashMessage/flashMessageState';
-import { modalState } from './modalState';
 import {
   defaultButtonClasses,
   labelClasses,
@@ -11,9 +10,11 @@ import {
   selectClasses,
 } from '../ui';
 import { useBlocks, useActivities, updateBlock } from '../../utils';
+import { ModalContext } from '.';
 
 export const EditBlock = ({ changeTab }: { changeTab: () => void }) => {
-  const [modal, setModal] = useRecoilState(modalState);
+  const { modalState: modal, setModalState: setModal } =
+    useContext(ModalContext);
   const [flashMessages, setFlashMessages] = useRecoilState(flashMessageState);
   const { activities } = useActivities();
   const { blocks } = useBlocks();
@@ -50,7 +51,7 @@ export const EditBlock = ({ changeTab }: { changeTab: () => void }) => {
       //2. Reset the local state
       updateLocalBlock(null, '');
     } finally {
-      setModal({ ...modal, showModal: false });
+      if (setModal) setModal({ ...modal, showModal: false });
     }
   };
 
@@ -73,7 +74,6 @@ export const EditBlock = ({ changeTab }: { changeTab: () => void }) => {
   };
 
   if (!activities || !blocks) {
-    console.log('no activities');
     return null;
   }
 
@@ -82,12 +82,13 @@ export const EditBlock = ({ changeTab }: { changeTab: () => void }) => {
       <select
         className={selectClasses}
         value={modal.activity?.id || undefined}
-        onChange={(e) =>
+        onChange={(e) => {
+          if (!setModal) return;
           setModal({
             ...modal,
             activity: activities.find((a) => a.id === +e.target.value),
-          })
-        }
+          });
+        }}
       >
         <option value="">Select an activity</option>
         {activities.map((activity) => (
@@ -111,12 +112,13 @@ export const EditBlock = ({ changeTab }: { changeTab: () => void }) => {
         id="notes"
         name="notes"
         value={modal.notes || ''}
-        onChange={(e) =>
+        onChange={(e) => {
+          if (!setModal) return;
           setModal({
             ...modal,
             notes: e.target.value,
-          })
-        }
+          });
+        }}
         className="w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
       />
       <button type="submit" className={defaultButtonClasses + ' mt-4'}>
