@@ -63,7 +63,7 @@ export const Blocks = ({}) => {
                   key={currentHour}
                   className={`grid grid-cols-3 ${gridColumns[blocksPerHour]}`}
                 >
-                  <h3 className="font-sans text-4xl place-self-center">
+                  <h3 className="font-display text-2xl place-self-center">
                     {convertNumberToHour(currentHour)}
                   </h3>
                   {/* Inside each hour, render its blocks */}
@@ -75,7 +75,7 @@ export const Blocks = ({}) => {
                       return (
                         <div
                           key={id}
-                          className={`min-w-full h-28 px-3 py-6 bg-slate-50 grid col-span-2 col-start-2 md:col-start-auto place-content-center ${
+                          className={`min-w-full h-28 px-3 py-6 bg-gray-100 grid col-span-2 col-start-2 md:col-start-auto place-content-center hover:bg-gray-200 ${
                             new Date(`${to}`).getMinutes() !== 0 && 'border-r'
                           }`}
                         >

@@ -10,6 +10,8 @@ export const Modal = () => {
     useContext(ModalContext);
   const [showEditBlock, setShowEditBlock] = useState(true);
 
+  if (!modal.showModal) return null;
+
   return (
     <SlideOver
       title={showEditBlock ? 'Edit Block' : 'Add Activity'}

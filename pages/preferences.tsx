@@ -1,8 +1,15 @@
-import { useContext } from 'react';
-import { useRecoilState } from 'recoil';
-import { profileState } from '../components/user';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { useSWRConfig } from 'swr';
+import {
+  defaultButtonClasses,
+  h3Classes,
+  inputClasses,
+  labelClasses,
+  selectClasses,
+} from '../components/ui';
 import { BlocksPerHourType, NextPageWithAuth } from '../types';
-import { convertNumberToHour, fetcher } from '../utils';
+import { convertNumberToHour, fetcher, useProfile } from '../utils';
 
 type HourOption = {
   value: number;
@@ -32,17 +39,27 @@ const hourOptions = Array.from(Array(24).keys()).map((hour) => {
 });
 
 const Preferences: NextPageWithAuth = () => {
-  const [userPreferences, setUserPreferences] = useRecoilState(profileState);
-  const { sleepFrom, sleepTo, blocksPerHour, firstName, lastName } =
-    userPreferences;
-
-  if (!setUserPreferences) {
-    return <div></div>;
-  }
+  const { profile } = useProfile();
+  const [profileState, setProfileState] = useState({
+    blocksPerHour: profile.blocksPerHour as BlocksPerHourType,
+    sleepFrom: profile.sleepFrom,
+    sleepTo: profile.sleepTo,
+    firstName: profile.firstName,
+    lastName: profile.lastName,
+  });
+  const { mutate } = useSWRConfig();
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await fetcher('/profile/update', userPreferences);
+    try {
+      await fetcher('/profile/update', profileState);
+      router.push('/');
+    } catch {
+      console.error('Failed to update profile');
+    } finally {
+      mutate('/profile');
+    }
   };
 
   return (
@@ -51,9 +68,7 @@ const Preferences: NextPageWithAuth = () => {
         <div className="md:grid md:grid-cols-3 md:gap-6">
           <div className="md:col-span-1">
             <div className="px-4 sm:px-0">
-              <h3 className="text-lg font-medium leading-6 text-gray-900">
-                Profile
-              </h3>
+              <h3 className={h3Classes + ' font-display'}>Profile</h3>
               <p className="mt-1 text-sm text-gray-600">
                 This is your personal information. It will be used to improve
                 your app experience.
@@ -66,69 +81,60 @@ const Preferences: NextPageWithAuth = () => {
                 <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
                   <div className="grid grid-cols-6 gap-6">
                     <div className="col-span-6 sm:col-span-3">
-                      <label
-                        htmlFor="first-name"
-                        className="block text-sm font-medium text-gray-700"
-                      >
+                      <label htmlFor="first-name" className={labelClasses}>
                         First name
                       </label>
                       <input
                         type="text"
                         name="first-name"
                         id="first-name"
-                        value={firstName || ''}
+                        value={profileState.firstName || ''}
                         onChange={(e) =>
-                          setUserPreferences({
-                            ...userPreferences,
+                          setProfileState({
+                            ...profileState,
                             firstName: e.target.value,
                           })
                         }
-                        className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md py-2 px-3 bg-white border"
+                        className={inputClasses}
                       />
                     </div>
 
                     <div className="col-span-6 sm:col-span-3">
-                      <label
-                        htmlFor="last-name"
-                        className="block text-sm font-medium text-gray-700"
-                      >
+                      <label htmlFor="last-name" className={labelClasses}>
                         Last name
                       </label>
                       <input
                         type="text"
                         name="last-name"
                         id="last-name"
-                        value={lastName || ''}
+                        value={profileState.lastName || ''}
                         onChange={(e) =>
-                          setUserPreferences({
-                            ...userPreferences,
+                          setProfileState({
+                            ...profileState,
                             lastName: e.target.value,
                           })
                         }
-                        className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md py-2 px-3 bg-white border"
+                        className={inputClasses}
                       />
                     </div>
 
                     <div className="col-span-6 sm:col-span-3">
-                      <label
-                        htmlFor="blocks"
-                        className="block text-sm font-medium text-gray-700"
-                      >
+                      <label htmlFor="blocks" className={labelClasses}>
                         Blocks per hour
                       </label>
                       <select
                         id="blocks"
                         name="blocks"
-                        value={blocksPerHour}
+                        value={profileState.blocksPerHour}
                         onChange={(e) =>
-                          setUserPreferences({
-                            ...userPreferences,
+                          setProfileState({
+                            ...profileState,
                             blocksPerHour: parseInt(
                               e.target.value
                             ) as BlocksPerHourType,
                           })
                         }
-                        className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        className={selectClasses}
                       >
                         <option>1</option>
                         <option>2</option>
@@ -143,23 +149,20 @@ const Preferences: NextPageWithAuth = () => {
                     </div>
 
                     <div className="col-span-6 sm:col-span-3">
-                      <label
-                        htmlFor="sleepFrom"
-                        className="block text-sm font-medium text-gray-700"
-                      >
+                      <label htmlFor="sleepFrom" className={labelClasses}>
                         Sleep from
                       </label>
                       <select
                         id="sleepFrom"
                         name="sleepFrom"
-                        value={sleepFrom}
+                        value={profileState.sleepFrom}
                         onChange={(e) =>
-                          setUserPreferences({
-                            ...userPreferences,
+                          setProfileState({
+                            ...profileState,
                             sleepFrom: Number(e.target.value),
                           })
                         }
-                        className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        className={selectClasses}
                       >
                         {hourOptions
                           .sort(SortHoursByIncreasingOrder)
@@ -172,23 +175,20 @@ const Preferences: NextPageWithAuth = () => {
                     </div>
 
                     <div className="col-span-6 sm:col-span-3">
-                      <label
-                        htmlFor="sleepTo"
-                        className="block text-sm font-medium text-gray-700"
-                      >
+                      <label htmlFor="sleepTo" className={labelClasses}>
                         Sleep to
                       </label>
                       <select
                         id="sleepTo"
                         name="sleepTo"
-                        value={sleepTo}
+                        value={profileState.sleepTo}
                         onChange={(e) =>
-                          setUserPreferences({
-                            ...userPreferences,
+                          setProfileState({
+                            ...profileState,
                             sleepTo: Number(e.target.value),
                           })
                         }
-                        className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        className={selectClasses}
                       >
                         {hourOptions
                           .sort(sortHoursByDecreasingOrder)
@@ -202,10 +202,7 @@ const Preferences: NextPageWithAuth = () => {
                   </div>
                 </div>
                 <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                  <button
-                    type="submit"
-                    className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  >
+                  <button type="submit" className={defaultButtonClasses}>
                     Save
                   </button>
                 </div>

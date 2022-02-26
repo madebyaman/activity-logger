@@ -1,6 +1,5 @@
 import { Activity } from '@prisma/client';
 import { useContext, useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
 
 import { useActivities } from '../../utils';
 import { ActivityTypes } from '../../types';
@@ -24,7 +23,7 @@ export const Block = ({
   notes: string;
 }) => {
   const [activity, setActivity] = useState<Activity | undefined>();
-  const { activities, isLoading, isError } = useActivities();
+  const { activities } = useActivities();
   const { modalState: modal, setModalState: setModal } =
     useContext(ModalContext);
 
@@ -51,7 +50,7 @@ export const Block = ({
 
   return (
     <button
-      className="inline-flex items-center bg-gray-100 px-3 py-2 rounded hover:bg-gray-200"
+      className="inline-flex items-center px-3 py-2 rounded"
       onClick={handleClick}
     >
       {activity ? (
@@ -59,10 +58,10 @@ export const Block = ({
           <span
             className={`w-3 h-3 mr-2 inline-block rounded-full ${blockTypeColors[type]}`}
           ></span>
-          <span>{name}</span>
+          <span className="font-display text-gray-700">{name}</span>
         </>
       ) : (
-        'No activity'
+        <span className="font-display text-gray-700">No activity</span>
       )}
     </button>
   );

@@ -20,7 +20,7 @@ export const h2Classes = `${baseHeadingClasses} text-2xl`;
 
 export const h3Classes = `${baseHeadingClasses} text-xl`;
 
-export const labelClasses = `block text-gray-700 text-sm font-bold mb-2`;
+export const labelClasses = `block text-gray-600 text-sm font-bold mb-2`;
 
 export const linkClasses = 'text-blue-500 hover:text-blue-800';
 

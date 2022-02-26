@@ -26,15 +26,19 @@ export const EditBlock = ({ changeTab }: { changeTab: () => void }) => {
     e.preventDefault();
     if (!modal.currentBlockId) return;
 
-    // 1. Update local state
+    // 1. Immediately Update local state
     if (modal.activity) {
       updateLocalBlock(modal.activity.id, modal.notes);
     }
+    // 2. Hide the modal
+    if (setModal) setModal({ ...modal, showModal: false });
 
     try {
+      // 2. Try updating the block
       if (modal.activity) {
         await updateBlock(modal.currentBlockId, modal.activity.id, modal.notes);
-        mutate('/blocks');
+        // 3. If successful, revalidate blocks data
+        mutate('/logs');
       }
     } catch (e) {
       // 1. Show warning flash message
@@ -50,8 +54,6 @@ export const EditBlock = ({ changeTab }: { changeTab: () => void }) => {
         ]);
       //2. Reset the local state
       updateLocalBlock(null, '');
-    } finally {
-      if (setModal) setModal({ ...modal, showModal: false });
     }
   };
 
@@ -70,7 +72,7 @@ export const EditBlock = ({ changeTab }: { changeTab: () => void }) => {
         return block;
       }
     });
-    mutate('/blocks', newBlocks, false);
+    mutate('/logs', newBlocks, false);
   };
 
   if (!activities || !blocks) {
