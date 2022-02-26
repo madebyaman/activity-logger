@@ -1,8 +1,6 @@
-import { useRecoilState } from 'recoil';
 import { useSWRConfig } from 'swr';
 import { FormEvent, useContext } from 'react';
 
-import { flashMessageState } from '../FlashMessage/flashMessageState';
 import {
   defaultButtonClasses,
   labelClasses,
@@ -11,11 +9,12 @@ import {
 } from '../ui';
 import { useBlocks, useActivities, updateBlock } from '../../utils';
 import { ModalContext } from '.';
+import { FlashMessageContext } from '../FlashMessage';
 
 export const EditBlock = ({ changeTab }: { changeTab: () => void }) => {
   const { modalState: modal, setModalState: setModal } =
     useContext(ModalContext);
-  const [flashMessages, setFlashMessages] = useRecoilState(flashMessageState);
+  const { setFlashMessages } = useContext(FlashMessageContext);
   const { activities } = useActivities();
   const { blocks } = useBlocks();
   const { mutate } = useSWRConfig();
@@ -39,15 +38,16 @@ export const EditBlock = ({ changeTab }: { changeTab: () => void }) => {
       }
     } catch (e) {
       // 1. Show warning flash message
-      setFlashMessages([
-        ...flashMessages,
-        {
-          title: 'Error updating block',
-          message:
-            'Something went wrong. There was an network error while updating the block. Please try again.',
-          type: 'warning',
-        },
-      ]);
+      setFlashMessages &&
+        setFlashMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            title: 'Error updating block',
+            message:
+              'Something went wrong. There was an network error while updating the block. Please try again.',
+            type: 'warning',
+          },
+        ]);
       //2. Reset the local state
       updateLocalBlock(null, '');
     } finally {

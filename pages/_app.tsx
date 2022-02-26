@@ -1,8 +1,11 @@
-import '../styles/globals.css';
 import type { AppProps } from 'next/app';
+
+import '../styles/globals.css';
 import { NextPageWithAuth } from '../types';
-import { RecoilRoot } from 'recoil';
-import { FlashMessageWrapper } from '../components/FlashMessage';
+import {
+  FlashMessageProvider,
+  FlashMessageWrapper,
+} from '../components/FlashMessage';
 import { AppLayout } from '../components/ui/AppLayout';
 
 type ComponentPropsWithAuth = AppProps & {
@@ -11,7 +14,7 @@ type ComponentPropsWithAuth = AppProps & {
 
 function MyApp({ Component, pageProps }: ComponentPropsWithAuth) {
   return (
-    <RecoilRoot>
+    <FlashMessageProvider>
       {Component.protectedRoute ? (
         <AppLayout>
           <Component {...pageProps} />
@@ -20,7 +23,7 @@ function MyApp({ Component, pageProps }: ComponentPropsWithAuth) {
         <Component {...pageProps} />
       )}
       <FlashMessageWrapper />
-    </RecoilRoot>
+    </FlashMessageProvider>
   );
 }
 

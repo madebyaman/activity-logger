@@ -1,4 +1,4 @@
-import { Fragment, ReactNode, useState } from 'react';
+import { Fragment, ReactNode, useContext, useState } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { AiOutlineClose, AiOutlineMenu, AiOutlineUser } from 'react-icons/ai';
 import moment from 'moment';
@@ -6,13 +6,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { classNames, useProfile } from '../../utils';
-import { useSetRecoilState } from 'recoil';
-import { flashMessageState } from '../FlashMessage';
 import { ModalProvider } from '../modal';
+import { FlashMessageContext } from '../FlashMessage';
 
 export const AppLayout = ({ children }: { children: ReactNode }) => {
   const { profile, isLoading, isError } = useProfile();
-  const setFlashMessages = useSetRecoilState(flashMessageState);
+  const { setFlashMessages } = useContext(FlashMessageContext);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -20,24 +19,26 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
     try {
       setLoading(true);
       await fetch('/api/logout');
-      setFlashMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          title: 'Logged out',
-          message: 'You have successfully logged out',
-          type: 'success',
-        },
-      ]);
+      setFlashMessages &&
+        setFlashMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            title: 'Logged out',
+            message: 'You have successfully logged out',
+            type: 'success',
+          },
+        ]);
       router.push('/signin');
     } catch (err) {
-      setFlashMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          title: 'Error logging out',
-          message: 'There was an error logging you out',
-          type: 'error',
-        },
-      ]);
+      setFlashMessages &&
+        setFlashMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            title: 'Error logging out',
+            message: 'There was an error logging you out',
+            type: 'error',
+          },
+        ]);
     } finally {
       setLoading(false);
     }

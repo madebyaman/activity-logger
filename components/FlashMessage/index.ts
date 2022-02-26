@@ -1,2 +1,2 @@
 export { FlashMessageWrapper } from './FlashMessageWrapper';
-export { flashMessageState } from './flashMessageState';
+export { FlashMessageContext, FlashMessageProvider } from './FlashMessageState';

@@ -1,10 +1,9 @@
-import { FormEvent, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { FormEvent, useContext, useState } from 'react';
 import { useSWRConfig } from 'swr';
 
 import { ActivityTypes } from '../../types';
 import { addActivity } from '../../utils';
-import { flashMessageState } from '../FlashMessage/flashMessageState';
+import { FlashMessageContext } from '../FlashMessage';
 import {
   defaultButtonClasses,
   inputClasses,
@@ -26,7 +25,7 @@ export const AddActivity = ({ changeTab }: { changeTab: () => void }) => {
   const [activityName, setActivityName] = useState('');
   const [loading, setLoading] = useState(false);
   const { mutate } = useSWRConfig();
-  const [flashMessages, setFlashMessages] = useRecoilState(flashMessageState);
+  const { setFlashMessages } = useContext(FlashMessageContext);
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -37,15 +36,16 @@ export const AddActivity = ({ changeTab }: { changeTab: () => void }) => {
         type: activityType || 'Neutral',
       });
     } catch (e) {
-      setFlashMessages([
-        ...flashMessages,
-        {
-          title: 'Error adding new activity',
-          message:
-            'Something went wrong. There was an network error while adding new activity. Please try again.',
-          type: 'error',
-        },
-      ]);
+      setFlashMessages &&
+        setFlashMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            title: 'Error adding new activity',
+            message:
+              'Something went wrong. There was an network error while adding new activity. Please try again.',
+            type: 'error',
+          },
+        ]);
     } finally {
       setLoading(false);
       mutate('/activities');

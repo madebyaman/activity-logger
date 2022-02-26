@@ -1,14 +1,15 @@
-import { useEffect } from 'react';
-import { useRecoilState } from 'recoil';
+import { useContext, useEffect } from 'react';
+
+import { FlashMessageContext } from '.';
 import { FlashMessage } from './FlashMessage';
-import { flashMessageState } from './flashMessageState';
 
 export const FlashMessageWrapper = () => {
-  const [flashMessages, setFlashMessages] = useRecoilState(flashMessageState);
+  const { flashMessages, setFlashMessages } = useContext(FlashMessageContext);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setFlashMessages((prevMessages) => prevMessages.slice(1));
+      setFlashMessages &&
+        setFlashMessages((prevMessages) => prevMessages.slice(1));
     }, 5_000);
 
     return () => clearTimeout(timer);

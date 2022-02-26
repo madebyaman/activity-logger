@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router';
-import { FC, FormEvent, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { FC, FormEvent, useContext, useState } from 'react';
+
 import { AuthSigninProps, AuthSignupProps } from '../types';
 import { auth } from '../utils/auth';
-import { flashMessageState } from './FlashMessage/flashMessageState';
+import { FlashMessageContext } from './FlashMessage';
 import {
   defaultButtonClasses,
   disabledButtonClasses,
@@ -18,7 +18,7 @@ export const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [flashMessages, setFlashMessages] = useRecoilState(flashMessageState);
+  const { setFlashMessages } = useContext(FlashMessageContext);
   const router = useRouter();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -47,39 +47,42 @@ export const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({
         mode === 'signin' ? signInUserData : signUpUserData
       );
       // res will be undefined if status is not between 200 and 300. Defined in `fetcher.ts` file
-      if (res) {
+      if (res.status >= 200 && res.status < 300) {
         router.push('/');
-        setFlashMessages([
-          ...flashMessages,
-          {
-            title: 'Success',
-            message: `You have successfully ${
-              mode === 'signin' ? 'logged in' : 'signed up'
-            }`,
-            type: 'success',
-          },
-        ]);
+        setFlashMessages &&
+          setFlashMessages((prevMessages) => [
+            ...prevMessages,
+            {
+              title: 'Success',
+              message: `You have successfully ${
+                mode === 'signin' ? 'logged in' : 'signed up'
+              }`,
+              type: 'success',
+            },
+          ]);
       } else {
-        setFlashMessages([
-          ...flashMessages,
-          {
-            title: 'Error',
-            message: 'Your email or password is incorrect. Please try again.',
-            type: 'error',
-          },
-        ]);
+        setFlashMessages &&
+          setFlashMessages((prevMessages) => [
+            ...prevMessages,
+            {
+              title: 'Error',
+              message: 'Your email or password is incorrect. Please try again.',
+              type: 'error',
+            },
+          ]);
       }
       router.push('/');
     } catch (err) {
-      setFlashMessages([
-        ...flashMessages,
-        {
-          title: 'Error submitting form',
-          message:
-            'Something went wrong while submitting your form. Refresh the page and try again.',
-          type: 'error',
-        },
-      ]);
+      setFlashMessages &&
+        setFlashMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            title: 'Error submitting form',
+            message:
+              'Something went wrong while submitting your form. Refresh the page and try again.',
+            type: 'error',
+          },
+        ]);
     } finally {
       setIsLoading(false);
     }

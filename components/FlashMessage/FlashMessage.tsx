@@ -1,6 +1,7 @@
+import { useContext } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
-import { useSetRecoilState } from 'recoil';
-import { flashMessageState } from './flashMessageState';
+
+import { FlashMessageContext } from '.';
 
 export const FlashMessage = ({
   message,
@@ -11,10 +12,11 @@ export const FlashMessage = ({
   title: string;
   type: 'error' | 'warning' | 'success';
 }) => {
-  const setFlashMessages = useSetRecoilState(flashMessageState);
+  const { setFlashMessages } = useContext(FlashMessageContext);
 
   const removeLastMessage = () => {
-    setFlashMessages((prevMessages) => prevMessages.slice(1));
+    setFlashMessages &&
+      setFlashMessages((prevMessages) => prevMessages.slice(1));
   };
 
   return (
