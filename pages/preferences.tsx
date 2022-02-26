@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useSWRConfig } from 'swr';
 import {
   defaultButtonClasses,
+  disabledButtonClasses,
   h3Classes,
   inputClasses,
   labelClasses,
@@ -47,17 +48,20 @@ const Preferences: NextPageWithAuth = () => {
     firstName: profile.firstName,
     lastName: profile.lastName,
   });
+  const [loading, setLoading] = useState(false);
   const { mutate } = useSWRConfig();
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     try {
       await fetcher('/profile/update', profileState);
       router.push('/');
     } catch {
       console.error('Failed to update profile');
     } finally {
+      setLoading(false);
       mutate('/profile');
     }
   };
@@ -202,8 +206,13 @@ const Preferences: NextPageWithAuth = () => {
                   </div>
                 </div>
                 <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                  <button type="submit" className={defaultButtonClasses}>
-                    Save
+                  <button
+                    type="submit"
+                    className={
+                      loading ? disabledButtonClasses : defaultButtonClasses
+                    }
+                  >
+                    {!loading ? 'Save' : 'Saving...'}
                   </button>
                 </div>
               </div>
