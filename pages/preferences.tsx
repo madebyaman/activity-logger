@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useSWRConfig } from 'swr';
+import { FlashMessageContext } from '../components/FlashMessage';
 import {
   defaultButtonClasses,
   disabledButtonClasses,
@@ -51,6 +52,7 @@ const Preferences: NextPageWithAuth = () => {
   const [loading, setLoading] = useState(false);
   const { mutate } = useSWRConfig();
   const router = useRouter();
+  const { setFlashMessages } = useContext(FlashMessageContext);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -59,7 +61,16 @@ const Preferences: NextPageWithAuth = () => {
       await fetcher('/profile/update', profileState);
       router.push('/');
     } catch {
-      console.error('Failed to update profile');
+      setFlashMessages &&
+        setFlashMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            title: 'Error',
+            message:
+              'Something went wrong while saving your profile. Please try again.',
+            type: 'error',
+          },
+        ]);
     } finally {
       setLoading(false);
       mutate('/profile');

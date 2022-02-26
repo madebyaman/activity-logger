@@ -47,7 +47,7 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
   const navigation = [
     { name: 'Dashboard', href: '/' },
     { name: 'Reports', href: '#' }, // TODO
-    { name: 'Settings', href: '/preferences' },
+    { name: 'Your Preferences', href: '/preferences' },
   ];
 
   const removeTrailingAndCapitalize = (s: string) => {

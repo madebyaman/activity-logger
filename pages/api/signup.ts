@@ -3,6 +3,8 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
 import prisma from '../../utils/prisma';
+import { activitiesData } from '../../utils';
+import { User } from '@prisma/client';
 
 export default async function signup(
   req: NextApiRequest,
@@ -11,7 +13,7 @@ export default async function signup(
   const salt = bcrypt.genSaltSync();
   const { email, password, firstName, lastName } = req.body;
 
-  let user;
+  let user: User | undefined;
   try {
     user = await prisma.user.create({
       data: {
@@ -26,18 +28,18 @@ export default async function signup(
   }
 
   // Update Profile with first name and last name
-  if (user) {
-    const updateProfile = await prisma.profile.update({
-      where: {
-        userId: user.id,
-      },
-      data: {
-        firstName,
-        lastName,
-      },
-    });
+  if (!user) {
+    return res.status(401).json({ error: 'User already exists' });
   }
-
+  const updateProfile = await prisma.profile.update({
+    where: {
+      userId: user.id,
+    },
+    data: {
+      firstName,
+      lastName,
+    },
+  });
   const token = jwt.sign(
     {
       email: user?.email,
@@ -56,6 +58,21 @@ export default async function signup(
       path: '/',
       sameSite: 'lax',
       secure: process.env.NODE_ENV === 'production',
+    })
+  );
+
+  // Seed activities
+  await Promise.all(
+    activitiesData.map((act) => {
+      return prisma.activity.create({
+        data: {
+          name: act.name,
+          type: act.type,
+          user: {
+            connect: { id: user && user.id },
+          },
+        },
+      });
     })
   );
 

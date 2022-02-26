@@ -14,6 +14,12 @@ const getLogs = async (
   const date = getDateString();
   const logs = await prisma.log.findMany({ where: { date: date } });
 
+  // Get `blocksPerHour` from profile db
+  const profile = await prisma.profile.findOne({
+    where: { user: { id: user.id } },
+  });
+  const { blocksPerHour } = profile;
+
   // Sometimes, only few logs are added to the db.
   if (logs.length === 96 || logs.length === 48 || logs.length === 24) {
     // If logs found, return them

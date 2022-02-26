@@ -1,11 +1,10 @@
 import bcrypt from 'bcrypt';
 import { env } from 'process';
-import { activitiesData } from './activitiesData';
+import { activitiesData } from '../utils';
 import prisma from '../utils/prisma';
 
 const run = async () => {
   if (!env['TEST_EMAIL'] || !env['TEST_PASSWORD']) {
-    console.error('No test email, password in env file');
     return;
   }
   // Put User
@@ -58,7 +57,6 @@ const run = async () => {
 
 run()
   .catch((e) => {
-    console.error(e);
     process.exit(1);
   })
   .finally(async () => {
