@@ -3,13 +3,12 @@ import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { AiOutlineClose, AiOutlineMenu, AiOutlineUser } from 'react-icons/ai';
 import moment from 'moment';
 import Link from 'next/link';
-import { classNames } from '../../utils';
 import { useRouter } from 'next/router';
-import { useRecoilValue } from 'recoil';
-import { profileState } from '../user';
+
+import { classNames, useProfile } from '../../utils';
 
 export const AppLayout = ({ children }: { children: ReactNode }) => {
-  const profile = useRecoilValue(profileState);
+  const { profile, isLoading, isError } = useProfile();
   const router = useRouter();
 
   const navigation = [
@@ -26,6 +25,14 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
     router.pathname === '/'
       ? moment().format('LL')
       : removeTrailingAndCapitalize(router.pathname);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error!</div>;
+  }
 
   return (
     <div className="min-h-full">

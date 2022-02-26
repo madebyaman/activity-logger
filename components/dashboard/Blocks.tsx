@@ -1,15 +1,14 @@
 import { Log } from '@prisma/client';
-import { useRecoilValue } from 'recoil';
 
-import { useBlocks } from './useBlocks';
 import { showBlock } from './utils';
-import { convertNumberToHour } from '../../utils';
-import { profileState } from '../user';
-import { ShowBlock } from './ShowBlock';
+import { convertNumberToHour, useBlocks, useProfile } from '../../utils';
+import { Block } from './Block';
+import { BlocksPerHourType } from '../../types';
 
 export const Blocks = ({}) => {
-  const profile = useRecoilValue(profileState);
-  const { sleepFrom, sleepTo, blocksPerHour } = profile;
+  const { profile } = useProfile();
+  const { sleepFrom, sleepTo } = profile;
+  const blocksPerHour = profile.blocksPerHour as BlocksPerHourType;
   const { blocks, isLoading, isError } = useBlocks();
 
   // This is to make sure purge css works correctly in Tailwind
@@ -81,7 +80,7 @@ export const Blocks = ({}) => {
                           }`}
                         >
                           {showBlock(to) ? (
-                            <ShowBlock
+                            <Block
                               id={id}
                               activityId={activityId}
                               notes={notes || ''}

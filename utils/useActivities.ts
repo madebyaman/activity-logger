@@ -1,6 +1,6 @@
 import { Activity } from '@prisma/client';
 import useSWR from 'swr';
-import { fetcher } from '../../utils';
+import { fetcher } from '.';
 
 /**
  * Function to fetch activities data from api route

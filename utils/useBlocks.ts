@@ -1,6 +1,6 @@
 import { Log } from '@prisma/client';
 import useSWR from 'swr';
-import { fetcher } from '../../utils';
+import { fetcher } from '.';
 
 /**
  * Function to fetch logs data from api route

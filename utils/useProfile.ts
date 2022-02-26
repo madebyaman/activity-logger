@@ -1,6 +1,6 @@
 import { Profile } from '@prisma/client';
 import useSWR from 'swr';
-import { fetcher } from '../../utils';
+import { fetcher } from '.';
 
 /**
  * Function to fetch user profile from api route

@@ -9,8 +9,7 @@ import {
   SlideOver,
 } from '../ui';
 import { updateBlock } from '../dashboard/utils';
-import { useActivities } from '../dashboard/useActivities';
-import { useBlocks } from '../dashboard/useBlocks';
+import { useBlocks, useActivities } from '../../utils';
 import { useSWRConfig } from 'swr';
 import { FormEvent } from 'react';
 

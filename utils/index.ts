@@ -4,3 +4,6 @@ export { convertNumberToHour } from './convertNumberToHour';
 export { validateRoute } from './validateRoute';
 export { newBlocks } from './newBlocks';
 export { getDateString } from './getDateString';
+export { useActivities } from './useActivities';
+export { useBlocks } from './useBlocks';
+export { useProfile } from './useProfile';
