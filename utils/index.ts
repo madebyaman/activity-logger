@@ -7,3 +7,5 @@ export { getDateString } from './getDateString';
 export { useActivities } from './useActivities';
 export { useBlocks } from './useBlocks';
 export { useProfile } from './useProfile';
+export { updateBlock } from './updateBlock';
+export { addActivity } from './addActivity';

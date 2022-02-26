@@ -24,6 +24,6 @@ export const labelClasses = `block text-gray-700 text-sm font-bold mb-2`;
 
 export const linkClasses = 'text-blue-500 hover:text-blue-800';
 
-export const selectClasses = `block w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500`;
+export const selectClasses = `block w-full shadow border border-gray-200 text-gray-700 py-2 px-3 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500`;
 
 export const inputClasses = `shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-blue-500 focus:border-blue-500`;

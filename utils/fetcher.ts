@@ -1,10 +1,21 @@
-import { SigninProps, SignupProps, UserPreferences } from '../types';
+import {
+  ActivityTypes,
+  SigninProps,
+  SignupProps,
+  UserPreferences,
+} from '../types';
 
 type UpdateLog = {
   blockId: number;
   activityId: number;
   notes: string;
 };
+
+type AddActivity = {
+  type: ActivityTypes;
+  name: string;
+};
+
 /**
  * Wrapper of native `fetch` function. It returns data or an error.
  */
@@ -15,6 +26,7 @@ export async function fetcher(
     | UpdateLog
     | SigninProps
     | SignupProps
+    | AddActivity
     | undefined = undefined
 ) {
   const res = await fetch(`${window.location.origin}/api${url}`, {
@@ -25,11 +37,5 @@ export async function fetcher(
     },
     body: JSON.stringify(data),
   });
-  if (res.status >= 200 && res.status <= 299) {
-    /**
-     * Successful responses are only between 200 - 299
-     * URL: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
-     */
-    return await res.json();
-  }
+  return await res.json();
 }

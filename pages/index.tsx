@@ -1,6 +1,6 @@
 import { NextPageWithAuth } from '../types';
 import { Blocks } from '../components/dashboard';
-import { EditBlock } from '../components/modal/EditBlock';
+import { Modal } from '../components/modal';
 
 const Home: NextPageWithAuth = () => {
   /**
@@ -43,7 +43,7 @@ const Home: NextPageWithAuth = () => {
       </div>
       {/* Modal */}
       {/* <Modal onSubmit={onSubmitNewActivity} /> */}
-      <EditBlock />
+      <Modal />
     </div>
   );
 };
