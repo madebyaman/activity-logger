@@ -1,8 +1,10 @@
 import { FormEvent, useState } from 'react';
+import { useRecoilState } from 'recoil';
 import { useSWRConfig } from 'swr';
 
 import { ActivityTypes } from '../../types';
 import { addActivity } from '../../utils';
+import { flashMessageState } from '../FlashMessage/flashMessageState';
 import {
   defaultButtonClasses,
   inputClasses,
@@ -22,12 +24,33 @@ const activityTypeOptions = [
 export const AddActivity = ({ changeTab }: { changeTab: () => void }) => {
   const [activityType, setActivityType] = useState<ActivityTypes | undefined>();
   const [activityName, setActivityName] = useState('');
+  const [loading, setLoading] = useState(false);
   const { mutate } = useSWRConfig();
+  const [flashMessages, setFlashMessages] = useRecoilState(flashMessageState);
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await addActivity({ name: activityName, type: activityType || 'Neutral' });
-    mutate('/activities');
+    setLoading(true);
+    try {
+      await addActivity({
+        name: activityName,
+        type: activityType || 'Neutral',
+      });
+    } catch (e) {
+      setFlashMessages([
+        ...flashMessages,
+        {
+          title: 'Error adding new activity',
+          message:
+            'Something went wrong. There was an network error while adding new activity. Please try again.',
+          type: 'error',
+        },
+      ]);
+    } finally {
+      setLoading(false);
+      mutate('/activities');
+      changeTab();
+    }
   };
 
   return (
@@ -56,7 +79,11 @@ export const AddActivity = ({ changeTab }: { changeTab: () => void }) => {
           ))}
         </select>
         <div className="flex">
-          <button type="submit" className={defaultButtonClasses}>
+          <button
+            type="submit"
+            disabled={loading}
+            className={defaultButtonClasses}
+          >
             Submit activity
           </button>
           <button

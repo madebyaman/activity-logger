@@ -1,6 +1,6 @@
 import { Log } from '@prisma/client';
 
-import { showBlock } from './utils';
+import { showBlock } from './showBlock';
 import { convertNumberToHour, useBlocks, useProfile } from '../../utils';
 import { Block } from './Block';
 import { BlocksPerHourType } from '../../types';

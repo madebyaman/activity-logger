@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
-import { FlashMessage } from '../ui';
+import { FlashMessage } from './FlashMessage';
 import { flashMessageState } from './flashMessageState';
 
 const FlashMessageWrapper = () => {

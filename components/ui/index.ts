@@ -1,4 +1,3 @@
-export { FlashMessage } from './FlashMessage';
 export { CenteredLayout } from './CenteredLayout';
 export { SlideOver } from './SlideOver';
 export { AppLayout } from './AppLayout';
