@@ -1,4 +1,4 @@
-import { Fragment, ReactNode } from 'react';
+import { Fragment, ReactNode, useState } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { AiOutlineClose, AiOutlineMenu, AiOutlineUser } from 'react-icons/ai';
 import moment from 'moment';
@@ -6,10 +6,41 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { classNames, useProfile } from '../../utils';
+import { useSetRecoilState } from 'recoil';
+import { flashMessageState } from '../FlashMessage';
 
 export const AppLayout = ({ children }: { children: ReactNode }) => {
   const { profile, isLoading, isError } = useProfile();
+  const setFlashMessages = useSetRecoilState(flashMessageState);
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
+  const handleLogout = async () => {
+    try {
+      setLoading(true);
+      await fetch('/api/logout');
+      setFlashMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          title: 'Logged out',
+          message: 'You have successfully logged out',
+          type: 'success',
+        },
+      ]);
+      router.push('/signin');
+    } catch (err) {
+      setFlashMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          title: 'Error logging out',
+          message: 'There was an error logging you out',
+          type: 'error',
+        },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const navigation = [
     { name: 'Dashboard', href: '/' },
@@ -32,6 +63,10 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
 
   if (isError) {
     return <div>Error!</div>;
+  }
+
+  if (loading) {
+    return <div>Logging you out...</div>;
   }
 
   return (
@@ -93,9 +128,9 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
                               <a
                                 className={classNames(
                                   active ? 'bg-gray-100' : '',
-                                  'block px-4 py-2 text-sm text-gray-700'
+                                  'block px-4 py-2 text-sm text-gray-700 cursor-pointer'
                                 )}
-                                onClick={() => console.log('signed out')} // TODO
+                                onClick={handleLogout} // TODO
                               >
                                 Sign out
                               </a>
@@ -162,8 +197,8 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
                 <div className="mt-3 px-2 space-y-1">
                   <Disclosure.Button
                     as="a"
-                    onClick={() => console.log('signed out')}
-                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700"
+                    onClick={handleLogout}
+                    className="cursor-pointer block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700"
                   >
                     Sign out
                   </Disclosure.Button>

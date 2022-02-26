@@ -3,7 +3,7 @@ import { useRecoilState } from 'recoil';
 import { FlashMessage } from './FlashMessage';
 import { flashMessageState } from './flashMessageState';
 
-const FlashMessageWrapper = () => {
+export const FlashMessageWrapper = () => {
   const [flashMessages, setFlashMessages] = useRecoilState(flashMessageState);
 
   useEffect(() => {
@@ -27,5 +27,3 @@ const FlashMessageWrapper = () => {
     </div>
   );
 };
-
-export default FlashMessageWrapper;

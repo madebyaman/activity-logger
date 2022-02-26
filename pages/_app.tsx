@@ -2,7 +2,7 @@ import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import { NextPageWithAuth } from '../types';
 import { RecoilRoot } from 'recoil';
-import FlashMessageWrapper from '../components/FlashMessage/FlashMessageWrapper';
+import { FlashMessageWrapper } from '../components/FlashMessage';
 import { AppLayout } from '../components/ui/AppLayout';
 
 type ComponentPropsWithAuth = AppProps & {
