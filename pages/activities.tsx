@@ -71,14 +71,17 @@ const Activities: NextPageWithAuth = () => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {activities.sort(sortActivitiesById).map((activity) => (
-            <Activity
-              key={activity.id}
-              activity={activity}
-              updateActivity={updateActivity}
-              onDelete={deleteActivity}
-            />
-          ))}
+          {activities.length &&
+            activities
+              .sort(sortActivitiesById)
+              .map((activity) => (
+                <Activity
+                  key={activity.id}
+                  activity={activity}
+                  updateActivity={updateActivity}
+                  onDelete={deleteActivity}
+                />
+              ))}
         </tbody>
       </table>
     </>

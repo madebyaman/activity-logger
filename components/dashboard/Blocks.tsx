@@ -3,12 +3,10 @@ import { Log } from '@prisma/client';
 import { showBlock } from './showBlock';
 import { convertNumberToHour, useBlocks, useProfile } from '../../utils';
 import { Block } from './Block';
-import { BlocksPerHourType } from '../../types';
 
 export const Blocks = ({}) => {
   const { profile } = useProfile();
   const { sleepFrom, sleepTo } = profile;
-  const blocksPerHour = profile.blocksPerHour as BlocksPerHourType;
   const { blocks, isLoading, isError } = useBlocks();
 
   // This is to make sure purge css works correctly in Tailwind
@@ -16,6 +14,11 @@ export const Blocks = ({}) => {
     1: 'md:grid-cols-3',
     2: 'md:grid-cols-5',
     4: 'md:grid-cols-9',
+  };
+
+  // Count the number of blocks per hour
+  const blocksPerHourCount = () => {
+    return blocks.length === 24 ? 1 : blocks.length === 48 ? 2 : 4;
   };
 
   /**
@@ -61,7 +64,9 @@ export const Blocks = ({}) => {
               return (
                 <div
                   key={currentHour}
-                  className={`grid grid-cols-3 ${gridColumns[blocksPerHour]}`}
+                  className={`grid grid-cols-3 ${
+                    gridColumns[blocksPerHourCount()]
+                  }`}
                 >
                   <h3 className="font-display text-2xl place-self-center">
                     {convertNumberToHour(currentHour)}
