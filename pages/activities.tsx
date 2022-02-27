@@ -32,6 +32,15 @@ const Activities: NextPageWithAuth = () => {
     mutate('/activities');
   };
 
+  const deleteActivity = async (id: number) => {
+    const updatedActivities = activities.filter(
+      (activity) => activity.id !== id
+    );
+    mutate('/activities', updatedActivities, false);
+    await fetcher('/activities/delete', { id });
+    mutate('/activities');
+  };
+
   if (isLoading) {
     return <p>Loading...</p>;
   }
@@ -67,6 +76,7 @@ const Activities: NextPageWithAuth = () => {
               key={activity.id}
               activity={activity}
               updateActivity={updateActivity}
+              onDelete={deleteActivity}
             />
           ))}
         </tbody>

@@ -20,6 +20,10 @@ interface EditActivity extends AddActivity {
   id: number;
 }
 
+type DeleteActivity = {
+  id: number;
+};
+
 /**
  * Wrapper of native `fetch` function. It returns data or an error.
  */
@@ -32,6 +36,7 @@ export async function fetcher(
     | SignupProps
     | AddActivity
     | EditActivity
+    | DeleteActivity
     | undefined = undefined
 ) {
   const res = await fetch(`${window.location.origin}/api${url}`, {

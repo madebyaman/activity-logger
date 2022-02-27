@@ -2,7 +2,7 @@ import { Activity as ActivityType } from '@prisma/client';
 import { useState } from 'react';
 import { ActivityTypes } from '../types';
 import { activityTypes } from '../utils';
-import { inputClasses, selectClasses } from './ui';
+import { defaultButtonClasses, inputClasses, selectClasses } from './ui';
 
 // style activity type
 function styledActivity(type: ActivityTypes) {
@@ -25,6 +25,7 @@ function styledActivity(type: ActivityTypes) {
 export const Activity = ({
   activity,
   updateActivity,
+  onDelete,
 }: {
   activity: ActivityType;
   updateActivity: ({
@@ -36,6 +37,7 @@ export const Activity = ({
     name: string;
     type: ActivityTypes;
   }) => Promise<void>;
+  onDelete: (id: number) => Promise<void>;
 }) => {
   const [editingActivity, setEditingActivity] = useState({
     isEditing: false,
@@ -58,6 +60,7 @@ export const Activity = ({
   };
 
   const tdClasses = 'px-6 py-4 whitespace-no-wrap';
+  const buttonClasses = 'text-sm font-medium';
 
   return (
     <tr>
@@ -108,11 +111,17 @@ export const Activity = ({
       </td>
       {editingActivity.isEditing ? (
         <td className={tdClasses}>
-          <button onClick={onSave}>Save</button>
+          <button
+            onClick={onSave}
+            className={buttonClasses + ' text-green-700 hover:text-green-900'}
+          >
+            Save
+          </button>
         </td>
       ) : (
         <td className={tdClasses}>
           <button
+            className={buttonClasses + ' text-teal-600 hover:text-teal-900'}
             onClick={() =>
               setEditingActivity({
                 type: activity.type as ActivityTypes,
@@ -125,9 +134,16 @@ export const Activity = ({
           </button>
         </td>
       )}
-      <td className={tdClasses}>
-        {!editingActivity.isEditing ? 'Delete' : null}
-      </td>
+      {editingActivity.isEditing ? null : (
+        <td className={tdClasses}>
+          <button
+            onClick={() => onDelete(activity.id)}
+            className={buttonClasses + ' text-red-700 hover:text-red-900'}
+          >
+            Delete
+          </button>
+        </td>
+      )}
     </tr>
   );
 };
