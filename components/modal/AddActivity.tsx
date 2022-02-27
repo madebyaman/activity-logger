@@ -2,7 +2,7 @@ import { FormEvent, useContext, useState } from 'react';
 import { useSWRConfig } from 'swr';
 
 import { ActivityTypes } from '../../types';
-import { addActivity } from '../../utils';
+import { activityTypes, addActivity } from '../../utils';
 import { FlashMessageContext } from '../FlashMessage';
 import {
   defaultButtonClasses,
@@ -11,14 +11,6 @@ import {
   outlineButtonClasses,
   selectClasses,
 } from '../ui';
-
-const activityTypeOptions = [
-  'Neutral',
-  'Productive',
-  'Very Productive',
-  'Distracting',
-  'Very Distracting',
-];
 
 export const AddActivity = ({ changeTab }: { changeTab: () => void }) => {
   const [activityType, setActivityType] = useState<ActivityTypes | undefined>();
@@ -74,7 +66,7 @@ export const AddActivity = ({ changeTab }: { changeTab: () => void }) => {
           onChange={(e) => setActivityType(e.target.value as ActivityTypes)}
         >
           <option value="">Type of activity</option>
-          {activityTypeOptions.map((activity) => (
+          {activityTypes.map((activity) => (
             <option key={activity}>{activity}</option>
           ))}
         </select>

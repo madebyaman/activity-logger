@@ -10,3 +10,4 @@ export { useProfile } from './useProfile';
 export { updateBlock } from './updateBlock';
 export { addActivity } from './addActivity';
 export { activitiesData } from './activitiesData';
+export { activityTypes } from './activityTypes';

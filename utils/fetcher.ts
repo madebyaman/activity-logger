@@ -16,6 +16,10 @@ type AddActivity = {
   name: string;
 };
 
+interface EditActivity extends AddActivity {
+  id: number;
+}
+
 /**
  * Wrapper of native `fetch` function. It returns data or an error.
  */
@@ -27,6 +31,7 @@ export async function fetcher(
     | SigninProps
     | SignupProps
     | AddActivity
+    | EditActivity
     | undefined = undefined
 ) {
   const res = await fetch(`${window.location.origin}/api${url}`, {
