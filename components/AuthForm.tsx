@@ -43,34 +43,18 @@ export const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({
     };
 
     try {
-      const res = await auth(
-        mode === 'signin' ? signInUserData : signUpUserData
-      );
-      // res will be undefined if status is not between 200 and 300. Defined in `fetcher.ts` file
-      if (res.status >= 200 && res.status < 300) {
-        router.push('/');
-        setFlashMessages &&
-          setFlashMessages((prevMessages) => [
-            ...prevMessages,
-            {
-              title: 'Success',
-              message: `You have successfully ${
-                mode === 'signin' ? 'logged in' : 'signed up'
-              }`,
-              type: 'success',
-            },
-          ]);
-      } else {
-        setFlashMessages &&
-          setFlashMessages((prevMessages) => [
-            ...prevMessages,
-            {
-              title: 'Error',
-              message: 'Your email or password is incorrect. Please try again.',
-              type: 'error',
-            },
-          ]);
-      }
+      await auth(mode === 'signin' ? signInUserData : signUpUserData);
+      setFlashMessages &&
+        setFlashMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            title: 'Success',
+            message: `You have successfully ${
+              mode === 'signin' ? 'logged in' : 'signed up'
+            }`,
+            type: 'success',
+          },
+        ]);
       router.push('/');
     } catch (err) {
       setFlashMessages &&

@@ -64,7 +64,7 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
   }
 
   if (isError) {
-    return <div>Error!</div>;
+    return <div>Error getting your profile!</div>;
   }
 
   if (loading) {

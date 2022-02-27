@@ -14,6 +14,7 @@ export default async function signup(
   const { email, password, firstName, lastName } = req.body;
 
   let user: User | undefined;
+
   try {
     user = await prisma.user.create({
       data: {
@@ -31,15 +32,27 @@ export default async function signup(
   if (!user) {
     return res.status(401).json({ error: 'User already exists' });
   }
-  const updateProfile = await prisma.profile.update({
+  await prisma.profile.upsert({
     where: {
       userId: user.id,
     },
-    data: {
+    update: {
       firstName,
       lastName,
     },
+    create: {
+      firstName,
+      lastName,
+      sleepFrom: 22,
+      sleepTo: 6,
+      blocksPerHour: 4,
+      user: {
+        connect: { id: user.id },
+      },
+    },
   });
+
+  // Create token and cookies
   const token = jwt.sign(
     {
       email: user?.email,
@@ -58,21 +71,6 @@ export default async function signup(
       path: '/',
       sameSite: 'lax',
       secure: process.env.NODE_ENV === 'production',
-    })
-  );
-
-  // Seed activities
-  await Promise.all(
-    activitiesData.map((act) => {
-      return prisma.activity.create({
-        data: {
-          name: act.name,
-          type: act.type,
-          user: {
-            connect: { id: user && user.id },
-          },
-        },
-      });
     })
   );
 
