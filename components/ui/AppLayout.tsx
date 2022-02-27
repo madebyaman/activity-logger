@@ -48,16 +48,17 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
     { name: 'Dashboard', href: '/' },
     { name: 'Reports', href: '#' }, // TODO
     { name: 'Your Preferences', href: '/preferences' },
+    { name: 'Activities', href: '/activities' },
   ];
 
-  const removeTrailingAndCapitalize = (s: string) => {
+  const removeTrailingSlashAndCapitalize = (s: string) => {
     return s.replace(/\//g, '').replace(/^\w/, (c) => c.toUpperCase());
   };
 
   const pageTitle =
     router.pathname === '/'
       ? moment().format('LL')
-      : removeTrailingAndCapitalize(router.pathname);
+      : removeTrailingSlashAndCapitalize(router.pathname);
 
   if (isLoading) {
     return <div>Loading...</div>;
