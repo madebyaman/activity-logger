@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useContext, useState } from 'react';
 import { useSWRConfig } from 'swr';
@@ -79,6 +80,10 @@ const Preferences: NextPageWithAuth = () => {
 
   return (
     <div>
+      <Head>
+        <title>User preferences</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </Head>
       <div>
         <div className="md:grid md:grid-cols-3 md:gap-6">
           <div className="md:col-span-1">

@@ -1,4 +1,5 @@
 import { Activity as ActivityType } from '@prisma/client';
+import Head from 'next/head';
 import { useSWRConfig } from 'swr';
 import { Activity } from '../components/Activity';
 import { ActivityTypes, NextPageWithAuth } from '../types';
@@ -51,7 +52,6 @@ const Activities: NextPageWithAuth = () => {
 
   const thClasses =
     'px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider';
-  const tdClasses = 'px-6 py-4 whitespace-no-wrap';
 
   const sortActivitiesById = (a: ActivityType, b: ActivityType) => {
     if (a.id < b.id) return -1;
@@ -61,6 +61,10 @@ const Activities: NextPageWithAuth = () => {
 
   return (
     <>
+      <Head>
+        <title>Your Activities</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </Head>
       <table className="min-w-full divide-y divide-gray-200 table-auto">
         <thead className="bg-gray-100">
           <tr>
