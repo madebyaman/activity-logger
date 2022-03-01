@@ -5,5 +5,10 @@
  */
 export const showBlock = (to: Date): boolean => {
   const currentTime = new Date(Date.now());
-  return new Date(to) <= currentTime;
+  // Why?
+  // B/c server stores time in zero zone, but client has current time in local zone. So we need to remove 'Z' from the end of the string.
+  const removeTimeZoneSignifier = to
+    .toString()
+    .substring(0, to.toString().length - 1);
+  return new Date(removeTimeZoneSignifier) <= currentTime;
 };
