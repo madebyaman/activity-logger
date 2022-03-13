@@ -3,7 +3,6 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
 import prisma from '../../utils/prisma';
-import { activitiesData } from '../../utils';
 import { User } from '@prisma/client';
 
 export default async function signup(

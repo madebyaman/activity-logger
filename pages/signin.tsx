@@ -9,7 +9,6 @@ const Signin: NextPage = () => {
     <CenteredLayout>
       <Head>
         <title>Signin</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <div>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
