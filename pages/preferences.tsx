@@ -60,7 +60,7 @@ const Preferences: NextPageWithAuth = () => {
     setLoading(true);
     try {
       await fetcher('/profile/update', profileState);
-      router.push('/');
+      router.push('/dashboard');
     } catch {
       setFlashMessages &&
         setFlashMessages((prevMessages) => [
