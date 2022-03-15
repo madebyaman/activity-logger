@@ -55,7 +55,7 @@ export const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({
             type: 'success',
           },
         ]);
-      router.push('/');
+      router.push('/dashboard');
     } catch (err) {
       setFlashMessages &&
         setFlashMessages((prevMessages) => [
