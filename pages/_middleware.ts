@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const protectedPages = ['/', '/preferences', '/activities'];
+const protectedPages = ['/dashboard', '/preferences', '/activities'];
 
 export default function middleware(req: NextRequest) {
   if (protectedPages.find((p) => p === req.nextUrl.pathname)) {

@@ -45,8 +45,7 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
   };
 
   const navigation = [
-    { name: 'Dashboard', href: '/' },
-    { name: 'Reports', href: '#' }, // TODO
+    { name: 'Dashboard', href: '/dashboard' },
     { name: 'Your Preferences', href: '/preferences' },
     { name: 'Activities', href: '/activities' },
   ];
@@ -56,7 +55,7 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
   };
 
   const pageTitle =
-    router.pathname === '/'
+    router.pathname === '/dashboard'
       ? moment().format('LL')
       : removeTrailingSlashAndCapitalize(router.pathname);
 
