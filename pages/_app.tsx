@@ -27,6 +27,7 @@ function MyApp({ Component, pageProps }: ComponentPropsWithAuth) {
         <title>Activity Logger App</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
+      <a href="#main">Skip to main content</a>
       {Component.protectedRoute ? (
         <AppLayout>
           <Component {...pageProps} />

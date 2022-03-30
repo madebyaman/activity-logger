@@ -20,7 +20,7 @@ export default function Index() {
           </Link>
         </nav>
       </header>
-      <main className="mt-20 flex justify-between items-center">
+      <main className="mt-20 flex justify-between items-center" id="main">
         <div>
           <h1 className="text-6xl font-bold text-gray-800">
             Take back control of your time

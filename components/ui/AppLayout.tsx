@@ -219,7 +219,7 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
             </h1>
           </div>
         </header>
-        <main>
+        <main id="main">
           <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
             {/* Replace with your content */}
             {children}

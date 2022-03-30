@@ -3,3 +3,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+[href='#main'] {
+  position: absolute;
+  top: 0;
+  right: 100%; /* moves off screen */
+}
+
+[href='#main']:focus {
+  right: auto;
+}
