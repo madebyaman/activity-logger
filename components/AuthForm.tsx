@@ -77,8 +77,8 @@ export const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({
 
   return (
     <div className="max-w-sm">
-      <form className="space-y-6" onSubmit={handleSubmit}>
-        <div className="flex flex-col mt-4">
+      <form onSubmit={handleSubmit}>
+        <div className="flex flex-col mt-4 gap-2">
           {mode === 'signup' && (
             <>
               <label className="sr-only" htmlFor="firstName">
@@ -90,7 +90,7 @@ export const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({
                 name="firstName"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
-                className={inputClasses + additionalInputClasses}
+                className={'input' + additionalInputClasses}
                 placeholder="First name"
                 required
               />
@@ -103,7 +103,7 @@ export const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({
                 name="lastName"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
-                className={inputClasses + additionalInputClasses}
+                className={'input' + additionalInputClasses}
                 placeholder="Last name"
                 required
               />
@@ -120,7 +120,7 @@ export const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({
             type="email"
             autoComplete="email"
             required
-            className={inputClasses + additionalInputClasses}
+            className={'input' + additionalInputClasses}
             placeholder="Email address"
           />
           <label htmlFor="password" className="sr-only">
@@ -134,16 +134,16 @@ export const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({
             type="password"
             autoComplete="current-password"
             required
-            className={inputClasses + additionalInputClasses}
+            className={'input' + additionalInputClasses}
             placeholder="Password"
           />
         </div>
 
-        <div className="mt-2">
+        <div className="mt-4">
           <button
             type="submit"
-            className={`w-full ${
-              isLoading ? disabledButtonClasses : defaultButtonClasses
+            className={`w-full btn ${
+              isLoading ? ' opacity-40 cursor-not-allowed' : ''
             }`}
           >
             {isLoading

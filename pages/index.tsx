@@ -29,10 +29,8 @@ export default function Index() {
         id="main"
       >
         <div>
-          <h1 className="text-4xl font-bold text-gray-800 leading-tight md:text-5xl">
-            Take Back Control of Your Time
-          </h1>
-          <div className="text-base text-gray-600 mt-2 md:mt-4 md:text-lg">
+          <h1 className="heading1">Take Back Control of Your Time</h1>
+          <div className="paragraph mt-2 md:mt-4">
             <p>
               Activity Logger is an app to help you keep track of your time.
               After every few hours come back to the app and enter what you were

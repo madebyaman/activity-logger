@@ -16,14 +16,32 @@
   .btn:focus {
     @apply outline-none ring ring-blue-600 ring-offset-2;
   }
-}
 
-[href='#main'] {
-  position: absolute;
-  top: 0;
-  right: 100%; /* moves off screen */
-}
+  .link {
+    @apply text-blue-500 underline decoration-1 underline-offset-4 decoration-gray-400;
+  }
 
-[href='#main']:focus {
-  right: auto;
+  .link:hover {
+    @apply decoration-2 decoration-blue-700;
+  }
+
+  .link:focus {
+    @apply bg-yellow-200 outline-none decoration-2 decoration-blue-700;
+  }
+
+  .heading1 {
+    @apply text-3xl font-bold text-gray-800 leading-tight md:text-5xl;
+  }
+
+  .paragraph {
+    @apply text-base text-gray-600 md:text-lg;
+  }
+
+  .input {
+    @apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight;
+  }
+
+  .input:focus {
+    @apply outline-none ring ring-blue-500;
+  }
 }
