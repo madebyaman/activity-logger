@@ -82,13 +82,12 @@ const Preferences: NextPageWithAuth = () => {
     <div>
       <Head>
         <title>User preferences</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <div>
         <div className="md:grid md:grid-cols-3 md:gap-6">
           <div className="md:col-span-1">
             <div className="px-4 sm:px-0">
-              <h3 className={h3Classes + ' font-display'}>Profile</h3>
+              <h2 className={h3Classes + ' font-display'}>Profile</h2>
               <p className="mt-1 text-sm text-gray-600">
                 This is your personal information. It will be used to improve
                 your app experience.

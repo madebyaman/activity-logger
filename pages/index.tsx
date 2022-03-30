@@ -4,39 +4,46 @@ import Image from 'next/image';
 
 export default function Index() {
   return (
-    <div className="container mx-auto mt-4 mb-8">
+    <div className="container mx-auto mt-4 mb-8 px-4">
       <Head>
         <title>Activity Logger App</title>
       </Head>
       <header>
-        <nav className="flex justify-between">
-          <h4 className="uppercase text-sm font-semibold text-gray-700">
-            Activity Logger App
-          </h4>
-          <Link href="/signin" passHref>
-            <a className="uppercase text-sm text-gray-600 hover:text-gray-800 hover:underline">
-              Login
-            </a>
-          </Link>
+        <nav>
+          <ul className="flex justify-between items-center">
+            <li className="uppercase text-sm font-semibold text-gray-700">
+              Activity Logger App
+            </li>
+            <li>
+              <Link href="/signin" passHref>
+                <a className="uppercase text-sm text-gray-600 tracking-wider font-semibold hover:text-gray-800 hover:underline">
+                  Login
+                </a>
+              </Link>
+            </li>
+          </ul>
         </nav>
       </header>
-      <main className="mt-20 flex justify-between items-center" id="main">
+      <main
+        className="mt-20 flex flex-col gap-12 justify-between items-start sm:flex-row"
+        id="main"
+      >
         <div>
-          <h1 className="text-6xl font-bold text-gray-800">
-            Take back control of your time
+          <h1 className="text-4xl font-bold text-gray-800 leading-tight md:text-5xl">
+            Take Back Control of Your Time
           </h1>
-          <div className="text-lg text-gray-600 mt-4">
+          <div className="text-base text-gray-600 mt-2 md:mt-4 md:text-lg">
             <p>
               Activity Logger is an app to help you keep track of your time.
               After every few hours come back to the app and enter what you were
               doing in that time.
             </p>
           </div>
-          <Link passHref href="/signin">
-            <a className="px-5 py-4 mt-4 inline-block uppercase bg-blue-600 text-gray-200 hover:bg-blue-700 rounded font-medium">
-              Start tracking your time
-            </a>
-          </Link>
+          <div className="mt-6 md:mt-8">
+            <Link passHref href="/signin">
+              <a className="btn">Start tracking your time</a>
+            </Link>
+          </div>
         </div>
         <Image
           src="/screenshot.png"

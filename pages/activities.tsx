@@ -63,7 +63,6 @@ const Activities: NextPageWithAuth = () => {
     <>
       <Head>
         <title>Your Activities</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <table className="min-w-full divide-y divide-gray-200 table-auto">
         <thead className="bg-gray-100">

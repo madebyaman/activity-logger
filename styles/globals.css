@@ -4,6 +4,20 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .btn {
+    @apply p-3 uppercase bg-blue-500 text-gray-200 rounded font-semibold text-sm tracking-wider md:px-4 md:py-3 md:text-base;
+  }
+
+  .btn:hover {
+    @apply bg-blue-400 text-white;
+  }
+
+  .btn:focus {
+    @apply outline-none ring ring-blue-600 ring-offset-2;
+  }
+}
+
 [href='#main'] {
   position: absolute;
   top: 0;
