@@ -29,6 +29,10 @@
     @apply bg-yellow-200 outline-none decoration-2 decoration-blue-700;
   }
 
+  .heading {
+    @apply font-bold text-gray-800 leading-tight;
+  }
+
   .heading1 {
     @apply text-3xl font-bold text-gray-800 leading-tight md:text-5xl;
   }

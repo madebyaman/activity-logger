@@ -68,7 +68,7 @@ export const Blocks = ({}) => {
                     gridColumns[blocksPerHourCount()]
                   }`}
                 >
-                  <h3 className="font-display text-2xl place-self-center">
+                  <h3 className="heading text-xl place-self-center md:text-2xl">
                     {convertNumberToHour(currentHour)}
                   </h3>
                   {/* Inside each hour, render its blocks */}

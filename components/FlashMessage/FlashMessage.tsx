@@ -29,15 +29,17 @@ export const FlashMessage = ({
           : 'bg-green-100 border-green-500 text-green-700'
       } border-l-4 p-4 mb-4 relative`}
       role="alert"
+      aria-live="assertive"
     >
-      <p className="font-bold">{title}</p>
+      <h3 className="font-bold">{title}</h3>
       <button
         className="absolute top-3 right-3 font-bold"
         onClick={removeLastMessage}
+        aria-label="Close notification"
       >
         <AiOutlineClose />
       </button>
-      <p>{message}</p>
+      <p className="paragraph">{message}</p>
     </div>
   );
 };
