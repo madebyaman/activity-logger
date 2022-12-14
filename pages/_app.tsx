@@ -34,10 +34,10 @@ function MyApp({ Component, pageProps }: ComponentPropsWithAuth) {
         Skip to main content
       </a>
       {Component.protectedRoute ? (
-        <AppLayout>
-          <Component {...pageProps} />
-        </AppLayout>
+        // <AppLayout>
+        <Component {...pageProps} />
       ) : (
+        // </AppLayout>
         <Component {...pageProps} />
       )}
       <FlashMessageWrapper />

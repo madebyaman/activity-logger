@@ -14,8 +14,8 @@ const Signup: NextPage = () => {
         <h1 className="mt-6 text-center heading1">Create a new account</h1>
         <p className="mt-2 text-center paragraph">
           Or{' '}
-          <Link href={'/signin'}>
-            <a className="link">sign in to your account</a>
+          <Link href={'/signin'} className="link">
+            sign in to your account
           </Link>
         </p>
       </div>

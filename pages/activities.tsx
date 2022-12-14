@@ -126,22 +126,24 @@ function SortableColumn({
       scope="col"
       className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
     >
-      <Link href={newSort ? `?${searchParams}` : `?`} passHref>
-        <a className="inline-flex cursor-pointer group">
-          {children}
-          <span
-            className={`${
-              sortProp === prop
-                ? 'text-gray-900 '
-                : 'invisible group-hover:visible text-gray-500 '
-            } flex-none ml-2 rounded`}
-          >
-            <ChevronDownIcon
-              className={`${desc ? 'rotate-180 ' : ' '} w-4 h-4`}
-              aria-hidden="true"
-            />
-          </span>
-        </a>
+      <Link
+        className="inline-flex cursor-pointer group"
+        href={newSort ? `?${searchParams}` : `?`}
+        passHref
+      >
+        {children}
+        <span
+          className={`${
+            sortProp === prop
+              ? 'text-gray-900 '
+              : 'invisible group-hover:visible text-gray-500 '
+          } flex-none ml-2 rounded`}
+        >
+          <ChevronDownIcon
+            className={`${desc ? 'rotate-180 ' : ' '} w-4 h-4`}
+            aria-hidden="true"
+          />
+        </span>
       </Link>
     </th>
   );

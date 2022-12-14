@@ -14,5 +14,6 @@ export function middleware(req: NextRequest & { cookies: CustomCookies }) {
 }
 
 export const config = {
-  matcher: ['/dashboard', '/preferences', '/activities'],
+  // matcher: ['/dashboard', '/preferences', '/activities'],
+  matcher: [],
 };

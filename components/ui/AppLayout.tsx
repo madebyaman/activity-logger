@@ -88,18 +88,18 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
                         {navigation.map((item, id) => {
                           const isCurrent = router.pathname === item.href;
                           return (
-                            <Link key={item.name} href={item.href}>
-                              <a
-                                className={classNames(
-                                  isCurrent
-                                    ? 'bg-blue-900 text-white'
-                                    : 'text-blue-300 hover:bg-blue-700 hover:text-white',
-                                  'px-3 py-2 rounded-md text-sm font-medium'
-                                )}
-                                aria-current={isCurrent ? 'page' : undefined}
-                              >
-                                {item.name}
-                              </a>
+                            <Link
+                              className={classNames(
+                                isCurrent
+                                  ? 'bg-blue-900 text-white'
+                                  : 'text-blue-300 hover:bg-blue-700 hover:text-white',
+                                'px-3 py-2 rounded-md text-sm font-medium'
+                              )}
+                              aria-current={isCurrent ? 'page' : undefined}
+                              key={item.name}
+                              href={item.href}
+                            >
+                              {item.name}
                             </Link>
                           );
                         })}

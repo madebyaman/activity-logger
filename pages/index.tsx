@@ -2,7 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import Image from 'next/image';
 
-export default function Index() {
+export default function Home() {
   return (
     <div className="container mx-auto mt-4 mb-8 px-4">
       <Head>
@@ -15,10 +15,12 @@ export default function Index() {
               Activity Logger App
             </li>
             <li>
-              <Link href="/signin" passHref>
-                <a className="uppercase text-sm text-gray-600 tracking-wider font-semibold hover:text-gray-800 hover:underline">
-                  Login
-                </a>
+              <Link
+                className="uppercase text-sm text-gray-600 tracking-wider font-semibold hover:text-gray-800 hover:underline"
+                href="/signin"
+                passHref
+              >
+                Login
               </Link>
             </li>
           </ul>
@@ -28,7 +30,7 @@ export default function Index() {
         className="mt-20 flex flex-col gap-12 justify-between items-start sm:flex-row"
         id="main"
       >
-        <div>
+        <div className="flex-2">
           <h1 className="heading1">Take Back Control of Your Time</h1>
           <div className="paragraph mt-2 md:mt-4">
             <p>
@@ -38,16 +40,18 @@ export default function Index() {
             </p>
           </div>
           <div className="mt-6 md:mt-8">
-            <Link passHref href="/signin">
-              <a className="btn">Start tracking your time</a>
+            <Link className="btn" href="/signin" passHref>
+              Start tracking your time
             </Link>
           </div>
         </div>
         <Image
           src="/screenshot.png"
           alt="screenshot of activity logger app"
-          width={1000}
-          height={778}
+          className="flex-1"
+          priority
+          width={1000 / 1.5}
+          height={778 / 1.5}
         />
       </main>
     </div>
