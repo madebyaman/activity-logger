@@ -21,6 +21,7 @@ export default async function signup(
         password: bcrypt.hashSync(password, salt),
       },
     });
+    console.log(user);
   } catch (e) {
     res.status(401);
     res.json({ error: 'User already exists' });

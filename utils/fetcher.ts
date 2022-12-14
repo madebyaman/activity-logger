@@ -42,10 +42,7 @@ export async function fetcher(
 ) {
   if (data) {
     return await axios.post(`${window.location.origin}/api${url}`, {
-      header: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
+      ...data,
     });
   } else {
     const res = await axios.get(`${window.location.origin}/api${url}`);

@@ -1,8 +1,9 @@
 import type { AppProps } from 'next/app';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Router from 'next/router';
 import NProgress from 'nprogress';
-import { lazy } from 'react';
+import { Suspense } from 'react';
 import {
   FlashMessageProvider,
   FlashMessageWrapper,
@@ -11,7 +12,9 @@ import '../styles/globals.css';
 import '../styles/nprogress.css';
 import { NextPageWithAuth } from '../types';
 
-const AppLayout = lazy(() => import('../components/ui/AppLayout'));
+const AppLayout = dynamic(() => import('../components/ui/AppLayout'), {
+  suspense: true,
+});
 
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());
@@ -35,9 +38,11 @@ function MyApp({ Component, pageProps }: ComponentPropsWithAuth) {
         Skip to main content
       </a>
       {Component.protectedRoute ? (
-        <AppLayout>
-          <Component {...pageProps} />
-        </AppLayout>
+        <Suspense fallback={`Loading...`}>
+          <AppLayout>
+            <Component {...pageProps} />
+          </AppLayout>
+        </Suspense>
       ) : (
         <Component {...pageProps} />
       )}

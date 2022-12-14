@@ -3,53 +3,24 @@ import { useRouter } from 'next/router';
 import { useContext, useState } from 'react';
 import { useSWRConfig } from 'swr';
 import { FlashMessageContext } from '../components/FlashMessage';
-import {
-  defaultButtonClasses,
-  disabledButtonClasses,
-  h3Classes,
-  inputClasses,
-  labelClasses,
-  selectClasses,
-} from '../components/ui';
-import { BlocksPerHourType, NextPageWithAuth } from '../types';
-import { convertNumberToHour, fetcher, useProfile } from '../utils';
-
-type HourOption = {
-  value: number;
-  label: string;
-};
-
-const SortHoursByIncreasingOrder = (a: HourOption, b: HourOption) => {
-  if (a.value > b.value) return -1;
-  if (a.value < b.value) return 1;
-  return 0;
-};
-
-const sortHoursByDecreasingOrder = (a: HourOption, b: HourOption) => {
-  if (a.value < b.value) return -1;
-  if (a.value > b.value) return 1;
-  return 0;
-};
-
-/**
- * Returns array of {value, label} of all hour options.
- */
-const hourOptions = Array.from(Array(24).keys()).map((hour) => {
-  return {
-    value: hour,
-    label: convertNumberToHour(hour),
-  };
-});
+import { h3Classes } from '../components/ui';
+import { UserPreferencesForm } from '../components/user/preferencesForm';
+import { NextPageWithAuth } from '../types';
+import { fetcher, useProfile } from '../utils';
 
 const Preferences: NextPageWithAuth = () => {
-  const { profile } = useProfile();
-  const [profileState, setProfileState] = useState({
-    blocksPerHour: profile.blocksPerHour as BlocksPerHourType,
-    sleepFrom: profile.sleepFrom,
-    sleepTo: profile.sleepTo,
-    firstName: profile.firstName,
-    lastName: profile.lastName,
-  });
+  const { isLoading, isError, profile } = useProfile();
+  const [profileState, setProfileState] = useState(() =>
+    profile
+      ? profile
+      : {
+          blocksPerHour: 2,
+          sleepFrom: 10,
+          sleepTo: 6,
+          firstName: '',
+          lastName: '',
+        }
+  );
   const [loading, setLoading] = useState(false);
   const { mutate } = useSWRConfig();
   const router = useRouter();
@@ -59,8 +30,17 @@ const Preferences: NextPageWithAuth = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await fetcher('/profile/update', profileState);
-      router.push('/dashboard');
+      if (profileState !== null) {
+        const blocksPerHour =
+          profileState.blocksPerHour &&
+          (profileState.blocksPerHour === 1 ||
+            profileState.blocksPerHour === 2 ||
+            profileState.blocksPerHour === 4)
+            ? profileState.blocksPerHour
+            : 2;
+        await fetcher('/profile/update', { ...profileState, blocksPerHour });
+        router.push('/dashboard');
+      }
     } catch {
       setFlashMessages &&
         setFlashMessages((prevMessages) => [
@@ -77,6 +57,14 @@ const Preferences: NextPageWithAuth = () => {
       mutate('/profile');
     }
   };
+
+  if (isLoading) {
+    return <div>Loading</div>;
+  }
+
+  if (isError) {
+    return <div>Error</div>;
+  }
 
   return (
     <div>
@@ -95,143 +83,12 @@ const Preferences: NextPageWithAuth = () => {
             </div>
           </div>
           <div className="mt-5 md:mt-0 md:col-span-2">
-            <form onSubmit={handleSubmit}>
-              <div className="shadow border border-gray-50 sm:rounded-md sm:overflow-hidden">
-                <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
-                  <div className="grid grid-cols-6 gap-6">
-                    <div className="col-span-6 sm:col-span-3">
-                      <label htmlFor="first-name" className={labelClasses}>
-                        First name
-                      </label>
-                      <input
-                        type="text"
-                        name="first-name"
-                        id="first-name"
-                        value={profileState.firstName || ''}
-                        onChange={(e) =>
-                          setProfileState({
-                            ...profileState,
-                            firstName: e.target.value,
-                          })
-                        }
-                        className={inputClasses}
-                      />
-                    </div>
-
-                    <div className="col-span-6 sm:col-span-3">
-                      <label htmlFor="last-name" className={labelClasses}>
-                        Last name
-                      </label>
-                      <input
-                        type="text"
-                        name="last-name"
-                        id="last-name"
-                        value={profileState.lastName || ''}
-                        onChange={(e) =>
-                          setProfileState({
-                            ...profileState,
-                            lastName: e.target.value,
-                          })
-                        }
-                        className={inputClasses}
-                      />
-                    </div>
-
-                    <div className="col-span-6 sm:col-span-3">
-                      <label htmlFor="blocks" className={labelClasses}>
-                        Blocks per hour
-                      </label>
-                      <select
-                        id="blocks"
-                        name="blocks"
-                        value={profileState.blocksPerHour}
-                        onChange={(e) =>
-                          setProfileState({
-                            ...profileState,
-                            blocksPerHour: parseInt(
-                              e.target.value
-                            ) as BlocksPerHourType,
-                          })
-                        }
-                        className={selectClasses}
-                      >
-                        <option>1</option>
-                        <option>2</option>
-                        <option>4</option>
-                      </select>
-                    </div>
-
-                    <div className="col-span-6 mt-2">
-                      <legend className="text-base font-medium text-gray-900">
-                        Sleep Timings
-                      </legend>
-                    </div>
-
-                    <div className="col-span-6 sm:col-span-3">
-                      <label htmlFor="sleepFrom" className={labelClasses}>
-                        Sleep from
-                      </label>
-                      <select
-                        id="sleepFrom"
-                        name="sleepFrom"
-                        value={profileState.sleepFrom}
-                        onChange={(e) =>
-                          setProfileState({
-                            ...profileState,
-                            sleepFrom: Number(e.target.value),
-                          })
-                        }
-                        className={selectClasses}
-                      >
-                        {hourOptions
-                          .sort(SortHoursByIncreasingOrder)
-                          .map((hour) => (
-                            <option key={hour.value} value={hour.value}>
-                              {hour.label}
-                            </option>
-                          ))}
-                      </select>
-                    </div>
-
-                    <div className="col-span-6 sm:col-span-3">
-                      <label htmlFor="sleepTo" className={labelClasses}>
-                        Sleep to
-                      </label>
-                      <select
-                        id="sleepTo"
-                        name="sleepTo"
-                        value={profileState.sleepTo}
-                        onChange={(e) =>
-                          setProfileState({
-                            ...profileState,
-                            sleepTo: Number(e.target.value),
-                          })
-                        }
-                        className={selectClasses}
-                      >
-                        {hourOptions
-                          .sort(sortHoursByDecreasingOrder)
-                          .map((hour) => (
-                            <option key={hour.value} value={hour.value}>
-                              {hour.label}
-                            </option>
-                          ))}
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                  <button
-                    type="submit"
-                    className={
-                      loading ? disabledButtonClasses : defaultButtonClasses
-                    }
-                  >
-                    {!loading ? 'Save' : 'Saving...'}
-                  </button>
-                </div>
-              </div>
-            </form>
+            <UserPreferencesForm
+              profile={profileState}
+              onSubmit={handleSubmit}
+              formSubmitting={loading}
+              updateState={setProfileState}
+            />
           </div>
         </div>
       </div>

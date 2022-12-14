@@ -26,7 +26,7 @@ export function useBlocks(): {
   }
 
   return {
-    blocks: data && (data.blocks as Log[]),
+    blocks: data?.blocks as Log[],
     isLoading: isLoading ? 'LOADING' : error ? 'ERROR' : 'LOADED',
     isError: errorMessage,
   };

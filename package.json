@@ -7,7 +7,7 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest --watch",
-    "cache": "next lint --no-cache",
+    "cache": "rm -rf .next",
     "migrate:local": "dotenv -e .env.development -- npx prisma migrate dev"
   },
   "prisma": {

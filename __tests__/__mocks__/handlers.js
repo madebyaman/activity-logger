@@ -20,7 +20,7 @@ export const handlers = [
       firstName: 'Aman',
       lastName: 'Thakur',
     };
-    return res(ctx.json({ profile }));
+    return res(ctx.json(profile));
   }),
 
   rest.get('http://localhost/api/activities', (req, res, ctx) => {

@@ -19,6 +19,6 @@ test('Dashboard component renders the blocks and profile', async () => {
     render(<DashboardComponent />);
   });
   const noActivityText = await screen.findAllByText(/no activity/i);
-  const firstText = noActivityText[0];
-  expect(firstText).toBeInTheDocument();
+  const firstNoActivityText = noActivityText[0];
+  expect(firstNoActivityText).toBeInTheDocument();
 });

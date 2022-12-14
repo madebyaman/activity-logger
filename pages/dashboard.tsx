@@ -2,9 +2,8 @@ import { NextPageWithAuth } from '../types';
 import { Blocks } from '../components/dashboard';
 import { Modal } from '../components/modal';
 import { useBlocks, useProfile } from '../utils';
-import { defaultProps } from 'react-select/dist/declarations/src/Select';
 
-const Home: NextPageWithAuth = () => {
+const Dashboard: NextPageWithAuth = () => {
   const { profile } = useProfile();
   const { blocks, isLoading, isError } = useBlocks();
 
@@ -12,14 +11,15 @@ const Home: NextPageWithAuth = () => {
     <div>
       <div>
         {isLoading === 'LOADING' ? (
-          <Blocks isLoading="LOADING" />
+          // <Blocks isLoading="LOADING" />
+          <div>Loadng...</div>
         ) : isLoading === 'ERROR' ? (
           <Blocks
             isLoading="ERROR"
             isError={isError || 'Error fetching data'}
           />
         ) : (
-          <Blocks profile={profile} blocks={blocks} isLoading={isLoading} />
+          <Blocks profile={profile} blocks={blocks} isLoading={'LOADED'} />
         )}
       </div>
       <Modal />
@@ -27,6 +27,6 @@ const Home: NextPageWithAuth = () => {
   );
 };
 
-Home.protectedRoute = true;
+Dashboard.protectedRoute = true;
 
-export default Home;
+export default Dashboard;

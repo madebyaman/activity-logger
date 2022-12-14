@@ -1,6 +1,5 @@
 export { CenteredLayout } from './CenteredLayout';
 export { SlideOver } from './SlideOver';
-export { AppLayout } from './AppLayout';
 export {
   defaultButtonClasses,
   disabledButtonClasses,

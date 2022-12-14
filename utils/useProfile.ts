@@ -6,11 +6,11 @@ import { fetcher } from '.';
  * Function to fetch user profile from api route
  */
 export const useProfile = () => {
-  const { data, error } = useSWR('/profile', fetcher);
+  const { data, isLoading, error } = useSWR('/profile', fetcher);
 
   return {
     profile: data as Profile,
-    isLoading: !error && !data,
+    isLoading,
     isError: error,
   };
 };
