@@ -1,14 +1,20 @@
-import { Log } from '@prisma/client';
+import { Log, Profile } from '@prisma/client';
 
-import { showBlock } from './showBlock';
-import { convertNumberToHour, useBlocks, useProfile } from '../../utils';
+import { convertNumberToHour } from '../../utils';
 import { Block } from './Block';
+import { showBlock } from './showBlock';
 
-export const Blocks = ({}) => {
-  const { profile } = useProfile();
-  const { sleepFrom, sleepTo } = profile;
-  const { blocks, isLoading, isError } = useBlocks();
-
+type BlocksComponentProps =
+  | {
+      isLoading: 'LOADING';
+    }
+  | { isError: string; isLoading: 'ERROR' }
+  | {
+      isLoading: 'LOADED';
+      profile: Profile;
+      blocks: Log[];
+    };
+export const Blocks = (props: BlocksComponentProps) => {
   // This is to make sure purge css works correctly in Tailwind
   const gridColumns = {
     1: 'md:grid-cols-3',
@@ -17,14 +23,22 @@ export const Blocks = ({}) => {
   };
 
   // Count the number of blocks per hour
-  const blocksPerHourCount = () => {
+  const blocksPerHourCount = (blocks: Log[]) => {
     return blocks.length === 24 ? 1 : blocks.length === 48 ? 2 : 4;
   };
 
   /**
    * Filter out blocks that come in sleep time.
    */
-  const filterBlocks = (hour: number) => {
+  const filterBlocks = ({
+    hour,
+    sleepFrom,
+    sleepTo,
+  }: {
+    hour: number;
+    sleepFrom: Number;
+    sleepTo: Number;
+  }) => {
     if (sleepFrom > sleepTo) {
       if (hour >= sleepFrom && hour <= 24) return false;
       if (hour >= 0 && hour < sleepTo) return false;
@@ -44,35 +58,41 @@ export const Blocks = ({}) => {
     return 0;
   };
 
-  if (isLoading) {
+  if (props.isLoading === 'LOADING') {
     return <div>Loading...</div>;
   }
 
-  if (isError) {
-    return <div>Error!</div>;
+  if (props.isLoading === 'ERROR') {
+    return <div>{props.isError}</div>;
   }
 
   return (
     <div className="mt-4">
       {/* Create array of [1, .. 23] */}
-      {blocks.length
+      {props.blocks.length
         ? Array.from(Array(24).keys())
             // But eliminate sleep hours.
-            .filter(filterBlocks)
+            .filter((hour) =>
+              filterBlocks({
+                hour,
+                sleepFrom: props.profile.sleepFrom,
+                sleepTo: props.profile.sleepTo,
+              })
+            )
             // Map for each hour
             .map((currentHour) => {
               return (
                 <div
                   key={currentHour}
                   className={`grid grid-cols-3 ${
-                    gridColumns[blocksPerHourCount()]
+                    gridColumns[blocksPerHourCount(props.blocks)]
                   }`}
                 >
                   <h3 className="heading text-xl place-self-center md:text-2xl">
                     {convertNumberToHour(currentHour)}
                   </h3>
                   {/* Inside each hour, render its blocks */}
-                  {blocks
+                  {props.blocks
                     .filter(({ hour }) => hour === currentHour)
                     .sort(sortBlocks)
                     .map((timeBlock) => {
