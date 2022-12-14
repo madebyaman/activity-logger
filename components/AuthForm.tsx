@@ -76,7 +76,7 @@ export const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({
     ' placeholder-gray-500 text-gray-900 sm:text-sm bg-gray-100 shadow-none my-1';
 
   return (
-    <div className="max-w-sm">
+    <div className="max-w-sm my-0 mx-auto">
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col mt-4 gap-2">
           {mode === 'signup' && (

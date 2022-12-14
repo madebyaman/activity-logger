@@ -9,7 +9,7 @@ import { classNames, useProfile } from '../../utils';
 import { ModalProvider } from '../modal';
 import { FlashMessageContext } from '../FlashMessage';
 
-export const AppLayout = ({ children }: { children: ReactNode }) => {
+const AppLayout = ({ children }: { children: ReactNode }) => {
   const { profile, isLoading, isError } = useProfile();
   const { setFlashMessages } = useContext(FlashMessageContext);
   const router = useRouter();
@@ -230,3 +230,5 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
     </ModalProvider>
   );
 };
+
+export default AppLayout;

@@ -1,16 +1,17 @@
 import type { AppProps } from 'next/app';
-import NProgress from 'nprogress';
+import Head from 'next/head';
 import Router from 'next/router';
-
-import '../styles/globals.css';
-import '../styles/nprogress.css';
-import { NextPageWithAuth } from '../types';
+import NProgress from 'nprogress';
+import { lazy } from 'react';
 import {
   FlashMessageProvider,
   FlashMessageWrapper,
 } from '../components/FlashMessage';
-import { AppLayout } from '../components/ui/AppLayout';
-import Head from 'next/head';
+import '../styles/globals.css';
+import '../styles/nprogress.css';
+import { NextPageWithAuth } from '../types';
+
+const AppLayout = lazy(() => import('../components/ui/AppLayout'));
 
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());
@@ -34,10 +35,10 @@ function MyApp({ Component, pageProps }: ComponentPropsWithAuth) {
         Skip to main content
       </a>
       {Component.protectedRoute ? (
-        // <AppLayout>
-        <Component {...pageProps} />
+        <AppLayout>
+          <Component {...pageProps} />
+        </AppLayout>
       ) : (
-        // </AppLayout>
         <Component {...pageProps} />
       )}
       <FlashMessageWrapper />
