@@ -2,11 +2,11 @@ import { NextPageWithAuth } from '../types';
 import { Blocks } from '../components/dashboard';
 import { Modal } from '../components/modal';
 import { useBlocks, useProfile } from '../utils';
+import { defaultProps } from 'react-select/dist/declarations/src/Select';
 
 const Home: NextPageWithAuth = () => {
-  // const { profile } = useProfile();
-  // const { blocks, isLoading, isError } = useBlocks();
-  const isLoading = 'LOADING';
+  const { profile } = useProfile();
+  const { blocks, isLoading, isError } = useBlocks();
 
   return (
     <div>

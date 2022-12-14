@@ -1,3 +1,4 @@
+import axios from 'axios';
 import {
   ActivityTypes,
   SigninProps,
@@ -39,13 +40,15 @@ export async function fetcher(
     | DeleteActivity
     | undefined = undefined
 ) {
-  const res = await fetch(`${window.location.origin}/api${url}`, {
-    method: data ? 'POST' : 'GET',
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
-  return await res.json();
+  if (data) {
+    return await axios.post(`${window.location.origin}/api${url}`, {
+      header: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+  } else {
+    const res = await axios.get(`${window.location.origin}/api${url}`);
+    return res.data;
+  }
 }

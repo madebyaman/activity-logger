@@ -15,6 +15,7 @@ interface JwtPayload {
 export const validateRoute = (
   handler: (req: NextApiRequest, res: NextApiResponse, user: User) => void
 ) => {
+  console.log('validation');
   return async (req: NextApiRequest, res: NextApiResponse) => {
     const { ACTIVITY_LOGGER_TOKEN: token } = req.cookies;
 

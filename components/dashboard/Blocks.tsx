@@ -63,13 +63,13 @@ export const Blocks = (props: BlocksComponentProps) => {
   }
 
   if (props.isLoading === 'ERROR') {
-    return <div>{props.isError}</div>;
+    return <div>Error: {props.isError}</div>;
   }
 
   return (
     <div className="mt-4">
       {/* Create array of [1, .. 23] */}
-      {props.blocks.length
+      {props.blocks?.length
         ? Array.from(Array(24).keys())
             // But eliminate sleep hours.
             .filter((hour) =>
@@ -83,7 +83,7 @@ export const Blocks = (props: BlocksComponentProps) => {
             .map((currentHour) => {
               return (
                 <div
-                  key={currentHour}
+                  key={currentHour.toString()}
                   className={`grid grid-cols-3 ${
                     gridColumns[blocksPerHourCount(props.blocks)]
                   }`}

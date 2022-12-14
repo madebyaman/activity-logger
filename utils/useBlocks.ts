@@ -1,6 +1,7 @@
 import { Log } from '@prisma/client';
+import axios from 'axios';
 import useSWR from 'swr';
-import { fetcher } from '.';
+import { fetcher, newBlocks } from '.';
 
 /**
  * Function to fetch logs data from api route
@@ -10,7 +11,8 @@ export function useBlocks(): {
   isLoading: 'ERROR' | 'LOADING' | 'LOADED';
   isError: string | undefined;
 } {
-  const { data, error } = useSWR('/logs', fetcher);
+  const res = useSWR('/logs', fetcher);
+  const { data, error, isLoading } = res;
 
   let errorMessage: undefined | string;
   if (error) {
@@ -24,8 +26,8 @@ export function useBlocks(): {
   }
 
   return {
-    blocks: data as Log[],
-    isLoading: data ? 'LOADING' : error ? 'ERROR' : 'LOADED',
+    blocks: data && (data.blocks as Log[]),
+    isLoading: isLoading ? 'LOADING' : error ? 'ERROR' : 'LOADED',
     isError: errorMessage,
   };
 }
