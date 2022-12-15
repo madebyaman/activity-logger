@@ -1,6 +1,6 @@
 import { Fragment, ReactNode, useContext, useState } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
-import { AiOutlineClose, AiOutlineMenu, AiOutlineUser } from 'react-icons/ai';
+import { XMarkIcon, Bars3Icon, UserIcon } from '@heroicons/react/24/outline';
 import moment from 'moment';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -114,7 +114,7 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
                         <div>
                           <Menu.Button className="max-w-xs bg-blue-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                             <span className="sr-only">Open user menu</span>
-                            <AiOutlineUser className="border-2 border-gray-400 rounded-full p-1 h-8 w-8 text-gray-400" />
+                            <UserIcon className="border-2 border-gray-400 rounded-full p-1 h-8 w-8 text-gray-400" />
                           </Menu.Button>
                         </div>
                         <Transition
@@ -150,15 +150,9 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
                     <Disclosure.Button className="bg-blue-800 inline-flex items-center justify-center p-2 rounded-md text-blue-400 hover:text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-blue-800 focus:ring-white">
                       <span className="sr-only">Open main menu</span>
                       {open ? (
-                        <AiOutlineClose
-                          className="block h-6 w-6"
-                          aria-hidden="true"
-                        />
+                        <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                       ) : (
-                        <AiOutlineMenu
-                          className="block h-6 w-6"
-                          aria-hidden="true"
-                        />
+                        <Bars3Icon className="h-6 w-6" aria-hidden="true" />
                       )}
                     </Disclosure.Button>
                   </div>
@@ -190,7 +184,7 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
                 <div className="pt-4 pb-3 border-t border-gray-700">
                   <div className="flex items-center px-5">
                     <div className="flex-shrink-0">
-                      <AiOutlineUser className="rounded-full p-1 h-8 w-8 text-gray-400" />
+                      <UserIcon className="rounded-full p-1 h-8 w-8 text-gray-400" />
                     </div>
                     <div className="ml-3">
                       <div className="text-base font-medium leading-none text-white">

@@ -1,21 +1,31 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ReactNode } from 'react';
+import { MouseEvent, ReactNode } from 'react';
 import { useSWRConfig } from 'swr';
+import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { Activity } from '../components/Activity';
 import { ActivityTypes, NextPageWithAuth } from '../types';
 import { fetcher, useActivities } from '../utils';
+import { SlideOver } from '../components/ui';
 
 const Activities: NextPageWithAuth = () => {
   const { isLoading, activities, isError } = useActivities();
   const router = useRouter();
+  const { mutate } = useSWRConfig();
+
+  // Sorting activities logic
   let sortProp: string;
   let desc: string;
   if (typeof router.query.sort === 'string') {
     [sortProp, desc] = router.query.sort.split(':');
   }
-  const { mutate } = useSWRConfig();
+
+  // Open activities logic
+  let openedActivityId: string;
+  if (typeof router.query.activity === 'string') {
+    openedActivityId = router.query.activity;
+  }
 
   const updateActivity = async ({
     id,
@@ -71,6 +81,30 @@ const Activities: NextPageWithAuth = () => {
     }
   });
 
+  const onClickActivity = (
+    id: string,
+    e?: MouseEvent<HTMLButtonElement>
+  ): string => {
+    e && e.preventDefault();
+    const urlParams = new URLSearchParams();
+    const sortParam = router.query.sort;
+    typeof sortParam === 'string' && urlParams.set('sort', sortParam);
+    urlParams.set('activity', id);
+    const currentUrl = window.location.origin + window.location.pathname;
+    const newUrl = currentUrl + '?' + urlParams.toString();
+    return newUrl;
+  };
+
+  const closeActivity = (e?: MouseEvent<HTMLButtonElement>) => {
+    e && e.preventDefault();
+    const urlParams = new URLSearchParams();
+    const sortParam = router.query.sort;
+    typeof sortParam === 'string' && urlParams.set('sort', sortParam);
+    const currentUrl = window.location.origin + window.location.pathname;
+    const newUrl = currentUrl + '?' + urlParams.toString();
+    router.push(newUrl);
+  };
+
   return (
     <>
       <Head>
@@ -93,10 +127,16 @@ const Activities: NextPageWithAuth = () => {
                 activity={activity}
                 updateActivity={updateActivity}
                 onDelete={deleteActivity}
+                onClick={onClickActivity}
               />
             ))}
         </tbody>
       </table>
+      {openedActivityId && (
+        <SlideOver onClose={closeActivity} title="Activity Notes">
+          Hello
+        </SlideOver>
+      )}
     </>
   );
 };
@@ -148,26 +188,6 @@ function SortableColumn({
     </th>
   );
 }
-
-const ChevronDownIcon = ({ ...props }) => {
-  return (
-    <svg
-      className="w-6 h-6"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2"
-        d="M19 9l-7 7-7-7"
-      ></path>
-    </svg>
-  );
-};
 
 Activities.protectedRoute = true;
 

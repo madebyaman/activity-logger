@@ -1,5 +1,6 @@
 import { Activity as ActivityType } from '@prisma/client';
-import { useState } from 'react';
+import Link from 'next/link';
+import { useState, MouseEvent } from 'react';
 import { ActivityTypes } from '../types';
 import { activityTypes } from '../utils';
 import { defaultButtonClasses, inputClasses, selectClasses } from './ui';
@@ -26,6 +27,7 @@ export const Activity = ({
   activity,
   updateActivity,
   onDelete,
+  onClick,
 }: {
   activity: ActivityType;
   updateActivity: ({
@@ -37,6 +39,7 @@ export const Activity = ({
     name: string;
     type: ActivityTypes;
   }) => Promise<void>;
+  onClick: (id: string, e?: MouseEvent<HTMLButtonElement>) => string;
   onDelete: (id: number) => Promise<void>;
 }) => {
   const [editingActivity, setEditingActivity] = useState({
@@ -77,9 +80,12 @@ export const Activity = ({
             }
           />
         ) : (
-          <span className="text-sm font-medium text-gray-900">
+          <Link
+            href={onClick(String(activity.id))}
+            className="text-sm font-medium text-gray-900"
+          >
             {activity.name}
-          </span>
+          </Link>
         )}
       </td>
       <td className={tdClasses}>

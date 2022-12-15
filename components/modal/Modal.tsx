@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { MouseEvent, useContext, useState } from 'react';
 
 import { ModalContext } from '.';
 import { SlideOver } from '../ui';
@@ -14,15 +14,20 @@ export const Modal = () => {
     return null;
   }
 
+  const changeTab = (e?: MouseEvent<HTMLButtonElement>) => {
+    e && e.preventDefault();
+    setShowEditBlock((state) => !state);
+  };
+
   return (
     <SlideOver
       title={showEditBlock ? 'Edit Block' : 'Add Activity'}
       onClose={() => setModal && setModal({ ...modal, showModal: false })}
     >
       {showEditBlock ? (
-        <EditBlock changeTab={() => setShowEditBlock((state) => !state)} />
+        <EditBlock changeTab={changeTab} />
       ) : (
-        <AddActivity changeTab={() => setShowEditBlock((state) => !state)} />
+        <AddActivity changeTab={changeTab} />
       )}
     </SlideOver>
   );

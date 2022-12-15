@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { AiOutlineClose } from 'react-icons/ai';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 
 import { FlashMessageContext } from '.';
 
@@ -37,7 +37,7 @@ export const FlashMessage = ({
         onClick={removeLastMessage}
         aria-label="Close notification"
       >
-        <AiOutlineClose />
+        <XMarkIcon className="h-6 w-6" aria-hidden="true" />
       </button>
       <p className="paragraph">{message}</p>
     </div>

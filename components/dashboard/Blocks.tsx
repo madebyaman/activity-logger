@@ -111,7 +111,7 @@ export const Blocks = (props: BlocksComponentProps) => {
                               notes={notes || ''}
                             />
                           ) : (
-                            'No activity'
+                            ''
                           )}
                         </div>
                       );

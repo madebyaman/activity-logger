@@ -1,4 +1,4 @@
-import { FormEvent, useContext, useState } from 'react';
+import { MouseEvent, FormEvent, useContext, useState } from 'react';
 import { useSWRConfig } from 'swr';
 
 import { ActivityTypes } from '../../types';
@@ -12,7 +12,11 @@ import {
   selectClasses,
 } from '../ui';
 
-export const AddActivity = ({ changeTab }: { changeTab: () => void }) => {
+export const AddActivity = ({
+  changeTab,
+}: {
+  changeTab: (e: MouseEvent<HTMLButtonElement>) => void;
+}) => {
   const [activityType, setActivityType] = useState<ActivityTypes | undefined>();
   const [activityName, setActivityName] = useState('');
   const [loading, setLoading] = useState(false);

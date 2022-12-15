@@ -1,5 +1,5 @@
 import { useSWRConfig } from 'swr';
-import { FormEvent, useContext } from 'react';
+import { MouseEvent, FormEvent, useContext } from 'react';
 
 import {
   defaultButtonClasses,
@@ -11,7 +11,11 @@ import { useBlocks, useActivities, updateBlock } from '../../utils';
 import { ModalContext } from '.';
 import { FlashMessageContext } from '../FlashMessage';
 
-export const EditBlock = ({ changeTab }: { changeTab: () => void }) => {
+export const EditBlock = ({
+  changeTab,
+}: {
+  changeTab: (e: MouseEvent<HTMLButtonElement>) => void;
+}) => {
   const { modalState: modal, setModalState: setModal } =
     useContext(ModalContext);
   const { setFlashMessages } = useContext(FlashMessageContext);
@@ -78,7 +82,6 @@ export const EditBlock = ({ changeTab }: { changeTab: () => void }) => {
   if (!activities || !blocks) {
     return null;
   }
-  console.log('Editing block');
 
   return (
     <form onSubmit={update}>
