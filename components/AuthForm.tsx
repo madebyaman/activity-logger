@@ -4,11 +4,6 @@ import { FC, FormEvent, useContext, useState } from 'react';
 import { AuthSigninProps, AuthSignupProps } from '../types';
 import { auth } from '../utils/auth';
 import { FlashMessageContext } from './FlashMessage';
-import {
-  defaultButtonClasses,
-  disabledButtonClasses,
-  inputClasses,
-} from './ui';
 
 export const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({
   mode = 'signin',
@@ -62,8 +57,7 @@ export const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({
           ...prevMessages,
           {
             title: 'Error submitting form',
-            message:
-              'Something went wrong while submitting your form. Refresh the page and try again.',
+            message: 'Something went wrong while submitting your form.',
             type: 'error',
           },
         ]);

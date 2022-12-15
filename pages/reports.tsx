@@ -1,6 +1,7 @@
-import { Bar } from '../components/chart';
+import { Bar, DoughnutChart } from '../components/chart';
+import { NextPageWithAuth } from '../types';
 
-export default function Reports() {
+const Reports: NextPageWithAuth = () => {
   const labelsBarChart = [
     'January',
     'February',
@@ -38,11 +39,8 @@ export default function Reports() {
     ],
   };
 
-  return (
-    <div className="shadow-lg rounded-lg overflow-hidden">
-      <div className="py-3 px-5 bg-gray-50">Bar chart</div>
-      <h1>Hello</h1>
-      <Bar data={dataBarChart} />
-    </div>
-  );
-}
+  return <Bar data={dataBarChart} />;
+};
+
+Reports.protectedRoute = true;
+export default Reports;

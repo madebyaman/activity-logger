@@ -1,12 +1,12 @@
-// eslint-disable-next-line @next/next/no-server-import-in-page
+import { NextApiRequestCookies } from 'next/dist/server/api-utils';
 import { NextRequest, NextResponse } from 'next/server';
 
-type CustomCookies = {
+type CustomCookies = NextApiRequestCookies & {
   ACTIVITY_LOGGER_TOKEN: string;
 };
 
 export function middleware(req: NextRequest & { cookies: CustomCookies }) {
-  const token = req.cookies.ACTIVITY_LOGGER_TOKEN;
+  const token = req.cookies.get('ACTIVITY_LOGGER_TOKEN');
 
   if (!token) {
     return NextResponse.redirect(new URL('/signin', req.url));
@@ -14,6 +14,5 @@ export function middleware(req: NextRequest & { cookies: CustomCookies }) {
 }
 
 export const config = {
-  // matcher: ['/dashboard', '/preferences', '/activities'],
-  matcher: [],
+  matcher: ['/dashboard', '/preferences', '/activities', '/reports'],
 };

@@ -12,13 +12,13 @@ type BarProps = {
     }[];
   };
 };
-export function Bar(props: BarProps) {
+export function DoughnutChart(props: BarProps) {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
     if (!chartRef.current) return;
     const configBarChart = {
-      type: 'bar' as keyof ChartTypeRegistry,
+      type: 'doughnut' as keyof ChartTypeRegistry,
       data: props.data,
       options: {},
     };

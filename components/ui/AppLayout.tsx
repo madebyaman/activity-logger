@@ -48,6 +48,7 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
     { name: 'Dashboard', href: '/dashboard' },
     { name: 'Your Preferences', href: '/preferences' },
     { name: 'Activities', href: '/activities' },
+    { name: 'Reports', href: '/reports' },
   ];
 
   const removeTrailingSlashAndCapitalize = (s: string) => {
