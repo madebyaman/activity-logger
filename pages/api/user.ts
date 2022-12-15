@@ -1,6 +1,6 @@
 import { User } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { validateRoute } from '../../utils/validateRoute';
+import { validateRoute } from '../../lib/validateRoute';
 
 /**
  * Calls `validateRoute` function and return a user or error.

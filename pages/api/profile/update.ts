@@ -1,5 +1,4 @@
-import { validateRoute } from '../../../utils';
-import prisma from '../../../utils/prisma';
+import { prisma, validateRoute } from '../../../lib';
 
 /**
  * Calls `validateRoute` function and returns updated profile.

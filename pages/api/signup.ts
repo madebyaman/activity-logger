@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
-import prisma from '../../utils/prisma';
+import { prisma } from '../../lib/prisma';
 import { User } from '@prisma/client';
 
 export default async function signup(

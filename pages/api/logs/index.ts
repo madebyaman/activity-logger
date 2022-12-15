@@ -1,7 +1,7 @@
 import { User } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { validateRoute, getDateString, newBlocks } from '../../../utils';
-import prisma from '../../../utils/prisma';
+import { prisma } from '../../../lib/prisma';
 
 /**
  * Calls `validateRoute` function and returns todays logs or [] if not found

@@ -1,5 +1,4 @@
-import { validateRoute } from '../../../utils';
-import prisma from '../../../utils/prisma';
+import { validateRoute, prisma } from '../../../lib';
 
 export default validateRoute(async (req, res, user) => {
   try {

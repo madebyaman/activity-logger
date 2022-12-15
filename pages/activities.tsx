@@ -4,10 +4,12 @@ import { useRouter } from 'next/router';
 import { MouseEvent, ReactNode } from 'react';
 import { useSWRConfig } from 'swr';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
-import { Activity } from '../components/Activity';
+import { ActivityRow } from '../components/activity';
 import { ActivityTypes, NextPageWithAuth } from '../types';
 import { fetcher, useActivities } from '../utils';
 import { SlideOver } from '../components/ui';
+import { ShowActivity } from '../components/activity';
+import { Activity } from '@prisma/client';
 
 const Activities: NextPageWithAuth = () => {
   const { isLoading, activities, isError } = useActivities();
@@ -22,9 +24,12 @@ const Activities: NextPageWithAuth = () => {
   }
 
   // Open activities logic
-  let openedActivityId: string;
+  let openedActivity: Activity | undefined = undefined;
   if (typeof router.query.activity === 'string') {
-    openedActivityId = router.query.activity;
+    const openedActivityId = router.query.activity;
+    openedActivity = activities.find(
+      (activity) => activity.id === Number(openedActivityId)
+    );
   }
 
   const updateActivity = async ({
@@ -81,18 +86,18 @@ const Activities: NextPageWithAuth = () => {
     }
   });
 
-  const onClickActivity = (
-    id: string,
-    e?: MouseEvent<HTMLButtonElement>
-  ): string => {
-    e && e.preventDefault();
+  const onClickActivity = (id: string, e?: MouseEvent<HTMLButtonElement>) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     const urlParams = new URLSearchParams();
     const sortParam = router.query.sort;
     typeof sortParam === 'string' && urlParams.set('sort', sortParam);
     urlParams.set('activity', id);
     const currentUrl = window.location.origin + window.location.pathname;
     const newUrl = currentUrl + '?' + urlParams.toString();
-    return newUrl;
+    router.push(newUrl);
   };
 
   const closeActivity = (e?: MouseEvent<HTMLButtonElement>) => {
@@ -122,7 +127,7 @@ const Activities: NextPageWithAuth = () => {
         <tbody className="bg-white divide-y divide-gray-200">
           {activities.length &&
             sortedActivities.map((activity) => (
-              <Activity
+              <ActivityRow
                 key={activity.id}
                 activity={activity}
                 updateActivity={updateActivity}
@@ -132,9 +137,9 @@ const Activities: NextPageWithAuth = () => {
             ))}
         </tbody>
       </table>
-      {openedActivityId && (
-        <SlideOver onClose={closeActivity} title="Activity Notes">
-          Hello
+      {openedActivity && (
+        <SlideOver onClose={closeActivity} title={openedActivity.name}>
+          <ShowActivity activity={openedActivity} />
         </SlideOver>
       )}
     </>

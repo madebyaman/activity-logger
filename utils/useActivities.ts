@@ -6,11 +6,11 @@ import { fetcher } from '.';
  * Function to fetch activities data from api route
  */
 export const useActivities = () => {
-  const { data, error } = useSWR('/activities', fetcher);
+  const { data, isLoading, error } = useSWR('/activities', fetcher);
 
   return {
     activities: data as Activity[],
-    isLoading: !error && !data,
+    isLoading: isLoading,
     isError: error,
   };
 };

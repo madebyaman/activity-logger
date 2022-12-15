@@ -1,9 +1,9 @@
 import { Activity as ActivityType } from '@prisma/client';
 import Link from 'next/link';
 import { useState, MouseEvent } from 'react';
-import { ActivityTypes } from '../types';
-import { activityTypes } from '../utils';
-import { defaultButtonClasses, inputClasses, selectClasses } from './ui';
+import { ActivityTypes } from '../../types';
+import { activityTypes } from '../../utils';
+import { defaultButtonClasses, inputClasses, selectClasses } from '../ui';
 
 // style activity type
 function styledActivity(type: ActivityTypes) {
@@ -23,7 +23,7 @@ function styledActivity(type: ActivityTypes) {
   }
 }
 
-export const Activity = ({
+export const ActivityRow = ({
   activity,
   updateActivity,
   onDelete,
@@ -39,7 +39,7 @@ export const Activity = ({
     name: string;
     type: ActivityTypes;
   }) => Promise<void>;
-  onClick: (id: string, e?: MouseEvent<HTMLButtonElement>) => string;
+  onClick: (id: string, e?: MouseEvent<HTMLButtonElement>) => void;
   onDelete: (id: number) => Promise<void>;
 }) => {
   const [editingActivity, setEditingActivity] = useState({
@@ -80,12 +80,12 @@ export const Activity = ({
             }
           />
         ) : (
-          <Link
-            href={onClick(String(activity.id))}
-            className="text-sm font-medium text-gray-900"
+          <button
+            onClick={(e) => onClick(activity.id.toString(), e)}
+            className="text-sm font-medium text-blue-600 hover:underline"
           >
             {activity.name}
-          </Link>
+          </button>
         )}
       </td>
       <td className={tdClasses}>
