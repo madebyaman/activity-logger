@@ -78,6 +78,7 @@ export const EditBlock = ({ changeTab }: { changeTab: () => void }) => {
   if (!activities || !blocks) {
     return null;
   }
+  console.log('Editing block');
 
   return (
     <form onSubmit={update}>

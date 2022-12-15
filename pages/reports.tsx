@@ -1,4 +1,5 @@
 import { Bar, DoughnutChart } from '../components/chart';
+import { h3Classes } from '../components/ui';
 import { NextPageWithAuth } from '../types';
 
 const Reports: NextPageWithAuth = () => {
@@ -9,12 +10,13 @@ const Reports: NextPageWithAuth = () => {
     'April',
     'May',
     'June',
+    'July',
   ];
   const dataBarChart = {
     labels: labelsBarChart,
     datasets: [
       {
-        label: 'My First Dataset',
+        label: 'All Activities',
         data: [65, 59, 80, 81, 56, 55, 40],
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
@@ -39,7 +41,47 @@ const Reports: NextPageWithAuth = () => {
     ],
   };
 
-  return <Bar data={dataBarChart} />;
+  return (
+    <div>
+      <div className="md:grid md:grid-cols-3 md:gap-6">
+        <div className="md:col-span-1">
+          <div className="px-4 sm:px-0">
+            <h2 className={h3Classes + ' font-display'}>All Activities</h2>
+            <p className="mt-1 text-sm text-gray-600">
+              This is your report for all activities
+            </p>
+          </div>
+        </div>
+        <div className="mt-5 md:mt-0 md:col-span-2">
+          <div className="shadow border border-gray-50 sm:rounded-md sm:overflow-hidden">
+            <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
+              <DoughnutChart data={dataBarChart} />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="md:grid md:grid-cols-3 md:gap-6 mt-4">
+        <div className="md:col-span-1">
+          <div className="px-4 sm:px-0">
+            <h2 className={h3Classes + ' font-display'}>
+              Productive Activities
+            </h2>
+            <p className="mt-1 text-sm text-gray-600">
+              This is your report for productive activites. Select the type of
+              activity to show their report.
+            </p>
+          </div>
+        </div>
+        <div className="mt-5 md:mt-0 md:col-span-2">
+          <div className="shadow border border-gray-50 sm:rounded-md sm:overflow-hidden">
+            <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
+              <Bar data={dataBarChart} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 Reports.protectedRoute = true;

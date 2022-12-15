@@ -4,7 +4,7 @@
  * @returns boolean -- true if `to` is less than current time
  */
 export const showBlock = (to: Date): boolean => {
-  const currentTime = new Date(Date.now());
+  const currentTime = new Date();
   // Why?
   // B/c server stores time in zero zone, but client has current time in local zone. So we need to remove 'Z' from the end of the string.
   const removeTimeZoneSignifier = to
