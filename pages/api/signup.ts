@@ -1,37 +1,53 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import bcrypt from 'bcrypt';
+import { hash, genSalt } from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
-import { prisma } from '../../lib/prisma';
+import { v4 as uuid } from 'uuid';
+import { prisma, sendEmail } from 'lib';
 import { User } from '@prisma/client';
 
 export default async function signup(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const salt = bcrypt.genSaltSync();
+  const salt = await genSalt();
   const { email, password, firstName, lastName } = req.body;
 
   let user: User | undefined;
+  const verificationString = uuid();
 
   try {
+    const passwordHash = await hash(password, salt);
     user = await prisma.user.create({
       data: {
-        email,
-        password: bcrypt.hashSync(password, salt),
+        email: email,
+        password: passwordHash,
+        isVerified: false,
+        verificationString,
       },
     });
-    console.log(user);
   } catch (e) {
     res.status(401);
     res.json({ error: 'User already exists' });
     return;
   }
 
-  // Update Profile with first name and last name
-  if (!user) {
-    return res.status(401).json({ error: 'User already exists' });
+  try {
+    await sendEmail({
+      to: email,
+      from: 'amanthakur95@gmail.com',
+      subject: 'Please verify your email',
+      text: `
+      Thanks fro signing up! To verify your email, click here: http://localhost:3000/verify-email/${verificationString}
+    `,
+    });
+  } catch (e) {
+    return res
+      .status(500)
+      .json({ message: 'Unable to send verification email' });
   }
+
+  // Update Profile with first name and last name
   await prisma.profile.upsert({
     where: {
       userId: user.id,

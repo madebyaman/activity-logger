@@ -50,7 +50,9 @@ export const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({
             type: 'success',
           },
         ]);
-      router.push('/dashboard');
+      mode === 'signin'
+        ? router.push('/dashboard')
+        : router.push('/verify-email');
     } catch (err) {
       setFlashMessages &&
         setFlashMessages((prevMessages) => [

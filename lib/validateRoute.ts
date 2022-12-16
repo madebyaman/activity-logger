@@ -35,6 +35,11 @@ export const validateRoute = (
           res.json({ error: 'User not found' });
           return;
         }
+        if (!user.isVerified) {
+          res.status(403);
+          res.json({ error: 'Email not verified' });
+          return;
+        }
       } catch (e) {
         res.status(401);
         res.json({ error: 'Not authorized' });

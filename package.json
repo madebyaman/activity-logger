@@ -8,10 +8,8 @@
     "lint": "next lint",
     "test": "jest --watch",
     "cache": "rm -rf .next",
-    "migrate:local": "dotenv -e .env.development -- npx prisma migrate dev"
-  },
-  "prisma": {
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+    "migrate:local": "dotenv -e .env.development -- npx prisma migrate dev",
+    "push:local": "dotenv -e .env.development -- npx prisma db push"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.6",
