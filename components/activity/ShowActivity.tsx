@@ -1,5 +1,5 @@
 import { Activity } from '@prisma/client';
-import useSWRImmutable from 'swr/immutable';
+import useSWR from 'swr';
 import { fetcher, paginationNumber } from 'utils';
 import { Log } from '@prisma/client';
 import { format } from 'date-fns';
@@ -10,11 +10,11 @@ import { classNames } from 'utils';
 
 export function ShowActivity({ activity }: { activity: Activity }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const { data: totalActivites } = useSWRImmutable<number>(
+  const { data: totalActivites } = useSWR<number>(
     `/activities/${activity.id.toString()}/count`,
     fetcher
   );
-  const { isLoading, data, error } = useSWRImmutable<Log[]>(
+  const { isLoading, data, error } = useSWR<Log[]>(
     `/activities/${activity.id.toString()}/${currentPage.toString()}`,
     fetcher
   );
@@ -36,6 +36,12 @@ export function ShowActivity({ activity }: { activity: Activity }) {
       newItems.push({ date: next.date, logs: [next] });
     }
     return newItems;
+  }
+
+  function sortLogs(a: Log, b: Log) {
+    if (a.from > b.from) return 1;
+    if (b.from > a.from) return -1;
+    else return 0;
   }
 
   function previousPageButtonDisabled(): boolean {
@@ -63,10 +69,10 @@ export function ShowActivity({ activity }: { activity: Activity }) {
           <h3 className="font-bold text-lg mb-1">
             {format(new Date(uniqueLog.date), 'MMM d, Y')}
           </h3>
-          {uniqueLog.logs.map((log) => (
+          {uniqueLog.logs.sort(sortLogs).map((log) => (
             <ul key={log.id} className="list-disc list-inside">
               <li className="text-gray-600 text-sm mb-1">
-                {format(new Date(log.from), 'h a')}
+                {format(new Date(log.from), 'h:mm a')}
                 {log.notes && `: ${log.notes}`}
               </li>
             </ul>

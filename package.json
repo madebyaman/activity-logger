@@ -31,9 +31,10 @@
     "react-dom": "^18.2.0",
     "react-select": "^5.2.2",
     "swr": "^2.0.0",
-    "uuid": "^8.3.2"
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@sendgrid/mail": "^7.7.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@types/bcrypt": "^5.0.0",
@@ -43,7 +44,7 @@
     "@types/node": "17.0.12",
     "@types/nprogress": "^0.2.0",
     "@types/react": "17.0.38",
-    "@types/uuid": "^8.3.4",
+    "@types/uuid": "^9.0.0",
     "autoprefixer": "^10.4.2",
     "dotenv-cli": "^6.0.0",
     "eslint": "8.7.0",

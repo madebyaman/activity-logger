@@ -37,6 +37,10 @@
     @apply text-3xl font-bold text-gray-800 leading-tight md:text-5xl;
   }
 
+  .heading2 {
+    @apply text-2xl font-bold text-gray-800 leading-tight md:text-3xl;
+  }
+
   .paragraph {
     @apply text-base text-gray-600 md:text-lg;
   }
