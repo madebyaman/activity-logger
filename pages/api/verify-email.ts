@@ -8,6 +8,9 @@ export default async function verifyEmail(
   res: NextApiResponse
 ) {
   const { verificationString } = req.body;
+  if (!verificationString) {
+    return res.status(401).json({ message: 'No verification string' });
+  }
 
   const result = await prisma.user.findUnique({
     where: {

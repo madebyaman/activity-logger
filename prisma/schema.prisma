@@ -16,8 +16,6 @@ model User {
   updatedAt          DateTime   @updatedAt
   email              String     @unique
   password           String
-  // passwordResetToken    String?
-  // passwordResetDeadline DateTime?
   verificationString String     @unique
   isVerified         Boolean    @default(false)
   activity           Activity[]

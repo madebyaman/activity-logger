@@ -35,10 +35,11 @@ export default async function signup(
   try {
     await sendEmail({
       to: email,
-      from: 'amanthakur95@gmail.com',
+      from: 'thakura994@gmail.com',
       subject: 'Please verify your email',
-      text: `
-      Thanks fro signing up! To verify your email, click here: http://localhost:3000/verify-email/${verificationString}
+      html: `
+      <p>Thanks for signing up! To verify your email, click here: <a href="http://localhost:3000/verify-email/${verificationString}">http://localhost:3000/verify-email/${verificationString}
+    </a></p>
     `,
     });
   } catch (e) {

@@ -1,17 +1,23 @@
-import sendgrid from '@sendgrid/mail';
+import nodemailer from 'nodemailer';
 
-if (process.env.SENDGRID_API_KEY) {
-  sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
-} else {
-  throw new Error('No sendgrid API key in environment');
+if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
+  throw new Error('No Email key in environment');
 }
+
+const options = {
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD,
+  },
+};
 
 export async function sendEmail(message: {
   to: string;
   from: string;
   subject: string;
-  text: string;
-  html?: string;
+  html: string;
 }) {
-  return sendgrid.send(message);
+  const transporter = nodemailer.createTransport(options);
+  return transporter.sendMail(message);
 }
