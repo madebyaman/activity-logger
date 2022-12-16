@@ -1,7 +1,7 @@
 import { User } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { validateRoute, getDateString, newBlocks } from '../../../utils';
-import { prisma } from '../../../lib/prisma';
+import { dateString, newBlocks } from '../../../utils';
+import { prisma, validateRoute } from '../../../lib';
 
 /**
  * Calls `validateRoute` function and returns todays logs or [] if not found
@@ -11,7 +11,7 @@ const getLogs = async (
   res: NextApiResponse,
   user: User
 ) => {
-  const date = getDateString();
+  const date = dateString;
   const logs = await prisma.log.findMany({ where: { date: date } });
 
   // Get `blocksPerHour` from profile db

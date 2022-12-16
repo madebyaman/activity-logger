@@ -86,18 +86,14 @@ const Activities: NextPageWithAuth = () => {
     }
   });
 
-  const onClickActivity = (id: string, e?: MouseEvent<HTMLButtonElement>) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
+  const activityLink = (id: number): string => {
     const urlParams = new URLSearchParams();
     const sortParam = router.query.sort;
     typeof sortParam === 'string' && urlParams.set('sort', sortParam);
-    urlParams.set('activity', id);
+    urlParams.set('activity', id.toString());
     const currentUrl = window.location.origin + window.location.pathname;
     const newUrl = currentUrl + '?' + urlParams.toString();
-    router.push(newUrl);
+    return newUrl;
   };
 
   const closeActivity = (e?: MouseEvent<HTMLButtonElement>) => {
@@ -132,7 +128,7 @@ const Activities: NextPageWithAuth = () => {
                 activity={activity}
                 updateActivity={updateActivity}
                 onDelete={deleteActivity}
-                onClick={onClickActivity}
+                link={activityLink(activity.id)}
               />
             ))}
         </tbody>

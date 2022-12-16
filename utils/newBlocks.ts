@@ -1,7 +1,6 @@
+import { dateString } from './getDateString';
+
 // Initialize a blank state to start tracking activities
-
-import { getDateString } from '.';
-
 type TimeLog = {
   from: Date;
   to: Date;
@@ -11,7 +10,7 @@ type TimeLog = {
 
 export const newBlocks = (noOfBlocksPerHour: number = 4): TimeLog[] => {
   let initialTimeLog: TimeLog[] = [];
-  const date = getDateString(new Date());
+  const date = dateString;
 
   Array.from(Array(24).keys()).map((hour) => {
     Array.from(Array(noOfBlocksPerHour).keys()).map((block) => {

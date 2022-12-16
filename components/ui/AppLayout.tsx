@@ -1,13 +1,13 @@
 import { Fragment, ReactNode, useContext, useState } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { XMarkIcon, Bars3Icon, UserIcon } from '@heroicons/react/24/outline';
-import moment from 'moment';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { classNames, useProfile } from '../../utils';
 import { ModalProvider } from '../modal';
 import { FlashMessageContext } from '../FlashMessage';
+import { format } from 'date-fns';
 
 const AppLayout = ({ children }: { children: ReactNode }) => {
   const { profile, isLoading, isError } = useProfile();
@@ -57,7 +57,7 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
 
   const pageTitle =
     router.pathname === '/dashboard'
-      ? moment().format('LL')
+      ? format(new Date(), 'do LLLL')
       : removeTrailingSlashAndCapitalize(router.pathname);
 
   if (isLoading) {
