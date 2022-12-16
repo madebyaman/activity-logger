@@ -1,5 +1,4 @@
-import { validateRoute } from '../../../lib';
-import { prisma } from '../../../lib/prisma';
+import { validateRoute, prisma } from 'lib';
 
 /**
  * Calls `validateRoute` function and return activities[] or error.

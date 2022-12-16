@@ -27,9 +27,9 @@ const Activities: NextPageWithAuth = () => {
   let openedActivity: Activity | undefined = undefined;
   if (typeof router.query.activity === 'string') {
     const openedActivityId = router.query.activity;
-    openedActivity = activities.find(
-      (activity) => activity.id === Number(openedActivityId)
-    );
+    openedActivity =
+      activities &&
+      activities.find((activity) => activity.id === Number(openedActivityId));
   }
 
   const updateActivity = async ({
