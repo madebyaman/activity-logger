@@ -54,5 +54,5 @@ export default async function verifyEmail(
     })
   );
 
-  return res.json(result);
+  return res.json({ email: result.email });
 }

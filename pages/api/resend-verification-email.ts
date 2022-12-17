@@ -36,6 +36,11 @@ export default async function resendVerificationEmail(
     return;
   }
 
+  // Check if email is already verified
+  if (user.isVerified) {
+    return res.status(200).json({ message: 'verified' });
+  }
+
   const updatedUser = await prisma.user.update({
     where: {
       id: user.id,
@@ -58,7 +63,6 @@ export default async function resendVerificationEmail(
 
     res.status(200).json({ message: 'Email sent successfully' });
   } catch (e) {
-    console.log(e);
     return res
       .status(500)
       .json({ message: 'Unable to send verification email' });

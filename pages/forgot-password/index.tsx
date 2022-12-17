@@ -1,11 +1,11 @@
 import Link from 'next/link';
 import { NextPage } from 'next';
-import { CenteredLayout } from '../components/ui';
+import { CenteredLayout } from 'components/ui';
 import Head from 'next/head';
 import { FormEvent, useContext, useState } from 'react';
 import { useRouter } from 'next/router';
 import { FlashMessageContext } from 'components/FlashMessage';
-import { fetcher } from 'utils';
+import axios from 'axios';
 
 const ForgotPassword: NextPage = () => {
   const [email, setEmail] = useState('');
@@ -17,7 +17,9 @@ const ForgotPassword: NextPage = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await fetcher(`/forgot-password/${email}`);
+      await axios.post('/api/forgot-password', {
+        email,
+      });
       setFlashMessages &&
         setFlashMessages((prevMessages) => [
           ...prevMessages,
@@ -28,7 +30,7 @@ const ForgotPassword: NextPage = () => {
           },
         ]);
       setTimeout(() => {
-        router.push('/login');
+        router.push('/signin');
       }, 3000);
     } catch (e) {
       setFlashMessages &&

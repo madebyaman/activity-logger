@@ -41,4 +41,6 @@ npm run dev
 yarn dev
 ```
 
+Get app password from Google. [Check how to do this.](support.google.com/accounts/answer/185833)
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
