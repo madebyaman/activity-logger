@@ -1,4 +1,4 @@
-import { fetcher } from '.';
+import axios from 'axios';
 import { ActivityTypes } from '../types';
 
 /**
@@ -11,5 +11,5 @@ export const addActivity = async ({
   name: string;
   type: ActivityTypes;
 }) => {
-  return await fetcher('/activities/add', { name, type });
+  return await axios.post('/activities/add', { name, type });
 };

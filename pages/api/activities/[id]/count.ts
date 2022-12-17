@@ -1,4 +1,4 @@
-import { prisma, paginationNumber, validateRoute } from 'lib';
+import { prisma, validateRoute } from 'lib';
 
 export default validateRoute(async (req, res, user) => {
   const totalLogs = await prisma.log.count({

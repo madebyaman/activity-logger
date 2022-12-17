@@ -1,26 +1,32 @@
+import axios from 'axios';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useSWRConfig } from 'swr';
 import { FlashMessageContext } from '../components/FlashMessage';
-import { h3Classes } from '../components/ui';
+import { h3Classes } from 'components/ui';
 import { UserPreferencesForm } from '../components/user/preferencesForm';
 import { NextPageWithAuth } from '../types';
-import { fetcher, useProfile } from '../utils';
+import { useProfile } from '../utils';
 
 const Preferences: NextPageWithAuth = () => {
   const { isLoading, isError, profile } = useProfile();
-  const [profileState, setProfileState] = useState(() =>
-    profile
-      ? profile
-      : {
-          blocksPerHour: 2,
-          sleepFrom: 10,
-          sleepTo: 6,
-          firstName: '',
-          lastName: '',
-        }
-  );
+  const [profileState, setProfileState] = useState({
+    blocksPerHour: 2,
+    sleepFrom: 10,
+    sleepTo: 6,
+    firstName: '',
+    lastName: '',
+  });
+
+  useEffect(() => {
+    let unmounted = false;
+    !unmounted && setProfileState(profile.profile);
+    return () => {
+      unmounted = true;
+    };
+  }, [profile]);
+
   const [loading, setLoading] = useState(false);
   const { mutate } = useSWRConfig();
   const router = useRouter();
@@ -38,7 +44,10 @@ const Preferences: NextPageWithAuth = () => {
             profileState.blocksPerHour === 4)
             ? profileState.blocksPerHour
             : 2;
-        await fetcher('/profile/update', { ...profileState, blocksPerHour });
+        await axios.post('/api/profile/update', {
+          ...profileState,
+          blocksPerHour,
+        });
         router.push('/dashboard');
       }
     } catch {

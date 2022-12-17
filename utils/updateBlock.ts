@@ -1,4 +1,4 @@
-import { fetcher } from '.';
+import axios from 'axios';
 
 /**
  * Update a block
@@ -8,5 +8,5 @@ export const updateBlock = async (
   activityId: number,
   notes: string
 ) => {
-  return await fetcher('/logs/update', { blockId, activityId, notes });
+  return await axios.post('/api/logs/update', { blockId, activityId, notes });
 };

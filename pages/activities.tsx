@@ -6,10 +6,11 @@ import { useSWRConfig } from 'swr';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { ActivityRow } from '../components/activity';
 import { ActivityTypes, NextPageWithAuth } from '../types';
-import { fetcher, useActivities } from '../utils';
+import { useActivities } from 'utils';
 import { SlideOver } from '../components/ui';
 import { ShowActivity } from '../components/activity';
 import { Activity } from '@prisma/client';
+import axios from 'axios';
 
 const Activities: NextPageWithAuth = () => {
   const { isLoading, activities, isError } = useActivities();
@@ -52,7 +53,7 @@ const Activities: NextPageWithAuth = () => {
       return activity;
     });
     mutate('/activities', updatedActivities, false);
-    await fetcher('/activities/update', { id, name, type });
+    await axios.post('/activities/update', { id, name, type });
     mutate('/activities');
   };
 
@@ -61,7 +62,7 @@ const Activities: NextPageWithAuth = () => {
       (activity) => activity.id !== id
     );
     mutate('/activities', updatedActivities, false);
-    await fetcher('/activities/delete', { id });
+    await axios.delete(`/activities/delete/${id}`);
     mutate('/activities');
   };
 
