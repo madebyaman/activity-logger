@@ -3,8 +3,22 @@ import { NextPage } from 'next';
 import { CenteredLayout } from '../components/ui';
 import { AuthForm } from '../components/AuthForm';
 import Head from 'next/head';
+import axios from 'axios';
 
 const Signin: NextPage = () => {
+  const handleSignin = async ({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) => {
+    await axios.post('/api/signin', {
+      email,
+      password,
+    });
+  };
+
   return (
     <CenteredLayout>
       <Head>
@@ -19,7 +33,7 @@ const Signin: NextPage = () => {
           </Link>
         </p>
       </div>
-      <AuthForm mode="signin" />
+      <AuthForm mode="SIGNIN" onSignin={handleSignin} />
     </CenteredLayout>
   );
 };

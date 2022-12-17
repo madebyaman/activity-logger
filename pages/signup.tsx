@@ -3,8 +3,18 @@ import { NextPage } from 'next/types';
 import { CenteredLayout } from '../components/ui';
 import { AuthForm } from '../components/AuthForm';
 import Head from 'next/head';
+import axios from 'axios';
 
 const Signup: NextPage = () => {
+  async function onSignup(props: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+  }): Promise<void> {
+    await axios.post('/api/signup', props);
+  }
+
   return (
     <CenteredLayout>
       <Head>
@@ -19,7 +29,7 @@ const Signup: NextPage = () => {
           </Link>
         </p>
       </div>
-      <AuthForm mode="signup" />
+      <AuthForm mode="SIGNUP" onSignup={onSignup} />
     </CenteredLayout>
   );
 };

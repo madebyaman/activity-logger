@@ -1,11 +1,10 @@
+import axios from 'axios';
+import { CenteredLayout } from 'components/ui';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import { CenteredLayout } from 'components/ui';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { controllers } from 'chart.js';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 const VerifyEmail: NextPage = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -57,9 +56,6 @@ const VerifyEmail: NextPage = () => {
             try again.
           </p>
         </div>
-        <Link className="btn inline-block mt-2" href={'/verify-email'}>
-          Resend verification email
-        </Link>
       </CenteredLayout>
     );
   }

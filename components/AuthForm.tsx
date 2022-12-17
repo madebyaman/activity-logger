@@ -1,13 +1,36 @@
 import { useRouter } from 'next/router';
 import { FC, FormEvent, useContext, useState } from 'react';
 
-import { AuthSigninProps, AuthSignupProps } from '../types';
-import { auth } from '../utils/auth';
 import { FlashMessageContext } from './FlashMessage';
 
-export const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({
-  mode = 'signin',
-}) => {
+type AuthFormProps =
+  | {
+      mode: 'SIGNIN';
+      onSignin: ({
+        email,
+        password,
+      }: {
+        email: string;
+        password: string;
+      }) => Promise<void>;
+    }
+  | {
+      mode: 'SIGNUP';
+      onSignup: ({
+        firstName,
+        lastName,
+        email,
+        password,
+      }: {
+        firstName: string;
+        lastName: string;
+        email: string;
+        password: string;
+      }) => Promise<void>;
+    };
+
+export function AuthForm(props: AuthFormProps) {
+  const { mode } = props;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -19,40 +42,25 @@ export const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
-    const signInUserData: AuthSigninProps = {
-      mode: 'signin',
-      body: {
-        email,
-        password,
-      },
-    };
-
-    const signUpUserData: AuthSignupProps = {
-      mode: 'signup',
-      body: {
-        email,
-        password,
-        firstName,
-        lastName,
-      },
-    };
 
     try {
-      await auth(mode === 'signin' ? signInUserData : signUpUserData);
+      if (mode === 'SIGNIN') {
+        await props.onSignin({ email, password });
+      } else {
+        await props.onSignup({ firstName, lastName, email, password });
+      }
       setFlashMessages &&
         setFlashMessages((prevMessages) => [
           ...prevMessages,
           {
             title: 'Success',
             message: `You have successfully ${
-              mode === 'signin' ? 'logged in' : 'signed up'
+              mode === 'SIGNIN' ? 'logged in' : 'signed up'
             }`,
             type: 'success',
           },
         ]);
-      mode === 'signin'
-        ? router.push('/dashboard')
-        : router.push('/verify-email');
+      router.push('/dashboard');
     } catch (err) {
       setFlashMessages &&
         setFlashMessages((prevMessages) => [
@@ -75,7 +83,7 @@ export const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({
     <div className="max-w-sm my-0 mx-auto">
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col mt-4 gap-2">
-          {mode === 'signup' && (
+          {mode === 'SIGNUP' && (
             <>
               <label className="sr-only" htmlFor="firstName">
                 First name
@@ -144,7 +152,7 @@ export const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({
           >
             {isLoading
               ? 'Loading...'
-              : mode === 'signin'
+              : mode === 'SIGNIN'
               ? 'Sign in'
               : 'Sign up'}
           </button>
@@ -152,4 +160,4 @@ export const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({
       </form>
     </div>
   );
-};
+}

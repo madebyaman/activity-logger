@@ -33,8 +33,6 @@ export async function fetcher(
   data:
     | UserPreferences
     | UpdateLog
-    | SigninProps
-    | SignupProps
     | AddActivity
     | EditActivity
     | DeleteActivity
