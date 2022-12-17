@@ -22,6 +22,8 @@ export default async function forgotPassword(
 
   // Check if user exists, then update their password reset string
   let user: User | null = null;
+  const currentTime = new Date();
+  currentTime.setHours(currentTime.getHours() + 2);
   try {
     user = await prisma.user.update({
       where: {
@@ -29,6 +31,7 @@ export default async function forgotPassword(
       },
       data: {
         verificationString: uuid(),
+        passwordResetDeadline: currentTime,
       },
     });
   } catch (e) {
@@ -45,7 +48,7 @@ export default async function forgotPassword(
       from: 'Aman Thakur',
       subject: 'Update your password',
       html: `
-      <p>Thanks for signing up! To verify your email, click here: <a href="http://localhost:3000/forgot-password/${user.verificationString}">http://localhost:3000/forgot-password/${user.verificationString}
+      <p>We received a request to reset your password. To continue please click the temporary link below within 2 hours: <a href="http://localhost:3000/forgot-password/${user.verificationString}">http://localhost:3000/forgot-password/${user.verificationString}
     </a></p>
     `,
     });

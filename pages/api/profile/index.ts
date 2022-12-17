@@ -4,7 +4,7 @@ import { validateRoute } from '../../../lib';
 import { prisma } from '../../../lib/prisma';
 
 /**
- * Calls `validateRoute` function and return profile or error.
+ * Calls `validateRoute` function and return profile or error. It also sends if user verified property
  */
 const getProfile = async (
   req: NextApiRequest,
@@ -14,7 +14,7 @@ const getProfile = async (
   const profile = await prisma.profile.findUnique({
     where: { userId: user.id },
   });
-  return res.json(profile);
+  return res.json({ profile: profile, isVerified: user.isVerified });
 };
 
 export default validateRoute(getProfile);

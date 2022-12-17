@@ -1,6 +1,12 @@
 import { validateRoute, prisma } from '../../../lib';
 
 export default validateRoute(async (req, res, user) => {
+  // Don't allow if user is not verified
+  if (!user.isVerified) {
+    res.status(403);
+    res.json({ error: 'Email not verified' });
+    return;
+  }
   // If method is not post, throw error
   if (req.method !== 'POST') {
     res.status(405);

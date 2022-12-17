@@ -20,24 +20,40 @@ export default async function updatePassword(
   let user: User | null = null;
   const salt = await genSalt();
   try {
-    user = await prisma.user.update({
+    user = await prisma.user.findUnique({
       where: {
         verificationString,
       },
-      data: {
-        password: await hash(password, salt),
-      },
     });
   } catch (e) {
-    return res
-      .status(401)
-      .json({ message: 'The email verification code is incorrect' });
+    return res.status(500).json({ message: 'Internal server error' });
   }
   if (!user) {
     return res
       .status(401)
       .json({ message: 'The email verification code is incorrect' });
   }
-
-  return res.status(200).json({ email: user.email });
+  // If email verification code is correct, then check if deadline has not passed.
+  const currentTime = new Date();
+  if (user.passwordResetDeadline && user.passwordResetDeadline > currentTime) {
+    const newPassword = await hash(password, salt);
+    try {
+      const updateUser = await prisma.user.update({
+        where: {
+          email: user.email,
+        },
+        data: {
+          password: newPassword,
+        },
+        select: {
+          email: true,
+        },
+      });
+      return res.status(200).json({ email: updateUser.email });
+    } catch (e) {
+      return res.status(500).json({ error: 'Internal error' });
+    }
+  } else {
+    return res.status(400).json({ error: 'Try resending the email' });
+  }
 }
