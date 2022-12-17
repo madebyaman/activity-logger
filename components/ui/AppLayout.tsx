@@ -118,9 +118,9 @@ function ApplicationShell({
 
   const navigation = [
     { name: 'Dashboard', href: '/dashboard' },
-    { name: 'Your Preferences', href: '/preferences' },
     { name: 'Activities', href: '/activities' },
     { name: 'Reports', href: '/reports' },
+    { name: 'Your Preferences', href: '/preferences' },
   ];
   return (
     <div className="min-h-full">
