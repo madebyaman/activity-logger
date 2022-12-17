@@ -1,8 +1,11 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useProfile } from 'utils';
 
 export default function HomeComponent() {
+  const { profile } = useProfile();
+
   return (
     <div className="bg-white mx-auto mt-4 mb-8 px-4">
       <Head>
@@ -16,11 +19,11 @@ export default function HomeComponent() {
             </li>
             <li>
               <Link
-                className="uppercase text-sm text-gray-600 tracking-wider font-semibold hover:text-gray-800 hover:underline"
-                href="/signin"
+                className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                href={profile ? '/dashboard' : '/signin'}
                 passHref
               >
-                Login
+                {profile ? 'Dashboard' : 'Login'}
               </Link>
             </li>
           </ul>
