@@ -20,7 +20,7 @@ export const newBlocks = (noOfBlocksPerHour: number = 4): TimeLog[] => {
       if (block === 0) {
         fromMinutes = 0;
       } else {
-        fromMinutes = (60 / noOfBlocksPerHour) * block + 1;
+        fromMinutes = (60 / noOfBlocksPerHour) * block;
       }
       const from = new Date(Date.now());
       from.setHours(hour);

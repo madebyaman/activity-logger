@@ -40,3 +40,9 @@ export type AuthSignupProps = {
   mode: 'signup';
   body: SignupProps;
 };
+export type Report = {
+  activityId: number;
+  totalMinutes: number;
+  activityName: string;
+  activityType: string;
+};

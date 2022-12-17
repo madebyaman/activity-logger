@@ -11,5 +11,5 @@ export const addActivity = async ({
   name: string;
   type: ActivityTypes;
 }) => {
-  return await axios.post('/activities/add', { name, type });
+  return await axios.post('/api/activities/add', { name, type });
 };

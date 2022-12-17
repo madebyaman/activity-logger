@@ -6,8 +6,8 @@ type BarProps = {
     labels: string[];
     datasets: {
       label: string;
-      backgroundColor: string | string[];
-      borderColor: string | string[];
+      backgroundColor?: string | string[];
+      borderColor?: string | string[];
       data: number[];
     }[];
   };

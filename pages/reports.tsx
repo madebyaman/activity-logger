@@ -1,45 +1,77 @@
-import { Bar, DoughnutChart } from '../components/chart';
+import axios from 'axios';
+import { sub } from 'date-fns';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { Report } from 'types';
+import { classNames } from 'utils';
+import { DoughnutChart } from '../components/chart';
 import { h3Classes } from '../components/ui';
 import { NextPageWithAuth } from '../types';
 
+function getBackgroundColor(
+  total: number,
+  saturation: number,
+  luminiosity: number
+): string[] {
+  const getRandomHue = () => {
+    return Math.ceil(Math.random() * 360);
+  };
+  return Array(total)
+    .fill(0)
+    .map((item) => `hsl(${getRandomHue()}, ${saturation}%, ${luminiosity}%)`);
+}
+
 const Reports: NextPageWithAuth = () => {
-  const labelsBarChart = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-  ];
+  const [report, setReport] = useState<Report[]>([]);
+  const router = useRouter();
+  const [days, setDays] = useState(1);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    let unmounted = false;
+
+    async function getActivitiesData() {
+      const report = await axios.post(
+        '/api/logs/report',
+        {
+          from: new Date(),
+          to: sub(new Date(), { days }),
+        },
+        {
+          signal: controller.signal,
+        }
+      );
+      !unmounted && setReport(report.data as Report[]);
+    }
+    getActivitiesData();
+
+    return () => {
+      unmounted = true;
+      controller.abort;
+    };
+  }, [days]);
+
+  if (!report.length) {
+    return <div>Loading...</div>;
+  }
+
   const dataBarChart = {
-    labels: labelsBarChart,
+    labels: report.map((item) => item.activityName),
     datasets: [
       {
         label: 'All Activities',
-        data: [65, 59, 80, 81, 56, 55, 40],
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(255, 159, 64, 0.2)',
-          'rgba(255, 205, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(201, 203, 207, 0.2)',
-        ],
-        borderColor: [
-          'rgb(255, 99, 132)',
-          'rgb(255, 159, 64)',
-          'rgb(255, 205, 86)',
-          'rgb(75, 192, 192)',
-          'rgb(54, 162, 235)',
-          'rgb(153, 102, 255)',
-          'rgb(201, 203, 207)',
-        ],
-        borderWidth: 1,
+        data: report.map((item) => item.totalMinutes),
+        backgroundColor: getBackgroundColor(report.length, 100, 70),
       },
     ],
   };
+
+  const buttons = [
+    { name: 'Today', onClick: () => setDays(1), current: days === 1 },
+    { name: 'Last week', onClick: () => setDays(7), current: days === 7 },
+    { name: 'Last month', onClick: () => setDays(30), current: days === 30 },
+  ];
 
   return (
     <div>
@@ -47,35 +79,52 @@ const Reports: NextPageWithAuth = () => {
         <div className="md:col-span-1">
           <div className="px-4 sm:px-0">
             <h2 className={h3Classes + ' font-display'}>All Activities</h2>
-            <p className="mt-1 text-sm text-gray-600">
-              This is your report for all activities
+            <p className="mt-2 text-sm text-gray-600">
+              This is your report of all activities for{' '}
+              {buttons.find((button) => button.current)?.name.toLowerCase()}
             </p>
+            <div className="mt-4 flex justify-start gap-4">
+              <div className="sm:hidden">
+                <label htmlFor="tabs" className="sr-only">
+                  Select a tab
+                </label>
+                <select
+                  id="tabs"
+                  name="tabs"
+                  className="block w-full focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+                  defaultValue={buttons.find((button) => button.current)?.name}
+                >
+                  {buttons.map((tab) => (
+                    <option key={tab.name}>{tab.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="hidden sm:block">
+                <nav className="flex space-x-4" aria-label="Tabs">
+                  {buttons.map((tab) => (
+                    <button
+                      key={tab.name}
+                      onClick={tab.onClick}
+                      className={classNames(
+                        tab.current
+                          ? 'bg-gray-200 text-gray-800'
+                          : 'text-gray-600 hover:text-gray-800',
+                        'px-3 py-2 font-medium text-sm rounded-md'
+                      )}
+                      aria-current={tab.current ? 'page' : undefined}
+                    >
+                      {tab.name}
+                    </button>
+                  ))}
+                </nav>
+              </div>
+            </div>
           </div>
         </div>
         <div className="mt-5 md:mt-0 md:col-span-2">
           <div className="shadow border border-gray-50 sm:rounded-md sm:overflow-hidden">
             <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
               <DoughnutChart data={dataBarChart} />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="md:grid md:grid-cols-3 md:gap-6 mt-4">
-        <div className="md:col-span-1">
-          <div className="px-4 sm:px-0">
-            <h2 className={h3Classes + ' font-display'}>
-              Productive Activities
-            </h2>
-            <p className="mt-1 text-sm text-gray-600">
-              This is your report for productive activites. Select the type of
-              activity to show their report.
-            </p>
-          </div>
-        </div>
-        <div className="mt-5 md:mt-0 md:col-span-2">
-          <div className="shadow border border-gray-50 sm:rounded-md sm:overflow-hidden">
-            <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
-              <Bar data={dataBarChart} />
             </div>
           </div>
         </div>

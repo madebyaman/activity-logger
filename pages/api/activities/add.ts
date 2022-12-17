@@ -16,15 +16,19 @@ export default validateRoute(async (req, res, user) => {
     res.json({ error: 'Method not allowed' });
     return;
   }
-  const newActivity = await prisma.activity.create({
-    data: {
-      name: req.body.name,
-      type: req.body.type,
-      user: {
-        connect: { id: user.id },
+  try {
+    const newActivity = await prisma.activity.create({
+      data: {
+        name: req.body.name,
+        type: req.body.type,
+        user: {
+          connect: { id: user.id },
+        },
       },
-    },
-  });
+    });
+  } catch (error) {
+    return res.status(500).json({ error: 'Not allowed' });
+  }
 
-  return res.json(newActivity);
+  return res.json({ message: 'Done' });
 });
