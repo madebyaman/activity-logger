@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { sub } from 'date-fns';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Report } from 'types';
@@ -9,17 +8,31 @@ import { DoughnutChart } from '../components/chart';
 import { h3Classes } from '../components/ui';
 import { NextPageWithAuth } from '../types';
 
-function getBackgroundColor(
-  total: number,
-  saturation: number,
-  luminiosity: number
-): string[] {
-  const getRandomHue = () => {
-    return Math.ceil(Math.random() * 360);
+function getBackgroundColor(type: string[]): string[] {
+  const getRandomNumber = (min: number, max: number) => {
+    const difference = max - min;
+    let rand = Math.random();
+    rand = Math.floor(rand * difference);
+    rand += min;
+    return rand;
   };
-  return Array(total)
-    .fill(0)
-    .map((item) => `hsl(${getRandomHue()}, ${saturation}%, ${luminiosity}%)`);
+  const colors = type.map((item) => {
+    switch (item) {
+      case 'Productive':
+        return `hsl(${getRandomNumber(120, 150)}, 100%, 70%)`;
+      case 'Very Productive':
+        return `hsl(${getRandomNumber(120, 145)}, 70%, 70%)`;
+      case 'Distracting':
+        return `hsl(${getRandomNumber(30, 45)}, 100%, 50%)`;
+      case 'Very Distracting':
+        return `hsl(${getRandomNumber(0, 15)}, 100%, 50%)`;
+      case 'Neutral':
+        return `hsl(135, 0%, ${getRandomNumber(0, 50)}%)`;
+      default:
+        return `hsl(135, 0%, ${getRandomNumber(0, 50)}%)`;
+    }
+  });
+  return colors;
 }
 
 const Reports: NextPageWithAuth = () => {
@@ -62,7 +75,9 @@ const Reports: NextPageWithAuth = () => {
       {
         label: 'All Activities',
         data: report.map((item) => item.totalMinutes),
-        backgroundColor: getBackgroundColor(report.length, 100, 70),
+        backgroundColor: getBackgroundColor(
+          report.map((item) => item.activityType)
+        ),
       },
     ],
   };
