@@ -10,23 +10,39 @@ import axios from 'axios';
 const UpdatePassword: NextPage = () => {
   const [formState, setFormState] = useState<{
     loading: 'INIT' | 'LOADING' | 'LOADED';
-  }>();
+    newPassword: string;
+    confirmNewPassword: string;
+  }>({ loading: 'INIT', newPassword: '', confirmNewPassword: '' });
   const router = useRouter();
+  const { hash } = router.query;
   const { setFlashMessages } = useContext(FlashMessageContext);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setIsLoading(true);
+    setFormState({ ...formState, loading: 'LOADING' });
+    if (formState.newPassword !== formState.confirmNewPassword || !hash) {
+      setFlashMessages &&
+        setFlashMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            title: "Password don't match",
+            message: 'Confirm your password again',
+            type: 'error',
+          },
+        ]);
+      return;
+    }
     try {
-      await axios.post('/api/forgot-password', {
-        email,
+      await axios.put('/api/forgot-password/update-password', {
+        password: formState.newPassword,
+        verificationString: hash,
       });
       setFlashMessages &&
         setFlashMessages((prevMessages) => [
           ...prevMessages,
           {
             title: 'Success',
-            message: 'Check your email for a reset link',
+            message: 'Successfully updated your password. You can now login',
             type: 'success',
           },
         ]);
@@ -44,17 +60,17 @@ const UpdatePassword: NextPage = () => {
           },
         ]);
     } finally {
-      setIsLoading(false);
+      setFormState({ ...formState, loading: 'LOADED' });
     }
   }
 
   return (
     <CenteredLayout>
       <Head>
-        <title>Forgot Password</title>
+        <title>Update Password</title>
       </Head>
       <div className="">
-        <h1 className="mt-6 text-center heading1">Forgot Password</h1>
+        <h1 className="mt-6 text-center heading1">Update Password</h1>
         <p className="mt-2 md:mt-4 text-base text-center paragraph">
           <Link href="/signin" className="link">
             Go back to login page
@@ -64,27 +80,48 @@ const UpdatePassword: NextPage = () => {
       <div className="max-w-sm my-0 mx-auto">
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col mt-4 gap-2">
-            <label className="sr-only" htmlFor="emailInput">
-              Enter your email
+            <label className="sr-only" htmlFor="newPassword">
+              Enter your new password
             </label>
             <input
-              type="email"
-              name="email"
-              id="emailInput"
+              type="password"
+              id="newPassword"
               className={
                 'input placeholder-gray-500 text-gray-900 sm:text-sm bg-gray-100 shadow-none my-1'
               }
-              value={email}
-              placeholder="Email"
-              onChange={(e) => setEmail(e.target.value)}
+              value={formState.newPassword}
+              placeholder="New password"
+              onChange={(e) =>
+                setFormState({ ...formState, newPassword: e.target.value })
+              }
+            />
+            <label className="sr-only" htmlFor="confirmNewPassword">
+              Confirm your new password
+            </label>
+            <input
+              type="password"
+              id="confirmNewPassword"
+              className={
+                'input placeholder-gray-500 text-gray-900 sm:text-sm bg-gray-100 shadow-none my-1'
+              }
+              value={formState.confirmNewPassword}
+              placeholder="Confirm new password"
+              onChange={(e) =>
+                setFormState({
+                  ...formState,
+                  confirmNewPassword: e.target.value,
+                })
+              }
             />
             <button
               type="submit"
               className={`w-full btn ${
-                isLoading ? ' opacity-40 cursor-not-allowed' : ''
+                formState.loading === 'LOADING'
+                  ? ' opacity-40 cursor-not-allowed'
+                  : ''
               }`}
             >
-              {isLoading ? 'Submitting...' : 'Submit'}
+              {formState.loading === 'LOADING' ? 'Submitting...' : 'Submit'}
             </button>
           </div>
         </form>
@@ -93,4 +130,4 @@ const UpdatePassword: NextPage = () => {
   );
 };
 
-export default ForgotPassword;
+export default UpdatePassword;

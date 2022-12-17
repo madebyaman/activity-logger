@@ -17,7 +17,7 @@ const ForgotPassword: NextPage = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await axios.post('/api/forgot-password', {
+      await axios.post('/api/forgot-password/send-email', {
         email,
       });
       setFlashMessages &&
@@ -25,7 +25,7 @@ const ForgotPassword: NextPage = () => {
           ...prevMessages,
           {
             title: 'Success',
-            message: 'Check your email for a reset link',
+            message: 'Check your email to update the password',
             type: 'success',
           },
         ]);

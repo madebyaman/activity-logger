@@ -43,16 +43,14 @@ export default async function forgotPassword(
     await sendEmail({
       to: email,
       from: 'Aman Thakur',
-      subject: 'Please verify your email',
+      subject: 'Update your password',
       html: `
-      <p>Thanks for signing up! To verify your email, click here: <a href="http://localhost:3000/verify-email/${user.verificationString}">http://localhost:3000/verify-email/${user.verificationString}
+      <p>Thanks for signing up! To verify your email, click here: <a href="http://localhost:3000/forgot-password/${user.verificationString}">http://localhost:3000/forgot-password/${user.verificationString}
     </a></p>
     `,
     });
     return res.status(200).json({ message: 'Email sent successfully' });
   } catch (e) {
-    return res
-      .status(500)
-      .json({ message: 'Unable to send verification email' });
+    return res.status(500).json({ message: 'Unable to send email' });
   }
 }

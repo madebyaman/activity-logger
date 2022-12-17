@@ -13,7 +13,7 @@ const ForgotPassword: NextPage = () => {
   const resetPassword = async (e: MouseEvent<HTMLButtonElement>) => {
     setStatus('LOADING');
     try {
-      await axios.get('/api/resend-verification-email');
+      await axios.get('/api/verify-email/send-email');
       setStatus('SUCCESS');
     } catch (e) {
       setStatus('ERROR');

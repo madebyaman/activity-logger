@@ -2,42 +2,48 @@ import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
 import { prisma } from 'lib';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { User } from '@prisma/client';
 
 export default async function verifyEmail(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  if (req.method !== 'PUT') {
+    res.status(405);
+    res.json({ error: 'Method not allowed' });
+    return;
+  }
   const { verificationString } = req.body;
   if (!verificationString) {
-    return res.status(401).json({ message: 'No verification string' });
+    return res.status(400).json({ message: 'No verification string' });
   }
 
-  const result = await prisma.user.findUnique({
-    where: {
-      verificationString,
-    },
-  });
-
-  if (!result) {
+  let user: User | null = null;
+  try {
+    user = await prisma.user.update({
+      where: {
+        verificationString,
+      },
+      data: {
+        isVerified: true,
+      },
+    });
+  } catch (e) {
+    return res
+      .status(401)
+      .json({ message: 'The email verification code is incorrect' });
+  }
+  if (!user) {
     return res
       .status(401)
       .json({ message: 'The email verification code is incorrect' });
   }
 
-  const verifiedUser = await prisma.user.update({
-    where: {
-      id: result.id,
-    },
-    data: {
-      isVerified: true,
-    },
-  });
-
   const token = jwt.sign(
     {
-      email: result.email,
+      email: user.email,
       time: Date.now(),
-      id: result.id,
+      id: user.id,
     },
     process.env.PRIVATE_KEY || 'secret',
     { expiresIn: '8h' }
@@ -54,5 +60,5 @@ export default async function verifyEmail(
     })
   );
 
-  return res.json({ email: result.email });
+  return res.json({ email: user.email });
 }
