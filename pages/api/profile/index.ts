@@ -14,7 +14,7 @@ const getProfile = async (
   const profile = await prisma.profile.findUnique({
     where: { userId: user.id },
   });
-  return res.json({ profile: profile, isVerified: user.isVerified });
+  return res.json({ ...profile, isVerified: user.isVerified });
 };
 
 export default validateRoute(getProfile);

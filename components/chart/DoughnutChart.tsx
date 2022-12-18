@@ -27,5 +27,12 @@ export function DoughnutChart(props: BarProps) {
     return () => chartBar.destroy();
   }, [props.data]);
 
-  return <canvas className="p-10" id="chartBar" ref={chartRef}></canvas>;
+  return (
+    <canvas
+      className="p-10"
+      id="chartBar"
+      data-testId="chartBar"
+      ref={chartRef}
+    ></canvas>
+  );
 }

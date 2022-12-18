@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { convertNumberToHour } from '../../utils';
+import { convertNumberToHour } from '@/utils';
 import {
   defaultButtonClasses,
   disabledButtonClasses,

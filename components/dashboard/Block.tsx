@@ -1,9 +1,9 @@
 import { Activity } from '@prisma/client';
 import { useContext, useEffect, useState } from 'react';
 
-import { useActivities } from '../../utils';
-import { ActivityTypes } from '../../types';
-import { ModalContext } from '../modal';
+import { useActivities } from '@/utils';
+import { ActivityTypes } from '@/types';
+import { ModalContext } from '@/components/modal';
 
 export const blockTypeColors = {
   Neutral: 'bg-gray-500',

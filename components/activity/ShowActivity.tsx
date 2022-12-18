@@ -1,12 +1,11 @@
 import { Activity } from '@prisma/client';
 import useSWR from 'swr';
-import { fetcher, paginationNumber } from 'utils';
+import { fetcher, paginationNumber } from '@/utils';
 import { Log } from '@prisma/client';
 import { format } from 'date-fns';
 import { useState } from 'react';
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
-import { disabledButtonClasses, outlineButtonClasses } from 'components/ui';
-import { classNames } from 'utils';
+import { classNames } from '@/utils';
 
 export function ShowActivity({ activity }: { activity: Activity }) {
   const [currentPage, setCurrentPage] = useState(1);

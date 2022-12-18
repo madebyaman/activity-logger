@@ -19,6 +19,7 @@ export const handlers = [
       blocksPerHour: 4,
       firstName: 'Aman',
       lastName: 'Thakur',
+      isVerified: true,
     };
     return res(ctx.json(profile));
   }),

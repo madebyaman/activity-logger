@@ -14,15 +14,16 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["*"]
+    }
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     "__tests__/__mocks__/server.js",
-    "__tests__/__mocks__/server.js",
-    "__tests__/__mocks__/handlers.js",
     "__tests__/__mocks__/handlers.js"
   ],
   "exclude": ["node_modules"]

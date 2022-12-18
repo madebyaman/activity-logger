@@ -19,11 +19,7 @@ const Dashboard: NextPageWithAuth = () => {
             isError={isError || 'Error fetching data'}
           />
         ) : (
-          <Blocks
-            profile={profile.profile}
-            blocks={blocks}
-            isLoading={'LOADED'}
-          />
+          <Blocks profile={profile} blocks={blocks} isLoading={'LOADED'} />
         )}
       </div>
       <Modal />

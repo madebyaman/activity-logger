@@ -1,6 +1,6 @@
 import { Log, Profile } from '@prisma/client';
 
-import { convertNumberToHour } from '../../utils';
+import { convertNumberToHour } from '@/utils';
 import { Block } from './Block';
 import { showBlock } from './showBlock';
 

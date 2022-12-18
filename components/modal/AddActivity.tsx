@@ -1,9 +1,9 @@
 import { MouseEvent, FormEvent, useContext, useState } from 'react';
 import { useSWRConfig } from 'swr';
 
-import { ActivityTypes } from '../../types';
-import { activityTypes, addActivity } from '../../utils';
-import { FlashMessageContext } from '../FlashMessage';
+import { ActivityTypes } from '@/types';
+import { activityTypes, addActivity } from '@/utils';
+import { FlashMessageContext } from '@/components/FlashMessage';
 import {
   defaultButtonClasses,
   inputClasses,
@@ -12,11 +12,7 @@ import {
   selectClasses,
 } from '../ui';
 
-export const AddActivity = ({
-  changeTab,
-}: {
-  changeTab: (e: MouseEvent<HTMLButtonElement>) => void;
-}) => {
+export const AddActivity = ({ changeTab }: { changeTab: () => void }) => {
   const [activityType, setActivityType] = useState<ActivityTypes | undefined>();
   const [activityName, setActivityName] = useState('');
   const [loading, setLoading] = useState(false);

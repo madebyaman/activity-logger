@@ -25,6 +25,7 @@ test('User preferences form shows the preferences correctly', () => {
     blocksPerHour: 4,
     firstName: 'Aman',
     lastName: 'Thakur',
+    isVerified: true,
   };
   render(
     <UserPreferencesForm

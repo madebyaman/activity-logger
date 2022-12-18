@@ -15,7 +15,9 @@ const customJestConfig = {
   testRegex: '\\.test\\.[jt]sx?$',
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
+    'components/(.*)': '<rootDir>/components/$1',
   },
+  moduleDirectories: ['node_modules'],
   testEnvironment: 'jest-environment-jsdom',
 };
 

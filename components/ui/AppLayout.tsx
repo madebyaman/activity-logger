@@ -11,7 +11,7 @@ import { XMarkIcon, Bars3Icon, UserIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import { classNames, useProfile } from '../../utils';
+import { classNames, useProfile } from '@/utils';
 import { ModalProvider } from '../modal';
 import { FlashMessageContext } from '../FlashMessage';
 import { format } from 'date-fns';
@@ -50,7 +50,7 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
         <VerifyEmailBanner verified={profile.isVerified} />
         <ApplicationShell
           setLoading={setLoading}
-          profile={profile.profile}
+          profile={profile}
           pageTitle={pageTitle}
         >
           {children}
@@ -63,7 +63,7 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
         <VerifyEmailBanner verified={profile.isVerified} />
         <ApplicationShell
           setLoading={setLoading}
-          profile={profile.profile}
+          profile={profile}
           pageTitle={pageTitle}
         >
           {children}

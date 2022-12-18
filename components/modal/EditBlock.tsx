@@ -7,9 +7,9 @@ import {
   linkClasses,
   selectClasses,
 } from '../ui';
-import { useBlocks, useActivities, updateBlock } from '../../utils';
+import { useBlocks, useActivities, updateBlock } from '@/utils';
 import { ModalContext } from '.';
-import { FlashMessageContext } from '../FlashMessage';
+import { FlashMessageContext } from '@/components/FlashMessage';
 
 export const EditBlock = ({
   changeTab,

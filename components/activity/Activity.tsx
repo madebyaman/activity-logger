@@ -1,9 +1,9 @@
 import { Activity as ActivityType } from '@prisma/client';
 import Link from 'next/link';
 import { useState } from 'react';
-import { ActivityTypes } from '../../types';
-import { activityTypes } from '../../utils';
-import { inputClasses, selectClasses } from '../ui';
+import { ActivityTypes } from '@/types';
+import { activityTypes } from '@/utils';
+import { inputClasses, selectClasses } from '@/components/ui';
 
 // style activity type
 function styledActivity(type: ActivityTypes) {

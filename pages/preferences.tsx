@@ -21,7 +21,7 @@ const Preferences: NextPageWithAuth = () => {
 
   useEffect(() => {
     let unmounted = false;
-    !unmounted && setProfileState(profile.profile);
+    !unmounted && setProfileState(profile);
     return () => {
       unmounted = true;
     };
@@ -67,7 +67,7 @@ const Preferences: NextPageWithAuth = () => {
     }
   };
 
-  if (isLoading) {
+  if (isLoading || profileState === undefined) {
     return <div>Loading</div>;
   }
 

@@ -1,7 +1,7 @@
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useState, MouseEvent } from 'react';
 import axios from 'axios';
-import { classNames } from 'utils';
+import { classNames } from '@/utils';
 
 function getMessage(
   status: 'INIT' | 'LOADING' | 'ERROR' | 'SUCCESS'

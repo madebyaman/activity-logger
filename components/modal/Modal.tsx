@@ -1,7 +1,7 @@
 import { MouseEvent, useContext, useState } from 'react';
 
 import { ModalContext } from '.';
-import { SlideOver } from '../ui';
+import { SlideOver } from '@/components/ui';
 import { AddActivity } from './AddActivity';
 import { EditBlock } from './EditBlock';
 
