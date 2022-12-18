@@ -2,11 +2,11 @@ import axios from 'axios';
 import { sub } from 'date-fns';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { Report } from 'types';
-import { classNames } from 'utils';
-import { DoughnutChart } from '../components/chart';
-import { h3Classes } from '../components/ui';
-import { NextPageWithAuth } from '../types';
+import { Report } from '@/types';
+import { classNames } from '@/utils';
+import { DoughnutChart } from '@/components/chart';
+import { h3Classes } from '@/components/ui';
+import { NextPageWithAuth } from '@/types';
 
 function getBackgroundColor(type: string[]): string[] {
   const getRandomNumber = (min: number, max: number) => {

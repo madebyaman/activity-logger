@@ -4,11 +4,11 @@ import { useRouter } from 'next/router';
 import { MouseEvent, ReactNode } from 'react';
 import { useSWRConfig } from 'swr';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
-import { ActivityRow } from '../components/activity';
-import { ActivityTypes, NextPageWithAuth } from '../types';
-import { useActivities } from 'utils';
-import { SlideOver } from '../components/ui';
-import { ShowActivity } from '../components/activity';
+import { ActivityRow } from '@/components/activity';
+import { ActivityTypes, NextPageWithAuth } from '@/types';
+import { useActivities } from '@/utils';
+import { SlideOver } from '@/components/ui';
+import { ShowActivity } from '@/components/activity';
 import { Activity } from '@prisma/client';
 import axios from 'axios';
 

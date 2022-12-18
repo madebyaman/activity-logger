@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useProfile } from 'utils';
+import { useProfile } from '@/utils';
 
 export default function HomeComponent() {
   const { profile } = useProfile();

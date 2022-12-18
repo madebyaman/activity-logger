@@ -7,10 +7,10 @@ import { Suspense } from 'react';
 import {
   FlashMessageProvider,
   FlashMessageWrapper,
-} from '../components/FlashMessage';
-import '../styles/globals.css';
-import '../styles/nprogress.css';
-import { NextPageWithAuth } from '../types';
+} from '@/components/FlashMessage';
+import '@/styles/globals.css';
+import '@/styles/nprogress.css';
+import { NextPageWithAuth } from '@/types';
 
 const AppLayout = dynamic(() => import('../components/ui/AppLayout'), {
   suspense: true,

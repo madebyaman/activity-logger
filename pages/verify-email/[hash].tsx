@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CenteredLayout } from 'components/ui';
+import { CenteredLayout } from '@/components/ui';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';

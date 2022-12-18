@@ -1,7 +1,7 @@
-import { NextPageWithAuth } from '../types';
-import { Blocks } from '../components/dashboard';
-import { Modal } from '../components/modal';
-import { useBlocks, useProfile } from '../utils';
+import { NextPageWithAuth } from '@/types';
+import { Blocks } from '@/components/dashboard';
+import { Modal } from '@/components/modal';
+import { useBlocks, useProfile } from '@/utils';
 
 const Dashboard: NextPageWithAuth = () => {
   const { profile } = useProfile();

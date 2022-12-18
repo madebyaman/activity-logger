@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { NextPage } from 'next/types';
-import { CenteredLayout } from '../components/ui';
-import { AuthForm } from '../components/AuthForm';
+import { CenteredLayout } from '@/components/ui';
+import { AuthForm } from '@/components/AuthForm';
 import Head from 'next/head';
 import axios from 'axios';
 

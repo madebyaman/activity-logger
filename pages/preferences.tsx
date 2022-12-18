@@ -3,11 +3,11 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { useSWRConfig } from 'swr';
-import { FlashMessageContext } from '../components/FlashMessage';
-import { h3Classes } from 'components/ui';
-import { UserPreferencesForm } from '../components/user/preferencesForm';
-import { NextPageWithAuth } from '../types';
-import { useProfile } from '../utils';
+import { FlashMessageContext } from '@/components/FlashMessage';
+import { h3Classes } from '@/components/ui';
+import { UserPreferencesForm } from '@/components/user/preferencesForm';
+import { NextPageWithAuth } from '@/types';
+import { useProfile } from '@/utils';
 
 const Preferences: NextPageWithAuth = () => {
   const { isLoading, isError, profile } = useProfile();

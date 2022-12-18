@@ -1,5 +1,4 @@
 import { Log } from '@prisma/client';
-import axios from 'axios';
 import useSWR from 'swr';
 import { fetcher, newBlocks } from '.';
 

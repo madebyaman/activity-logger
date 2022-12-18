@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ActivityTypes } from '../types';
+import { ActivityTypes } from '@/types';
 
 /**
  * Add a new activity and returns it.
