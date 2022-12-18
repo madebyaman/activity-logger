@@ -7,5 +7,5 @@ export default validateRoute(async (req, res, user) => {
       userId: user.id,
     },
   });
-  res.status(200).json(totalLogs);
+  res.status(200).json({ totalCount: totalLogs });
 });

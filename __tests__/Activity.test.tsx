@@ -7,6 +7,7 @@ import mockRouter from 'next-router-mock';
 import { fakeActivities } from './__mocks__/fakeData/fakeActivities';
 import { format, isValid, parse } from 'date-fns';
 import { fakeBlocks } from './__mocks__/fakeData/fakeBlocks';
+import { SWRConfig } from 'swr';
 
 test('Activity Row shows the correct activity', async () => {
   const Activity = {
@@ -69,15 +70,21 @@ function formattedDateIfValid(date: string) {
 }
 
 test('Show activity component renders the log for current activity', async () => {
-  render(<ShowActivity activity={fakeActivities[1]} />);
+  render(
+    <SWRConfig value={{ provider: () => new Map() }}>
+      <ShowActivity activity={fakeActivities[1]} />
+    </SWRConfig>
+  );
 
   const heading = await screen.findByRole('heading', {
     name: formattedDateIfValid(fakeBlocks[0].date),
   });
   expect(heading).toBeInTheDocument();
 
-  const nextButton = await screen.findByTestId('next-logs');
-  expect(nextButton.ariaDisabled).toBeFalsy();
-  const previousButton = await screen.findByTestId('previous-logs');
-  expect(previousButton.ariaDisabled).toBeTruthy();
+  const nextButton = screen.getByTestId('next-logs') as HTMLButtonElement;
+  expect(nextButton).toHaveAttribute('aria-disabled', 'false');
+  const previousButton = screen.getByTestId(
+    'previous-logs'
+  ) as HTMLButtonElement;
+  expect(previousButton).toHaveAttribute('aria-disabled', 'true');
 });

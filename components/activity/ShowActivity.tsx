@@ -9,8 +9,9 @@ import { classNames } from '@/utils';
 
 export function ShowActivity({ activity }: { activity: Activity }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const { data: totalActivites, isLoading: totalActivitesLoading } =
-    useSWR<number>(`/activities/${activity.id.toString()}/count`, fetcher);
+  const { data: totalActivites, isLoading: totalActivitesLoading } = useSWR<{
+    totalCount: number;
+  }>(`/activities/${activity.id.toString()}/count`, fetcher);
   const { isLoading, data, error } = useSWR<Log[]>(
     `/activities/${activity.id.toString()}/${currentPage.toString()}`,
     fetcher
@@ -52,7 +53,7 @@ export function ShowActivity({ activity }: { activity: Activity }) {
   function nextPageButtonDisabled(): boolean {
     if (!totalActivites) return false;
     const visiblePages = paginationNumber * currentPage;
-    if (totalActivites > visiblePages) {
+    if (totalActivites.totalCount > visiblePages) {
       return false;
     } else return true;
   }
@@ -84,9 +85,10 @@ export function ShowActivity({ activity }: { activity: Activity }) {
       ))}
       <div className="flex justify-between">
         <button
-          disabled={previousPageButtonDisabled()}
+          disabled={previousPageButtonDisabled() ? true : false}
           aria-disabled={previousPageButtonDisabled()}
           onClick={() => setCurrentPage((page) => page - 1)}
+          data-testid="previous-logs"
           className={classNames(
             'bg-gray-300 text-gray-800 font-semibold text-sm py-2 px-4 rounded inline-flex items-center gap-1',
             previousPageButtonDisabled()
@@ -95,12 +97,13 @@ export function ShowActivity({ activity }: { activity: Activity }) {
           )}
         >
           <ArrowLeftIcon className="h-4 w-4 text-gray-600" />
-          <span data-testid="previous-logs">Previous Logs</span>
+          <span>Previous Logs</span>
         </button>
         <button
           onClick={() => setCurrentPage((page) => page + 1)}
           disabled={nextPageButtonDisabled()}
           aria-disabled={nextPageButtonDisabled()}
+          data-testid="next-logs"
           className={classNames(
             'bg-gray-300 text-gray-800 font-semibold text-sm py-2 px-4 rounded inline-flex items-center gap-1',
             nextPageButtonDisabled()
@@ -108,7 +111,7 @@ export function ShowActivity({ activity }: { activity: Activity }) {
               : 'hover:bg-gray-400'
           )}
         >
-          <span data-testid="next-logs">Next Logs</span>
+          <span>Next Logs</span>
           <ArrowRightIcon className="h-4 w-4 text-gray-600" />
         </button>
       </div>

@@ -1,6 +1,7 @@
 import { act, render, screen } from '@testing-library/react';
 import { Blocks } from '../components/dashboard';
 import DashboardComponent from '../pages/dashboard';
+import { fakeActivities } from './__mocks__/fakeData/fakeActivities';
 
 test('Blocks component renders correct blocks', async () => {
   render(<Blocks isLoading="LOADING" />);
@@ -18,7 +19,7 @@ test('Dashboard component renders the blocks and profile', async () => {
   await act(() => {
     render(<DashboardComponent />);
   });
-  const noActivityText = await screen.findAllByText(/entertainment/i);
+  const noActivityText = await screen.findAllByText(fakeActivities[1].name);
   const firstNoActivityText = noActivityText[0];
   expect(firstNoActivityText).toBeInTheDocument();
 });
