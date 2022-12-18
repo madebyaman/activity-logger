@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import { env } from 'process';
+import { v4 as uuid } from 'uuid';
 import { activitiesData } from '../utils';
 import { prisma } from '../lib/prisma';
 
@@ -15,6 +16,8 @@ const run = async () => {
     create: {
       email: env['TEST_EMAIL'],
       password: bcrypt.hashSync(env['TEST_PASSWORD'], salt),
+      verificationString: uuid(),
+      isVerified: true,
     },
   });
 
