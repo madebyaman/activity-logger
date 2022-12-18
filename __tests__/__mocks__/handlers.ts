@@ -16,7 +16,7 @@ export const handlers: RestHandler[] = [
     return res(ctx.json(fakeActivities));
   }),
 
-  rest.get('http://localhost/api/activities/:id/count', (req, res, ctx) => {
+  rest.get('http://localhost/api/activities/:id', (req, res, ctx) => {
     const totalCount = fakeBlocks.length;
     return res(ctx.json({ totalCount }));
   }),

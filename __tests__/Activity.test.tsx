@@ -87,4 +87,6 @@ test('Show activity component renders the log for current activity', async () =>
     'previous-logs'
   ) as HTMLButtonElement;
   expect(previousButton).toHaveAttribute('aria-disabled', 'true');
+
+  // Check if next button click renders
 });

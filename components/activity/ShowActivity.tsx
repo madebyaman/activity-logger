@@ -11,7 +11,7 @@ export function ShowActivity({ activity }: { activity: Activity }) {
   const [currentPage, setCurrentPage] = useState(1);
   const { data: totalActivites, isLoading: totalActivitesLoading } = useSWR<{
     totalCount: number;
-  }>(`/activities/${activity.id.toString()}/count`, fetcher);
+  }>(`/activities/${activity.id.toString()}`, fetcher);
   const { isLoading, data, error } = useSWR<Log[]>(
     `/activities/${activity.id.toString()}/${currentPage.toString()}`,
     fetcher
