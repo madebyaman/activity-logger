@@ -7,7 +7,6 @@ type BarProps = {
     datasets: {
       label: string;
       backgroundColor?: string | string[];
-      borderColor?: string | string[];
       data: number[];
     }[];
   };
@@ -31,7 +30,7 @@ export function DoughnutChart(props: BarProps) {
     <canvas
       className="p-10"
       id="chartBar"
-      data-testId="chartBar"
+      data-testid="chartBar"
       ref={chartRef}
     ></canvas>
   );

@@ -18,7 +18,7 @@ test('User preferences page shows the preferences form', async () => {
   expect(heading).toBeInTheDocument();
 });
 
-test('User preferences form shows the preferences correctly', () => {
+test('User preferences form shows the preferences correctly', async () => {
   const profile = {
     sleepFrom: 22,
     sleepTo: 6,
@@ -36,17 +36,21 @@ test('User preferences form shows the preferences correctly', () => {
     />
   );
 
-  const firstNameInput = screen.getByRole('textbox', { name: /first name/i });
+  const firstNameInput = await screen.findByRole('textbox', {
+    name: /first name/i,
+  });
   if (firstNameInput instanceof HTMLInputElement) {
     expect(firstNameInput.value).toEqual(profile.firstName);
   }
 
-  const lastNameInput = screen.getByRole('textbox', { name: /last name/i });
+  const lastNameInput = await screen.findByRole('textbox', {
+    name: /last name/i,
+  });
   if (lastNameInput instanceof HTMLInputElement) {
     expect(lastNameInput.value).toEqual(profile.lastName);
   }
 
-  const blocksPerHourSelect = screen.getByRole('combobox', {
+  const blocksPerHourSelect = await screen.findByRole('combobox', {
     name: /blocks per hour/i,
   });
   if (blocksPerHourSelect instanceof HTMLSelectElement) {

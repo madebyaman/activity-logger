@@ -8,22 +8,24 @@ beforeEach(() => {
   mockRouter.setCurrentUrl('/initial');
 });
 
-test('Login component is rendering', () => {
+test('Login component is rendering', async () => {
   render(<Signin />);
   jest.mock('next/router', () => require('next-router-mock'));
-  const signupLink = screen.getByRole('link', {
+  const signupLink = await screen.findByRole('link', {
     name: /create a new account/i,
   });
   if (signupLink instanceof HTMLLinkElement) {
     expect(signupLink.href).toContain('signup');
   }
 
-  const loginButton = screen.getByRole('button', { name: /sign in/i });
+  const loginButton = await screen.findByRole('button', { name: /sign in/i });
   expect(loginButton).toBeInTheDocument();
 
-  const emailInput = screen.getByRole('textbox', { name: /email address/i });
+  const emailInput = await screen.findByRole('textbox', {
+    name: /email address/i,
+  });
   expect(emailInput).toBeInTheDocument();
 
-  const passwordInput = screen.getByLabelText(/password/i);
+  const passwordInput = await screen.findByLabelText(/password/i);
   expect(passwordInput).toBeInTheDocument();
 });

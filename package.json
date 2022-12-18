@@ -9,7 +9,8 @@
     "test": "jest --watch",
     "cache": "rm -rf .next",
     "migrate:local": "dotenv -e .env.development -- npx prisma migrate dev",
-    "push:local": "dotenv -e .env.development -- npx prisma db push"
+    "push:local": "dotenv -e .env.development -- npx prisma db push",
+    "jest:cache": "jest --clear-cache"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.6",
@@ -28,7 +29,6 @@
     "nprogress": "^0.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-select": "^5.2.2",
     "swr": "^2.0.0",
     "uuid": "^9.0.0"
   },
@@ -36,6 +36,7 @@
     "@sendgrid/mail": "^7.7.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^14.4.3",
     "@types/bcrypt": "^5.0.0",
     "@types/cookie": "^0.4.1",
     "@types/jsonwebtoken": "^8.5.8",
