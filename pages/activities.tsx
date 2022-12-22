@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { MouseEvent, ReactNode } from 'react';
+import { MouseEvent, ReactNode, useContext } from 'react';
 import { useSWRConfig } from 'swr';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { ActivityRow } from '@/components/activity';
@@ -11,11 +11,13 @@ import { SlideOver } from '@/components/ui';
 import { ShowActivity } from '@/components/activity';
 import { Activity } from '@prisma/client';
 import axios from 'axios';
+import { FlashMessageContext } from '@/components/FlashMessage';
 
 const Activities: NextPageWithAuth = () => {
   const { isLoading, activities, isError } = useActivities();
   const router = useRouter();
   const { mutate } = useSWRConfig();
+  const { setFlashMessages } = useContext(FlashMessageContext);
 
   // Sorting activities logic
   let sortProp: string;
@@ -53,8 +55,21 @@ const Activities: NextPageWithAuth = () => {
       return activity;
     });
     mutate('/activities', updatedActivities, false);
-    await axios.post('/activities/update', { id, name, type });
-    mutate('/activities');
+    try {
+      await axios.post('/api/activities/update', { id, name, type });
+    } catch (error) {
+      setFlashMessages &&
+        setFlashMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            title: '🔴 Error updating',
+            type: 'error',
+            message: 'Unable to update the activity',
+          },
+        ]);
+    } finally {
+      mutate('/activities');
+    }
   };
 
   const deleteActivity = async (id: number) => {
@@ -62,8 +77,21 @@ const Activities: NextPageWithAuth = () => {
       (activity) => activity.id !== id
     );
     mutate('/activities', updatedActivities, false);
-    await axios.delete(`/activities/delete/${id}`);
-    mutate('/activities');
+    try {
+      await axios.delete(`/api/activities/delete/${id}`);
+    } catch (error) {
+      setFlashMessages &&
+        setFlashMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            title: '🔴 Error',
+            type: 'error',
+            message: 'Unable to delete the activity',
+          },
+        ]);
+    } finally {
+      mutate('/activities');
+    }
   };
 
   if (isLoading) {

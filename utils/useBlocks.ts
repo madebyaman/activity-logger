@@ -1,5 +1,5 @@
 import { Log } from '@prisma/client';
-import useSWR from 'swr';
+import useSWRImmutable from 'swr/immutable';
 import { fetcher, newBlocks } from '.';
 
 /**
@@ -10,7 +10,7 @@ export function useBlocks(): {
   isLoading: 'ERROR' | 'LOADING' | 'LOADED';
   isError: string | undefined;
 } {
-  const res = useSWR('/logs', fetcher);
+  const res = useSWRImmutable('/logs', fetcher);
   const { data, error, isLoading } = res;
 
   let errorMessage: undefined | string;

@@ -1,4 +1,4 @@
-import { MouseEvent, FormEvent, useContext, useState } from 'react';
+import { FormEvent, useContext, useState } from 'react';
 import { useSWRConfig } from 'swr';
 
 import { ActivityTypes } from '@/types';

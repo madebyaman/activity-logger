@@ -37,27 +37,24 @@ export const EditBlock = ({
     // 2. Hide the modal
     if (setModal) setModal({ ...modal, showModal: false });
 
-    try {
-      // 2. Try updating the block
-      if (modal.activity) {
+    // 2. Try updating the block
+    if (modal.activity) {
+      try {
         await updateBlock(modal.currentBlockId, modal.activity.id, modal.notes);
-        // 3. If successful, revalidate blocks data
+      } catch (error) {
+        setFlashMessages &&
+          setFlashMessages((prevMessages) => [
+            ...prevMessages,
+            {
+              title: '❗ Error',
+              message:
+                'Something went wrong. There was an network error while updating the block. Please try again.',
+              type: 'warning',
+            },
+          ]);
+      } finally {
         mutate('/logs');
       }
-    } catch (e) {
-      // 1. Show warning flash message
-      setFlashMessages &&
-        setFlashMessages((prevMessages) => [
-          ...prevMessages,
-          {
-            title: 'Error updating block',
-            message:
-              'Something went wrong. There was an network error while updating the block. Please try again.',
-            type: 'warning',
-          },
-        ]);
-      //2. Reset the local state
-      updateLocalBlock(null, '');
     }
   };
 
