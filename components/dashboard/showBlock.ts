@@ -5,7 +5,7 @@ export const showBlock = (to: string | Date): boolean => {
   const currentTime = new Date();
   const toTime = new Date(to);
   if (currentTime > toTime) {
-    console.log(toTime, currentTime);
+    console.log(currentTime.getTimezoneOffset());
   }
   return currentTime > toTime;
 };
