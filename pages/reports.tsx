@@ -4,40 +4,21 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Report } from '@/types';
 import { classNames } from '@/utils';
-import { DoughnutChart } from '@/components/chart';
+import { PieChart } from '@/components/chart';
 import { h3Classes } from '@/components/ui';
 import { NextPageWithAuth } from '@/types';
 
-function getBackgroundColor(type: string[]): string[] {
-  const getRandomNumber = (min: number, max: number) => {
-    const difference = max - min;
-    let rand = Math.random();
-    rand = Math.floor(rand * difference);
-    rand += min;
-    return rand;
+function getBackgroundColor() {
+  const getRandomNumber = () => {
+    return Math.ceil(Math.random() * 360);
   };
-  const colors = type.map((item) => {
-    switch (item) {
-      case 'Productive':
-        return `hsl(${getRandomNumber(120, 150)}, 100%, 70%)`;
-      case 'Very Productive':
-        return `hsl(${getRandomNumber(120, 145)}, 70%, 70%)`;
-      case 'Distracting':
-        return `hsl(${getRandomNumber(30, 45)}, 100%, 50%)`;
-      case 'Very Distracting':
-        return `hsl(${getRandomNumber(0, 15)}, 100%, 50%)`;
-      case 'Neutral':
-        return `hsl(135, 0%, ${getRandomNumber(0, 50)}%)`;
-      default:
-        return `hsl(135, 0%, ${getRandomNumber(0, 50)}%)`;
-    }
-  });
-  return colors;
+  return `hsl(${getRandomNumber()} 84% 60%)`;
 }
 
+type PieChartData = { label: string; minutes: number; color: string };
+
 const Reports: NextPageWithAuth = () => {
-  const [report, setReport] = useState<Report[]>([]);
-  const router = useRouter();
+  const [report, setReport] = useState<PieChartData[]>([]);
   const [days, setDays] = useState(1);
 
   useEffect(() => {
@@ -45,7 +26,7 @@ const Reports: NextPageWithAuth = () => {
     let unmounted = false;
 
     async function getActivitiesData() {
-      const report = await axios.post(
+      const report = await axios.post<Report[]>(
         '/api/logs/report',
         {
           from: new Date(),
@@ -55,7 +36,16 @@ const Reports: NextPageWithAuth = () => {
           signal: controller.signal,
         }
       );
-      !unmounted && setReport(report.data as Report[]);
+      if (!unmounted) {
+        const newReport = report.data.map((item) => {
+          return {
+            label: item.activityName,
+            minutes: item.totalMinutes,
+            color: getBackgroundColor(),
+          };
+        });
+        setReport(newReport);
+      }
     }
     getActivitiesData();
 
@@ -68,19 +58,6 @@ const Reports: NextPageWithAuth = () => {
   if (!report.length) {
     return <div>Loading...</div>;
   }
-
-  const dataBarChart = {
-    labels: report.map((item) => item.activityName),
-    datasets: [
-      {
-        label: 'All Activities',
-        data: report.map((item) => item.totalMinutes),
-        backgroundColor: getBackgroundColor(
-          report.map((item) => item.activityType)
-        ),
-      },
-    ],
-  };
 
   const buttons = [
     { name: 'Today', onClick: () => setDays(1), current: days === 1 },
@@ -138,8 +115,9 @@ const Reports: NextPageWithAuth = () => {
         </div>
         <div className="mt-5 md:mt-0 md:col-span-2">
           <div className="shadow border border-gray-50 sm:rounded-md sm:overflow-hidden">
-            <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
-              <DoughnutChart data={dataBarChart} />
+            <div className="px-4 py-5 bg-white space-y-6 sm:p-6 flex justify-center">
+              {/* <DoughnutChart data={dataBarChart} /> */}
+              <PieChart data={report} width={500} />
             </div>
           </div>
         </div>
