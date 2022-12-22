@@ -64,7 +64,7 @@ const ForgotPassword: NextPage = () => {
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col mt-4 gap-2">
             <label className="sr-only" htmlFor="emailInput">
-              Enter your email
+              Email address
             </label>
             <input
               type="email"
