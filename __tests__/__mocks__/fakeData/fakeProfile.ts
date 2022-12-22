@@ -5,4 +5,8 @@ export const fakeProfile = {
   firstName: 'Aman',
   lastName: 'Thakur',
   isVerified: true,
+  userId: 1,
+  id: 1,
+  createdAt: new Date(),
+  updatedAt: new Date(),
 };

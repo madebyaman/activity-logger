@@ -62,7 +62,7 @@ export const Blocks = (props: BlocksComponentProps) => {
   return (
     <div className="mt-4">
       {/* Create array of [1, .. 23] */}
-      {props.blocks?.length
+      {props.blocks
         ? Array.from(Array(24).keys())
             // But eliminate sleep hours.
             .filter((hour) =>

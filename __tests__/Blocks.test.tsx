@@ -2,15 +2,10 @@ import { render, screen } from '@testing-library/react';
 import { Blocks } from '../components/dashboard';
 import DashboardComponent from '../pages/dashboard';
 import { fakeActivities } from './__mocks__/fakeData/fakeActivities';
-
-test('Blocks component renders correct blocks', async () => {
-  render(<Blocks isLoading="LOADING" />);
-  const loadingText = await screen.findByText(/loading\.\.\./i);
-  expect(loadingText).toBeInTheDocument();
-});
+import { fakeProfile } from './__mocks__/fakeData/fakeProfile';
 
 test('Blocks component renders the error message', async () => {
-  render(<Blocks isLoading="ERROR" isError="No blocks" />);
+  render(<Blocks isError="No blocks" blocks={[]} profile={fakeProfile} />);
   const errorText = await screen.findByText(/error/i);
   expect(errorText).toBeInTheDocument();
 });

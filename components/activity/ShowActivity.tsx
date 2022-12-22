@@ -66,7 +66,7 @@ export function ShowActivity({ activity }: { activity: Activity }) {
     if (isValid(parsedDate)) return format(parsedDate, 'MMM d, Y');
   }
 
-  function formattedTime(from: string) {
+  function formattedTime(from: string | Date) {
     return format(new Date(from), 'h:mm a');
   }
 

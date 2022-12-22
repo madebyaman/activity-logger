@@ -55,11 +55,11 @@ export const newBlocks = ({
         } else {
           fromMinutes = (60 / noOfBlocksPerHour) * block;
         }
-        const from = zonedTimeToUtc(new Date(), 'Europe/Berlin');
+        const from = new Date(new Date().getTime());
         from.setHours(hour);
         from.setMinutes(fromMinutes);
         from.setSeconds(0);
-        const to = zonedTimeToUtc(new Date(), 'Europe/Berlin');
+        const to = new Date(new Date().getTime());
         to.setHours(hour);
         to.setMinutes(toMinutes);
         to.setSeconds(0);
