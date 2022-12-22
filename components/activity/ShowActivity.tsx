@@ -2,7 +2,7 @@ import { Activity } from '@prisma/client';
 import useSWR from 'swr';
 import { fetcher, paginationNumber, removeTimezone } from '@/utils';
 import { Log } from '@prisma/client';
-import { add, format, isValid, parse } from 'date-fns';
+import { add, format, isValid, parse, parseISO } from 'date-fns';
 import { useState } from 'react';
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import { classNames } from '@/utils';
@@ -66,9 +66,10 @@ export function ShowActivity({ activity }: { activity: Activity }) {
     if (isValid(parsedDate)) return format(parsedDate, 'MMM d, Y');
   }
 
-  function formattedTime(from: Date) {
+  function formattedTime(from: string) {
     const offset = new Date().getTimezoneOffset();
-    const timeInCurrentZone = add(from, { minutes: -offset }); // Negative b/c it needs to convert GMT to local time
+    const parsedDate = parseISO(from);
+    const timeInCurrentZone = add(parsedDate, { minutes: -offset }); // Negative b/c it needs to convert GMT to local time
     return format(timeInCurrentZone, 'h:mm a');
   }
 
