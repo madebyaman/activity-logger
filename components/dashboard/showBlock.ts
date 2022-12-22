@@ -5,8 +5,8 @@ import { add } from 'date-fns';
  */
 export const showBlock = (to: string | Date): boolean => {
   const offset = new Date().getTimezoneOffset();
-  const currentTime = add(new Date(), { minutes: offset });
-  const toTime = new Date(to);
+  const currentTime = new Date();
+  const toTime = add(new Date(to), { minutes: offset });
   if (currentTime.getTime() > toTime.getTime()) {
     return true;
   } else {
