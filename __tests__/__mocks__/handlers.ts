@@ -40,7 +40,7 @@ export const handlers: RestHandler[] = [
 
   rest.post('http://localhost/api/logs/report', async (req, res, ctx) => {
     const { to } = await req.json();
-    if (!isValid(new Date(`${to}`))) {
+    if (!isValid(new Date(to))) {
       return res(ctx.status(400));
     }
     const toDateWithoutTime = new Date(`${to}`);

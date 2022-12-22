@@ -53,8 +53,10 @@ export const Blocks = (props: BlocksComponentProps) => {
    * Sort function to sort blocks by start time.
    */
   const sortBlocks = (a: Log, b: Log) => {
-    if (a.from < b.from) return -1;
-    if (a.from > b.from) return 1;
+    const from = new Date(a.from);
+    const bfrom = new Date(b.from);
+    if (from < bfrom) return -1;
+    if (from > bfrom) return 1;
     return 0;
   };
 

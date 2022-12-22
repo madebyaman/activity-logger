@@ -11,3 +11,4 @@ export { activitiesData } from './activitiesData';
 export { activityTypes } from './activityTypes';
 export { dateString } from './getDateString';
 export { paginationNumber } from './pagination';
+export { removeTimezone } from './removeTimezone';

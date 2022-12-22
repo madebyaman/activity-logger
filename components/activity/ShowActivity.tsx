@@ -1,6 +1,6 @@
 import { Activity } from '@prisma/client';
 import useSWR from 'swr';
-import { fetcher, paginationNumber } from '@/utils';
+import { fetcher, paginationNumber, removeTimezone } from '@/utils';
 import { Log } from '@prisma/client';
 import { format, isValid, parse } from 'date-fns';
 import { useState } from 'react';
@@ -66,6 +66,11 @@ export function ShowActivity({ activity }: { activity: Activity }) {
     if (isValid(parsedDate)) return format(parsedDate, 'MMM d, Y');
   }
 
+  function formattedTime(from: Date) {
+    const fromWithoutTZ = removeTimezone(`${from}`);
+    return format(fromWithoutTZ, 'h:mm a');
+  }
+
   return (
     <div>
       {data?.reduce(reduceLogsToDate, []).map((uniqueLog) => (
@@ -76,7 +81,7 @@ export function ShowActivity({ activity }: { activity: Activity }) {
           {uniqueLog.logs.sort(sortLogs).map((log) => (
             <ul key={log.id} className="list-disc list-inside">
               <li className="text-gray-600 text-sm mb-1">
-                {format(new Date(log.from), 'h:mm a')}
+                {formattedTime(log.from)}
                 {log.notes && `: ${log.notes}`}
               </li>
             </ul>
