@@ -7,9 +7,8 @@ import mockRouter from 'next-router-mock';
 import { fakeActivities } from './__mocks__/fakeData/fakeActivities';
 import { format, isValid, parse } from 'date-fns';
 import { fakeBlocks } from './__mocks__/fakeData/fakeBlocks';
-import { SWRConfig } from 'swr';
 
-test('Activity Row shows the correct activity', async () => {
+test('Activity Row shows the correct activity and allows editing', async () => {
   const Activity = {
     id: 19323,
     createdAt: new Date(),
@@ -70,11 +69,7 @@ function formattedDateIfValid(date: string) {
 }
 
 test('Show activity component renders the log for current activity', async () => {
-  render(
-    <SWRConfig value={{ provider: () => new Map() }}>
-      <ShowActivity activity={fakeActivities[1]} />
-    </SWRConfig>
-  );
+  render(<ShowActivity activity={fakeActivities[1]} />);
 
   const heading = await screen.findByRole('heading', {
     name: formattedDateIfValid(fakeBlocks[0].date),
