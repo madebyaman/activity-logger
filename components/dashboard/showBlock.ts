@@ -3,7 +3,7 @@ import { add, parseISO } from 'date-fns';
 /**
  * Returns if a block should be allowed to edit.
  */
-export const showBlock = (to: string): boolean => {
+export const showBlock = (to: Date): boolean => {
   const offset = new Date().getTimezoneOffset();
   const currentTime = new Date();
   const parsedDate = parseISO(`${to}`);
