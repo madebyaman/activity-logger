@@ -38,7 +38,7 @@ const getLogs = async (
     data: blocksWithUserId,
   });
   const newLogs = await prisma.log.findMany({ where: { date: date } });
-  return res.status(200).json(blocks);
+  return res.status(200).json(newLogs);
 };
 
 export default validateRoute(getLogs);
