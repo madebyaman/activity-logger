@@ -69,7 +69,9 @@ export function ShowActivity({ activity }: { activity: Activity }) {
   function formattedTime(from: string) {
     const offset = new Date().getTimezoneOffset();
     const parsedDate = parseISO(from);
-    const timeInCurrentZone = add(parsedDate, { minutes: offset - 720 }); // Negative b/c it needs to convert GMT to local time
+    const timeInCurrentZone = add(parsedDate, {
+      minutes: offset,
+    }); // Code runs in client. Meaning client automatically converts to the TZ, we only need to remove that conversion
     return format(timeInCurrentZone, 'h:mm a');
   }
 
