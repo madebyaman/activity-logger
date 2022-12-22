@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { sub } from 'date-fns';
-import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Report } from '@/types';
 import { classNames } from '@/utils';
@@ -26,25 +25,29 @@ const Reports: NextPageWithAuth = () => {
     let unmounted = false;
 
     async function getActivitiesData() {
-      const report = await axios.post<Report[]>(
-        '/api/logs/report',
-        {
-          from: new Date(),
-          to: sub(new Date(), { days }),
-        },
-        {
-          signal: controller.signal,
+      try {
+        const report = await axios.post<Report[]>(
+          '/api/logs/report',
+          {
+            from: new Date(),
+            to: sub(new Date(), { days }),
+          },
+          {
+            signal: controller.signal,
+          }
+        );
+        if (!unmounted) {
+          const newReport = report.data.map((item) => {
+            return {
+              label: item.activityName,
+              minutes: item.totalMinutes,
+              color: getBackgroundColor(),
+            };
+          });
+          setReport(newReport);
         }
-      );
-      if (!unmounted) {
-        const newReport = report.data.map((item) => {
-          return {
-            label: item.activityName,
-            minutes: item.totalMinutes,
-            color: getBackgroundColor(),
-          };
-        });
-        setReport(newReport);
+      } catch (error) {
+        setReport([]);
       }
     }
     getActivitiesData();
@@ -55,7 +58,7 @@ const Reports: NextPageWithAuth = () => {
     };
   }, [days]);
 
-  if (!report.length) {
+  if (!report) {
     return <div>Loading...</div>;
   }
 
@@ -116,8 +119,14 @@ const Reports: NextPageWithAuth = () => {
         <div className="mt-5 md:mt-0 md:col-span-2">
           <div className="shadow border border-gray-50 sm:rounded-md sm:overflow-hidden">
             <div className="px-4 py-5 bg-white space-y-6 sm:p-6 flex justify-center">
-              {/* <DoughnutChart data={dataBarChart} /> */}
-              <PieChart data={report} width={500} />
+              <div className="w-96 h-96">
+                {/* <DoughnutChart data={dataBarChart} /> */}
+                {report.length ? (
+                  <PieChart data={report} width={400} />
+                ) : (
+                  'No data to show'
+                )}
+              </div>
             </div>
           </div>
         </div>

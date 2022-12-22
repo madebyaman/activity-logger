@@ -1,5 +1,5 @@
 import { Activity, Log, User } from '@prisma/client';
-import { differenceInMinutes } from 'date-fns';
+import { differenceInMinutes, isValid } from 'date-fns';
 import { prisma, validateRoute } from 'lib';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Report } from 'types';
@@ -64,7 +64,10 @@ const getLogsReport = async (
     return;
   }
   // If no `to` passed, return early
-  const { to } = req.body;
+  const { to, from } = req.body;
+  if (!isValid(new Date(`${to}`)) && from && !isValid(new Date(`${from}`))) {
+    res.status(400);
+  }
   const toDate = new Date(to);
   const fromDate = new Date(req.body.from) || new Date();
   if (!to || Number.isNaN(toDate.getTime())) {

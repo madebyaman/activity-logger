@@ -1,7 +1,9 @@
-import { DefaultBodyType, rest, RestHandler } from 'msw';
+import { isEqual, isValid, sub } from 'date-fns';
+import { rest, RestHandler } from 'msw';
 import { fakeActivities } from './fakeData/fakeActivities';
 import { fakeBlocks } from './fakeData/fakeBlocks';
 import { fakeProfile } from './fakeData/fakeProfile';
+import { fakeActivityReport } from './fakeData/fakeReports';
 
 export const handlers: RestHandler[] = [
   rest.get('http://localhost/api/logs', (req, res, ctx) => {
@@ -34,5 +36,21 @@ export const handlers: RestHandler[] = [
     });
     // Return logs
     return res(ctx.json(paginatedBlocks));
+  }),
+
+  rest.post('http://localhost/api/logs/report', async (req, res, ctx) => {
+    const { to } = await req.json();
+    if (!isValid(new Date(`${to}`))) {
+      return res(ctx.status(400));
+    }
+    const toDateWithoutTime = new Date(`${to}`);
+    toDateWithoutTime.setUTCHours(0, 0, 0, 0);
+    const yesterdayWithoutTime = sub(new Date(), { days: 1 });
+    yesterdayWithoutTime.setUTCHours(0, 0, 0, 0);
+    if (isEqual(yesterdayWithoutTime, toDateWithoutTime)) {
+      return res(ctx.json(fakeActivityReport));
+    } else {
+      return res(ctx.json([]));
+    }
   }),
 ];

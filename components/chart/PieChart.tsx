@@ -13,7 +13,7 @@ export function PieChart({
   const [activeItem, setActiveItem] = useState<typeof data[0] | null>(null);
 
   return (
-    <svg width={width} height={width}>
+    <svg viewBox={`0 0 ${width} ${width}`}>
       <Group top={width / 2} left={width / 2}>
         <Pie
           data={data}
