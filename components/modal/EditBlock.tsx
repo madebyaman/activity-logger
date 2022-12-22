@@ -70,7 +70,7 @@ export const EditBlock = ({
         return block;
       }
     });
-    mutate(newBlocks);
+    mutate('/logs', newBlocks);
   };
 
   if (!activities || !blocks) {

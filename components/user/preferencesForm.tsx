@@ -68,6 +68,7 @@ export function UserPreferencesForm({
       label: convertNumberToHour(hour),
     };
   });
+
   return (
     <form onSubmit={onSubmit}>
       <div className="shadow border border-gray-50 sm:rounded-md sm:overflow-hidden">

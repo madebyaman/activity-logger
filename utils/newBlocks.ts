@@ -1,6 +1,4 @@
 import { zonedTimeToUtc } from 'date-fns-tz';
-import { dateString } from './getDateString';
-import { removeTimezone } from './removeTimezone';
 
 // Initialize a blank state to start tracking activities
 type TimeLog = {
@@ -35,13 +33,14 @@ export const newBlocks = ({
   sleepFrom,
   sleepTo,
   noOfBlocksPerHour = 4,
+  date,
 }: {
   noOfBlocksPerHour: number;
   sleepFrom: number;
   sleepTo: number;
+  date: string;
 }): TimeLog[] => {
   let initialTimeLog: TimeLog[] = [];
-  const date = dateString;
 
   Array.from(Array(24).keys())
     .filter((i) => filterBlocks({ hour: i, sleepFrom, sleepTo }))
@@ -55,11 +54,11 @@ export const newBlocks = ({
         } else {
           fromMinutes = (60 / noOfBlocksPerHour) * block;
         }
-        const from = new Date(new Date().getTime());
+        const from = zonedTimeToUtc(new Date(), 'Europe/London');
         from.setHours(hour);
         from.setMinutes(fromMinutes);
         from.setSeconds(0);
-        const to = new Date(new Date().getTime());
+        const to = zonedTimeToUtc(new Date(), 'Europe/London');
         to.setHours(hour);
         to.setMinutes(toMinutes);
         to.setSeconds(0);

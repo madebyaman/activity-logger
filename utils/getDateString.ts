@@ -1,4 +1,7 @@
-import { format } from 'date-fns';
+import { add, format } from 'date-fns';
 
 // Date in 12/16/2022
-export const dateString = format(new Date(), 'MM/dd/yyyy');
+export function dateString(offset: number) {
+  const date = add(new Date(), { minutes: -offset });
+  return format(date, 'MM/dd/y');
+}

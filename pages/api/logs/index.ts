@@ -11,7 +11,12 @@ const getLogs = async (
   res: NextApiResponse,
   user: User
 ) => {
-  const date = dateString;
+  const { timeZone } = req.body;
+  const timeZoneOffset = Number(timeZone);
+  if (!timeZone || Number.isNaN(timeZone)) {
+    return res.status(400);
+  }
+  const date = dateString(timeZoneOffset);
   const logs = await prisma.log.findMany({ where: { date: date } });
 
   // Get `blocksPerHour` from profile db
@@ -30,6 +35,7 @@ const getLogs = async (
     sleepFrom: profile?.sleepFrom || 22,
     sleepTo: profile?.sleepTo || 6,
     noOfBlocksPerHour: blocksPerHour,
+    date,
   }).map((block) => ({
     ...block,
     userId: user.id,

@@ -1,7 +1,13 @@
 import { Log } from '@prisma/client';
+import axios from 'axios';
 import useSWR from 'swr/immutable';
-import { fetcher } from '.';
 
+async function fetcher(url: string) {
+  const res = await axios.post(`${window.location.origin}/api${url}`, {
+    timeZone: new Date().getTimezoneOffset(),
+  });
+  return res.data;
+}
 /**
  * Function to fetch logs data from api route
  */
