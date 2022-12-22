@@ -83,7 +83,7 @@ export function ShowActivity({ activity }: { activity: Activity }) {
           {uniqueLog.logs.sort(sortLogs).map((log) => (
             <ul key={log.id} className="list-disc list-inside">
               <li className="text-gray-600 text-sm mb-1">
-                {formattedTime(log.from)}
+                {formattedTime(`${log.from}`)}
                 {log.notes && `: ${log.notes}`}
               </li>
             </ul>
