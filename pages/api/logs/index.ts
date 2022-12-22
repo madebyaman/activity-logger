@@ -20,21 +20,17 @@ const getLogs = async (
   });
   let blocksPerHour = profile ? profile.blocksPerHour : 4;
 
-  // Sometimes, only few logs are added to the db.
-  if (logs.length === 96 || logs.length === 48 || logs.length === 24) {
+  if (logs.length) {
     // If logs found, return them
     return res.status(200).json({ blocks: logs });
-  } else if (logs.length) {
-    // Clear out the logs that are found. B/c it is not of ideal size.
-    await prisma.log.deleteMany({
-      where: {
-        date: date,
-        userId: user.id,
-      },
-    });
   }
+
   // Then, add logs for today based on blocksPerHour.
-  const blocksWithUserId = newBlocks(blocksPerHour).map((block) => ({
+  const blocksWithUserId = newBlocks({
+    sleepFrom: profile?.sleepFrom || 22,
+    sleepTo: profile?.sleepTo || 6,
+    noOfBlocksPerHour: blocksPerHour,
+  }).map((block) => ({
     ...block,
     userId: user.id,
   }));
