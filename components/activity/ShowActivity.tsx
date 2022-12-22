@@ -67,9 +67,7 @@ export function ShowActivity({ activity }: { activity: Activity }) {
   }
 
   function formattedTime(from: string) {
-    const offset = new Date().getTimezoneOffset();
-    const parsedDate = parseISO(from);
-    const timeInCurrentZone = add(parsedDate, { minutes: offset - 720 }); // Negative b/c it needs to convert GMT to local time
+    const timeInCurrentZone = new Date(from);
     return format(timeInCurrentZone, 'h:mm a');
   }
 
