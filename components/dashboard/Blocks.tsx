@@ -4,16 +4,11 @@ import { convertNumberToHour } from '@/utils';
 import { Block } from './Block';
 import { showBlock } from './showBlock';
 
-type BlocksComponentProps =
-  | {
-      isLoading: 'LOADING';
-    }
-  | { isError: string; isLoading: 'ERROR' }
-  | {
-      isLoading: 'LOADED';
-      profile: Profile;
-      blocks: Log[];
-    };
+type BlocksComponentProps = {
+  isError?: string;
+  profile: Profile;
+  blocks: Log[];
+};
 export const Blocks = (props: BlocksComponentProps) => {
   // This is to make sure purge css works correctly in Tailwind
   const gridColumns = {
@@ -60,12 +55,8 @@ export const Blocks = (props: BlocksComponentProps) => {
     return 0;
   };
 
-  if (props.isLoading === 'LOADING') {
-    return <div>Loading...</div>;
-  }
-
-  if (props.isLoading === 'ERROR') {
-    return <div>Error: {props.isError}</div>;
+  if (props.isError) {
+    return <div>Error loading blocks</div>;
   }
 
   return (

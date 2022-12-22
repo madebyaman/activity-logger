@@ -1,3 +1,4 @@
+import { zonedTimeToUtc } from 'date-fns-tz';
 import { dateString } from './getDateString';
 import { removeTimezone } from './removeTimezone';
 
@@ -54,11 +55,11 @@ export const newBlocks = ({
         } else {
           fromMinutes = (60 / noOfBlocksPerHour) * block;
         }
-        const from = new Date(Date.now());
+        const from = zonedTimeToUtc(new Date(), 'Europe/Berlin');
         from.setHours(hour);
         from.setMinutes(fromMinutes);
         from.setSeconds(0);
-        const to = new Date(Date.now());
+        const to = zonedTimeToUtc(new Date(), 'Europe/Berlin');
         to.setHours(hour);
         to.setMinutes(toMinutes);
         to.setSeconds(0);

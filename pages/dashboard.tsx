@@ -10,16 +10,10 @@ const Dashboard: NextPageWithAuth = () => {
   return (
     <div>
       <div>
-        {isLoading === 'LOADING' ? (
-          // <Blocks isLoading="LOADING" />
-          <div>Loadng...</div>
-        ) : isLoading === 'ERROR' ? (
-          <Blocks
-            isLoading="ERROR"
-            isError={isError || 'Error fetching data'}
-          />
+        {isLoading ? (
+          <div>Loading...</div>
         ) : (
-          <Blocks profile={profile} blocks={blocks} isLoading={'LOADED'} />
+          <Blocks profile={profile} blocks={blocks} isError={isError} />
         )}
       </div>
       <Modal />

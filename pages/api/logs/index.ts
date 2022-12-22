@@ -22,7 +22,7 @@ const getLogs = async (
 
   if (logs.length) {
     // If logs found, return them
-    return res.status(200).json({ blocks: logs });
+    return res.status(200).json(logs);
   }
 
   // Then, add logs for today based on blocksPerHour.
@@ -38,7 +38,7 @@ const getLogs = async (
     data: blocksWithUserId,
   });
   const newLogs = await prisma.log.findMany({ where: { date: date } });
-  return res.status(200).json({ blocks: newLogs });
+  return res.status(200).json(blocks);
 };
 
 export default validateRoute(getLogs);

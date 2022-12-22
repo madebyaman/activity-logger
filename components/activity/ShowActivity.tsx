@@ -66,9 +66,8 @@ export function ShowActivity({ activity }: { activity: Activity }) {
     if (isValid(parsedDate)) return format(parsedDate, 'MMM d, Y');
   }
 
-  function formattedTime(from: Date) {
-    const fromWithoutTZ = removeTimezone(`${from}`);
-    return format(fromWithoutTZ, 'h:mm a');
+  function formattedTime(from: string) {
+    return format(new Date(from), 'h:mm a');
   }
 
   return (

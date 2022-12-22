@@ -1,4 +1,3 @@
-import { useSWRConfig } from 'swr';
 import { MouseEvent, FormEvent, useContext } from 'react';
 
 import {
@@ -10,18 +9,19 @@ import {
 import { useBlocks, useActivities, updateBlock } from '@/utils';
 import { ModalContext } from '.';
 import { FlashMessageContext } from '@/components/FlashMessage';
+import { useSWRConfig } from 'swr';
 
 export const EditBlock = ({
   changeTab,
 }: {
   changeTab: (e: MouseEvent<HTMLButtonElement>) => void;
 }) => {
+  const { mutate } = useSWRConfig();
   const { modalState: modal, setModalState: setModal } =
     useContext(ModalContext);
   const { setFlashMessages } = useContext(FlashMessageContext);
   const { activities } = useActivities();
   const { blocks } = useBlocks();
-  const { mutate } = useSWRConfig();
 
   /**
    * It updates 'blockState' when a new activity is selected.
@@ -30,16 +30,13 @@ export const EditBlock = ({
     e.preventDefault();
     if (!modal.currentBlockId) return;
 
-    // 1. Immediately Update local state
-    if (modal.activity) {
-      updateLocalBlock(modal.activity.id, modal.notes);
-    }
     // 2. Hide the modal
     if (setModal) setModal({ ...modal, showModal: false });
 
     // 2. Try updating the block
     if (modal.activity) {
       try {
+        updateLocalBlock(modal.activity.id, modal.notes);
         await updateBlock(modal.currentBlockId, modal.activity.id, modal.notes);
       } catch (error) {
         setFlashMessages &&
@@ -62,7 +59,7 @@ export const EditBlock = ({
    * This function updates the local state with the `activityId`
    */
   const updateLocalBlock = (activityId: number | null, notes: string = '') => {
-    const newBlocks = blocks.map((block) => {
+    const newBlocks = blocks?.map((block) => {
       if (block.id === modal.currentBlockId) {
         return {
           ...block,
@@ -73,7 +70,7 @@ export const EditBlock = ({
         return block;
       }
     });
-    mutate('/logs', newBlocks, false);
+    mutate(newBlocks);
   };
 
   if (!activities || !blocks) {

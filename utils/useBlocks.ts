@@ -1,17 +1,12 @@
 import { Log } from '@prisma/client';
-import useSWRImmutable from 'swr/immutable';
-import { dateString, fetcher, newBlocks, removeTimezone } from '.';
+import useSWR from 'swr/immutable';
+import { fetcher } from '.';
 
 /**
  * Function to fetch logs data from api route
  */
-export function useBlocks(): {
-  blocks: Log[];
-  isLoading: 'ERROR' | 'LOADING' | 'LOADED';
-  isError: string | undefined;
-} {
-  const res = useSWRImmutable('/logs', fetcher);
-  const { data, error, isLoading } = res;
+export function useBlocks() {
+  const { data, error, isLoading } = useSWR<Log[]>('/logs', fetcher);
 
   let errorMessage: undefined | string;
   if (error) {
@@ -23,19 +18,10 @@ export function useBlocks(): {
       errorMessage = 'Error fetching data';
     }
   }
-  let newBlocks = [];
-
-  if (data && data.blocks) {
-    newBlocks = data.blocks.map((item: Log) => ({
-      ...item,
-      from: removeTimezone(`${item.from}`),
-      to: removeTimezone(`${item.to}`),
-    }));
-  }
 
   return {
-    blocks: newBlocks,
-    isLoading: isLoading ? 'LOADING' : error ? 'ERROR' : 'LOADED',
+    blocks: data as Log[],
+    isLoading: isLoading,
     isError: errorMessage,
   };
 }
