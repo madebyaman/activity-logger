@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useProfile } from '@/utils';
+import { dateString, useProfile } from '@/utils';
 
 export default function HomeComponent() {
   const { profile } = useProfile();
@@ -64,6 +64,7 @@ export default function HomeComponent() {
           </div>
         </div>
       </div>
+      <div>{dateString(-330)}</div>
     </div>
   );
 }

@@ -140,18 +140,18 @@ const Activities: NextPageWithAuth = () => {
       <Head>
         <title>Your Activities</title>
       </Head>
-      <table className="min-w-full divide-y divide-gray-200 table-auto">
-        <thead className="bg-gray-100">
-          <tr>
-            <SortableColumn prop="name">Activity Name</SortableColumn>
-            <SortableColumn prop="type">Activity Type</SortableColumn>
-            <th className={thClasses}>Edit</th>
-            <th className={thClasses}>Delete</th>
-          </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          {activities.length &&
-            sortedActivities.map((activity) => (
+      {activities.length ? (
+        <table className="min-w-full divide-y divide-gray-200 table-auto">
+          <thead className="bg-gray-100">
+            <tr>
+              <SortableColumn prop="name">Activity Name</SortableColumn>
+              <SortableColumn prop="type">Activity Type</SortableColumn>
+              <th className={thClasses}>Edit</th>
+              <th className={thClasses}>Delete</th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {sortedActivities.map((activity) => (
               <ActivityRow
                 key={activity.id}
                 activity={activity}
@@ -160,8 +160,11 @@ const Activities: NextPageWithAuth = () => {
                 link={activityLink(activity.id)}
               />
             ))}
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      ) : (
+        'Add new activities in Dashboard'
+      )}
       {openedActivity && (
         <SlideOver onClose={closeActivity} title={openedActivity.name}>
           <ShowActivity activity={openedActivity} />
