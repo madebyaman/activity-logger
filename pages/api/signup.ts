@@ -38,7 +38,7 @@ export default async function signup(
       from: 'thakura994@gmail.com',
       subject: 'Please verify your email',
       html: `
-      <p>Thanks for signing up! To verify your email, click here: <a href="http://localhost:3000/verify-email/${verificationString}">http://localhost:3000/verify-email/${verificationString}
+      <p>Thanks for signing up! To verify your email, click here: <a href="http://activity-logger.vercel.app/verify-email/${verificationString}">http://activity-logger.vercel.app/verify-email/${verificationString}
     </a></p>
     `,
     });

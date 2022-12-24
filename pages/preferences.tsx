@@ -21,8 +21,10 @@ const Preferences: NextPageWithAuth = () => {
 
   useEffect(() => {
     let unmounted = false;
-    const { isVerified, ...profileSnapshot } = profile;
-    !unmounted && setProfileState(profileSnapshot);
+    if (profile) {
+      const { isVerified, ...profileSnapshot } = profile;
+      !unmounted && setProfileState(profileSnapshot);
+    }
     return () => {
       unmounted = true;
     };
@@ -30,7 +32,6 @@ const Preferences: NextPageWithAuth = () => {
 
   const [loading, setLoading] = useState(false);
   const { mutate } = useSWRConfig();
-  const router = useRouter();
   const { setFlashMessages } = useContext(FlashMessageContext);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

@@ -1,6 +1,6 @@
 # Activity Logger App
 
-![Activity Logger App](screenshot.png)
+![Activity Logger App](./public/screenshot.png)
 Keep track of your time easily with Activty Logger App (Demo only)
 
 ## Features

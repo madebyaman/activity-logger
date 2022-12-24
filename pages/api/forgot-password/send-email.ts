@@ -48,7 +48,7 @@ export default async function forgotPassword(
       from: 'Aman Thakur',
       subject: 'Update your password',
       html: `
-      <p>We received a request to reset your password. To continue please click the temporary link below within 2 hours: <a href="http://localhost:3000/forgot-password/${user.verificationString}">http://localhost:3000/forgot-password/${user.verificationString}
+      <p>We received a request to reset your password. To continue please click the temporary link below within 2 hours: <a href="http://activity-logger.vercel.app/forgot-password/${user.verificationString}">http://activity-logger.vercel.app/forgot-password/${user.verificationString}
     </a></p>
     `,
     });

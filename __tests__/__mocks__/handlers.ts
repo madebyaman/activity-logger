@@ -11,7 +11,8 @@ export const handlers: RestHandler[] = [
   }),
 
   rest.get('http://localhost/api/profile', (req, res, ctx) => {
-    return res(ctx.json(fakeProfile));
+    const newProfile = { ...fakeProfile, isVerified: true };
+    return res(ctx.json(newProfile));
   }),
 
   rest.get('http://localhost/api/activities', (req, res, ctx) => {
