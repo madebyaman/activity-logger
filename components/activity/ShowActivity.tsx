@@ -66,7 +66,10 @@ export function ShowActivity({ activity }: { activity: Activity }) {
 
   function formattedTime(from: string) {
     const parsedDate = parseISO(from);
-    return format(parsedDate, 'h:mm a');
+    const offsettedTime = add(parsedDate, {
+      minutes: new Date().getTimezoneOffset(),
+    });
+    return format(offsettedTime, 'h:mm a');
   }
 
   return (

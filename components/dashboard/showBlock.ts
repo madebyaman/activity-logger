@@ -1,4 +1,4 @@
-import { parseISO } from 'date-fns';
+import { add, parseISO, sub } from 'date-fns';
 
 /**
  * Returns if a block should be allowed to edit.
@@ -6,5 +6,8 @@ import { parseISO } from 'date-fns';
 export const showBlock = (to: Date): boolean => {
   const currentTime = new Date();
   const toTime = parseISO(`${to}`);
-  return currentTime.getTime() > toTime.getTime();
+  const toOffsetted = add(toTime, {
+    minutes: new Date().getTimezoneOffset(),
+  });
+  return currentTime.getTime() > toOffsetted.getTime();
 };

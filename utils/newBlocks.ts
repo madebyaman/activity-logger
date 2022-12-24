@@ -1,4 +1,4 @@
-import { add } from 'date-fns';
+import { add, set, sub } from 'date-fns';
 import { zonedTimeToUtc } from 'date-fns-tz';
 
 // Initialize a blank state to start tracking activities
@@ -55,19 +55,27 @@ export const newBlocks = ({
         } else {
           fromMinutes = (60 / noOfBlocksPerHour) * block;
         }
-        const from = new Date();
-        console.log(hour, from.getHours());
-        from.setHours(hour);
-        from.setMinutes(fromMinutes);
-        from.setSeconds(0);
-        console.log(hour, from.getHours());
-        const to = new Date();
-        to.setHours(hour);
-        to.setMinutes(toMinutes);
-        to.setSeconds(0);
+        const from = set(new Date(), {
+          hours: hour,
+          minutes: fromMinutes,
+          seconds: 0,
+          milliseconds: 0,
+        });
+        const fromOffseted = sub(from, {
+          minutes: new Date().getTimezoneOffset(),
+        });
+        const to = set(new Date(), {
+          hours: hour,
+          minutes: toMinutes,
+          seconds: 0,
+          milliseconds: 0,
+        });
+        const toOffsetted = sub(to, {
+          minutes: new Date().getTimezoneOffset(),
+        });
         initialTimeLog.push({
-          from,
-          to,
+          from: fromOffseted,
+          to: toOffsetted,
           hour,
           date,
         });
