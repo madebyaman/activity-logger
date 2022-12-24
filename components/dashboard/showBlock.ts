@@ -6,9 +6,5 @@ import { parseISO } from 'date-fns';
 export const showBlock = (to: Date): boolean => {
   const currentTime = new Date();
   const toTime = parseISO(`${to}`);
-  if (currentTime.getTime() > toTime.getTime()) {
-    return true;
-  } else {
-    return false;
-  }
+  return currentTime.getTime() > toTime.getTime();
 };

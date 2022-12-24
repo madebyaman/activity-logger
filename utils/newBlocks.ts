@@ -55,11 +55,12 @@ export const newBlocks = ({
         } else {
           fromMinutes = (60 / noOfBlocksPerHour) * block;
         }
-        const from = new Date(Date.now());
+        const from = new Date();
         from.setHours(hour);
+        console.log(hour, from.getHours());
         from.setMinutes(fromMinutes);
         from.setSeconds(0);
-        const to = new Date(Date.now());
+        const to = new Date();
         to.setHours(hour);
         to.setMinutes(toMinutes);
         to.setSeconds(0);

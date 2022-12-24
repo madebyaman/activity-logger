@@ -14,6 +14,7 @@ const getProfile = async (
   const profile = await prisma.profile.findUnique({
     where: { userId: user.id },
   });
+  console.log(new Date());
   return res.json({ ...profile, isVerified: user.isVerified });
 };
 
