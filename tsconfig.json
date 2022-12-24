@@ -25,7 +25,8 @@
     "**/*.ts",
     "**/*.tsx",
     "__tests__/__mocks__/server.js",
-    "__tests__/__mocks__/handlers.ts"
+    "__tests__/__mocks__/handlers.ts",
+    "hello.js"
   ],
   "exclude": ["node_modules"]
 }

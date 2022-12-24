@@ -1,3 +1,4 @@
+import { add } from 'date-fns';
 import { zonedTimeToUtc } from 'date-fns-tz';
 
 // Initialize a blank state to start tracking activities
@@ -54,11 +55,12 @@ export const newBlocks = ({
         } else {
           fromMinutes = (60 / noOfBlocksPerHour) * block;
         }
-        const from = zonedTimeToUtc(new Date(), 'Europe/London');
+        const timezoneOffset = new Date().getTimezoneOffset();
+        const from = add(new Date(), { minutes: timezoneOffset });
         from.setHours(hour);
         from.setMinutes(fromMinutes);
         from.setSeconds(0);
-        const to = zonedTimeToUtc(new Date(), 'Europe/London');
+        const to = add(new Date(), { minutes: timezoneOffset });
         to.setHours(hour);
         to.setMinutes(toMinutes);
         to.setSeconds(0);
