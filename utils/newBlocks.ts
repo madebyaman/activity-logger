@@ -15,7 +15,7 @@ export const newBlocks = ({
   date: string;
 }): TimeLog[] => {
   let initialTimeLog: TimeLog[] = [];
-  const day = date.split('/')[0];
+  const day = date.split('/')[1];
 
   Array.from(Array(24).keys()).map((hour) => {
     Array.from(Array(noOfBlocksPerHour).keys()).map((block) => {
@@ -38,6 +38,7 @@ export const newBlocks = ({
         minutes: new Date().getTimezoneOffset(),
       });
       const to = set(new Date(), {
+        date: Number(day),
         hours: hour,
         minutes: toMinutes,
         seconds: 0,
