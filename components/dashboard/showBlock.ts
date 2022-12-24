@@ -9,5 +9,5 @@ export const showBlock = (to: Date): boolean => {
   const toOffsetted = add(toTime, {
     minutes: new Date().getTimezoneOffset(),
   });
-  return currentTime.getTime() > toOffsetted.getTime();
+  return currentTime > toOffsetted;
 };
