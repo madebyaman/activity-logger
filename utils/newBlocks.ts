@@ -60,6 +60,7 @@ export const newBlocks = ({
         console.log(hour, from.getHours());
         from.setMinutes(fromMinutes);
         from.setSeconds(0);
+        console.log(hour, from.getHours());
         const to = new Date();
         to.setHours(hour);
         to.setMinutes(toMinutes);
