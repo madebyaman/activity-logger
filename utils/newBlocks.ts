@@ -55,12 +55,11 @@ export const newBlocks = ({
         } else {
           fromMinutes = (60 / noOfBlocksPerHour) * block;
         }
-        const timezoneOffset = new Date().getTimezoneOffset();
-        const from = add(new Date(), { minutes: timezoneOffset });
+        const from = new Date(Date.now());
         from.setHours(hour);
         from.setMinutes(fromMinutes);
         from.setSeconds(0);
-        const to = add(new Date(), { minutes: timezoneOffset });
+        const to = new Date(Date.now());
         to.setHours(hour);
         to.setMinutes(toMinutes);
         to.setSeconds(0);
