@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import Image from 'next/image';
-import { dateString, useProfile } from '@/utils';
+import { useProfile } from '@/utils';
 
 export default function HomeComponent() {
   const { profile } = useProfile();
@@ -21,7 +21,6 @@ export default function HomeComponent() {
               <Link
                 className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 href={profile ? '/dashboard' : '/signin'}
-                passHref
               >
                 {profile ? 'Dashboard' : 'Login'}
               </Link>

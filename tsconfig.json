@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["cypress", "@testing-library/cypress"],
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -26,5 +27,5 @@
     "__tests__/__mocks__/server.js",
     "__tests__/__mocks__/handlers.ts"
   ],
-  "exclude": ["node_modules", "cypress/**/*", "cypress.config.ts"]
+  "exclude": ["node_modules"]
 }
