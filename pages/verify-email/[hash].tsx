@@ -46,7 +46,7 @@ const VerifyEmail: NextPage = () => {
     );
   }
 
-  if (!isLoading && !isSuccess) {
+  if (!isSuccess) {
     return (
       <CenteredLayout>
         <div className="heading1 mb-4">Failed to verify your email</div>

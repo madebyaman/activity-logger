@@ -17,7 +17,9 @@ const getLogs = async (
     return res.status(400);
   }
   const date = dateString(timeZoneOffset);
-  const logs = await prisma.log.findMany({ where: { date: date } });
+  const logs = await prisma.log.findMany({
+    where: { date: date, userId: user.id },
+  });
 
   // Get `blocksPerHour` from profile db
   const profile = await prisma.profile.findUnique({
