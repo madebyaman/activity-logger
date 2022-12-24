@@ -19,7 +19,7 @@ export default function HomeComponent() {
             </li>
             <li>
               <Link
-                className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 href={profile ? '/dashboard' : '/signin'}
                 passHref
               >
@@ -45,7 +45,7 @@ export default function HomeComponent() {
                 were doing in that time.
               </p>
               <Link
-                className="mt-8 bg-white border border-transparent rounded-md shadow px-5 py-3 inline-flex items-center text-base font-medium text-indigo-600 hover:bg-indigo-50"
+                className="mt-8 bg-white border border-transparent rounded-md shadow px-5 py-3 inline-flex items-center text-base font-medium text-gray-600 hover:bg-gray-300"
                 href="/signin"
               >
                 Start tracking your time
@@ -64,7 +64,6 @@ export default function HomeComponent() {
           </div>
         </div>
       </div>
-      <div>{dateString(-330)}</div>
     </div>
   );
 }

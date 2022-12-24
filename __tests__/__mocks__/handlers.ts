@@ -6,7 +6,7 @@ import { fakeProfile } from './fakeData/fakeProfile';
 import { fakeActivityReport } from './fakeData/fakeReports';
 
 export const handlers: RestHandler[] = [
-  rest.get('http://localhost/api/logs', (req, res, ctx) => {
+  rest.post('http://localhost/api/logs', (req, res, ctx) => {
     return res(ctx.json(fakeBlocks));
   }),
 

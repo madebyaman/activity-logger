@@ -61,7 +61,7 @@ export const Block = ({
           <span className="font-display text-gray-700">{name}</span>
         </>
       ) : (
-        <span className="font-display text-gray-700">No activity</span>
+        <span className="font-display text-gray-600">Add activity</span>
       )}
     </button>
   );

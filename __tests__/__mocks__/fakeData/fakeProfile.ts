@@ -1,6 +1,6 @@
 export const fakeProfile = {
-  sleepFrom: 22,
-  sleepTo: 6,
+  sleepFrom: 12,
+  sleepTo: 13,
   blocksPerHour: 4,
   firstName: 'Aman',
   lastName: 'Thakur',

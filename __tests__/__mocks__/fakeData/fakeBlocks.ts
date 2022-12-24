@@ -1,10 +1,12 @@
-import { newBlocks } from '@/utils';
+import { dateString, newBlocks } from '@/utils';
 import { Log } from '@prisma/client';
+import { fakeProfile } from './fakeProfile';
 
 export const fakeBlocks: Log[] = newBlocks({
-  noOfBlocksPerHour: 4,
-  sleepFrom: 22,
-  sleepTo: 6,
+  noOfBlocksPerHour: fakeProfile.blocksPerHour,
+  sleepFrom: fakeProfile.sleepFrom,
+  sleepTo: fakeProfile.sleepTo,
+  date: dateString(-330),
 }).map((block, id) => ({
   ...block,
   id,

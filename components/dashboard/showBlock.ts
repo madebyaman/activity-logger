@@ -1,4 +1,4 @@
-import { add, parseISO } from 'date-fns';
+import { parseISO } from 'date-fns';
 
 /**
  * Returns if a block should be allowed to edit.

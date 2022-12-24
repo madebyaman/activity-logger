@@ -26,5 +26,5 @@
     "__tests__/__mocks__/server.js",
     "__tests__/__mocks__/handlers.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "cypress/**/*", "cypress.config.ts"]
 }

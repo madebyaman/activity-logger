@@ -1,11 +1,9 @@
-import { Activity } from '@prisma/client';
-import useSWR from 'swr';
-import { fetcher, paginationNumber, removeTimezone } from '@/utils';
-import { Log } from '@prisma/client';
-import { add, format, isValid, parse, parseISO } from 'date-fns';
-import { useState } from 'react';
+import { classNames, fetcher, paginationNumber } from '@/utils';
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
-import { classNames } from '@/utils';
+import { Activity, Log } from '@prisma/client';
+import { format, isValid, parse, parseISO } from 'date-fns';
+import { useState } from 'react';
+import useSWR from 'swr';
 
 export function ShowActivity({ activity }: { activity: Activity }) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -73,13 +71,13 @@ export function ShowActivity({ activity }: { activity: Activity }) {
 
   return (
     <div>
-      {data?.reduce(reduceLogsToDate, []).map((uniqueLog) => (
+      {data?.reduce(reduceLogsToDate, []).map((uniqueLog, id) => (
         <div className="mb-6" key={uniqueLog.date}>
           <h3 className="font-bold text-lg mb-1">
             {formattedDateIfValid(uniqueLog.date)}
           </h3>
           {uniqueLog.logs.sort(sortLogs).map((log) => (
-            <ul key={log.id} className="list-disc list-inside">
+            <ul key={log.id.toString()} className="list-disc list-inside">
               <li className="text-gray-600 text-sm mb-1">
                 {formattedTime(`${log.from}`)}
                 {log.notes && `: ${log.notes}`}

@@ -2,7 +2,7 @@ import { FormEvent, useContext, useState } from 'react';
 import { useSWRConfig } from 'swr';
 
 import { ActivityTypes } from '@/types';
-import { activityTypes, addActivity } from '@/utils';
+import { activityTypes, addActivity, useActivities, useProfile } from '@/utils';
 import { FlashMessageContext } from '@/components/FlashMessage';
 import {
   defaultButtonClasses,
@@ -11,6 +11,7 @@ import {
   outlineButtonClasses,
   selectClasses,
 } from '../ui';
+import { Activity } from '@prisma/client';
 
 export const AddActivity = ({ changeTab }: { changeTab: () => void }) => {
   const [activityType, setActivityType] = useState<ActivityTypes | undefined>();
@@ -18,11 +19,18 @@ export const AddActivity = ({ changeTab }: { changeTab: () => void }) => {
   const [loading, setLoading] = useState(false);
   const { mutate } = useSWRConfig();
   const { setFlashMessages } = useContext(FlashMessageContext);
+  const { activities } = useActivities();
+  const { profile } = useProfile();
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     try {
+      // Update local state instantly
+      addActivityToLocal({
+        name: activityName,
+        type: activityType || 'Neutral',
+      });
       await addActivity({
         name: activityName,
         type: activityType || 'Neutral',
@@ -44,6 +52,21 @@ export const AddActivity = ({ changeTab }: { changeTab: () => void }) => {
       changeTab();
     }
   };
+
+  function addActivityToLocal({ name, type }: { name: string; type: string }) {
+    const newActivities: Activity[] = [
+      ...activities,
+      {
+        name,
+        type,
+        id: Date.now(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        userId: profile.userId,
+      },
+    ];
+    mutate('/activities', newActivities);
+  }
 
   return (
     <div>
