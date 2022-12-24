@@ -20,8 +20,8 @@ export default validateRoute(async (req, res, user) => {
   }
 
   // Fetch the activity with activityId
-  const activity = await prisma.activity.findUnique({
-    where: { id: req.body.activityId },
+  const activity = await prisma.activity.findFirst({
+    where: { id: req.body.activityId, userId: user.id },
   });
 
   // If activity is not found, throw error
@@ -32,6 +32,12 @@ export default validateRoute(async (req, res, user) => {
   }
 
   // Get a log with the id, and update it.
+  const logToUpdate = await prisma.log.findFirst({
+    where: { id: req.body.blockId, userId: user.id },
+  });
+  if (!logToUpdate) {
+    return res.status(400);
+  }
   const log = await prisma.log.update({
     where: { id: req.body.blockId },
     data: {

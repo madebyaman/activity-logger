@@ -1,4 +1,4 @@
-import { validateRoute, prisma } from 'lib';
+import { prisma, validateRoute } from 'lib';
 
 export default validateRoute(async (req, res, user) => {
   // Don't allow if user is not verified
@@ -22,10 +22,15 @@ export default validateRoute(async (req, res, user) => {
   }
 
   try {
-    const deletedActivity = await prisma.activity.delete({
-      where: { id },
+    const activityToDelete = await prisma.activity.findFirst({
+      where: { AND: [{ id }, { userId: user.id }] },
     });
-    return res.status(200).json(deletedActivity);
+    if (activityToDelete) {
+      const deletedActivity = await prisma.activity.delete({ where: { id } });
+      return res.status(200).json(deletedActivity);
+    } else {
+      return res.status(400);
+    }
   } catch (e) {
     return res.status(400).json({ error: 'Activity not found' });
   }

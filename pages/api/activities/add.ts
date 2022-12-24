@@ -21,9 +21,7 @@ export default validateRoute(async (req, res, user) => {
       data: {
         name: req.body.name,
         type: req.body.type,
-        user: {
-          connect: { id: user.id },
-        },
+        userId: user.id,
       },
     });
   } catch (error) {
