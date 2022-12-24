@@ -1,14 +1,14 @@
 import nodemailer from 'nodemailer';
 
-if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
+if (!process.env.GOOGLE_USER || !process.env.GOOGLE_APP_PASSWORD) {
   throw new Error('No Email key in environment');
 }
 
 const options = {
   service: 'gmail',
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD,
+    user: process.env.GOOGLE_USER,
+    pass: process.env.GOOGLE_APP_PASSWORD,
   },
 };
 
