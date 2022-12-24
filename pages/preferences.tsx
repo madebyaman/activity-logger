@@ -21,7 +21,8 @@ const Preferences: NextPageWithAuth = () => {
 
   useEffect(() => {
     let unmounted = false;
-    !unmounted && setProfileState(profile);
+    const { isVerified, ...profileSnapshot } = profile;
+    !unmounted && setProfileState(profileSnapshot);
     return () => {
       unmounted = true;
     };
@@ -43,12 +44,20 @@ const Preferences: NextPageWithAuth = () => {
             profileState.blocksPerHour === 2 ||
             profileState.blocksPerHour === 4)
             ? profileState.blocksPerHour
-            : 2;
+            : 4;
         await axios.post('/api/profile/update', {
           ...profileState,
           blocksPerHour,
         });
-        router.push('/dashboard');
+        setFlashMessages &&
+          setFlashMessages((prevMessages) => [
+            ...prevMessages,
+            {
+              title: '🍺 Saved',
+              message: 'Your profile was successfully saved',
+              type: 'success',
+            },
+          ]);
       }
     } catch {
       setFlashMessages &&

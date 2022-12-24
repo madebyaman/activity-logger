@@ -3,6 +3,7 @@ import { Log, Profile } from '@prisma/client';
 import { convertNumberToHour } from '@/utils';
 import { Block } from './Block';
 import { showBlock } from './showBlock';
+import { add, parseISO } from 'date-fns';
 
 type BlocksComponentProps = {
   isError?: string;
@@ -90,11 +91,15 @@ export const Blocks = (props: BlocksComponentProps) => {
                     .sort(sortBlocks)
                     .map((timeBlock) => {
                       const { id, to, activityId, notes } = timeBlock;
+                      const toTime = parseISO(`${to}`);
+                      const toOffsetted = add(toTime, {
+                        minutes: new Date().getTimezoneOffset(),
+                      });
                       return (
                         <div
                           key={id}
-                          className={`min-w-full h-28 px-3 py-6 bg-gray-100 grid col-span-2 col-start-2 md:col-start-auto place-content-center hover:bg-gray-200 ${
-                            new Date(`${to}`).getMinutes() !== 0 && 'border-r'
+                          className={`blocks min-w-full h-28 px-3 py-6 bg-gray-100 grid col-span-2 col-start-2 md:col-start-auto place-content-center hover:bg-gray-200 ${
+                            toOffsetted.getMinutes() !== 0 && 'border-r'
                           }`}
                         >
                           {showBlock(to) ? (
