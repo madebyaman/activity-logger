@@ -78,6 +78,11 @@ const getLogsReport = async (
     where: {
       AND: [
         {
+          activityId: {
+            not: null,
+          },
+        },
+        {
           userId: user.id,
         },
         {

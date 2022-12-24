@@ -1,6 +1,6 @@
 import { Log } from '@prisma/client';
 import axios from 'axios';
-import useSWR from 'swr/immutable';
+import useSWR from 'swr';
 
 async function fetcher(url: string) {
   const res = await axios.post(`${window.location.origin}/api${url}`, {

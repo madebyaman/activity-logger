@@ -4,8 +4,6 @@ import { fakeProfile } from './fakeProfile';
 
 export const fakeBlocks: Log[] = newBlocks({
   noOfBlocksPerHour: fakeProfile.blocksPerHour,
-  sleepFrom: fakeProfile.sleepFrom,
-  sleepTo: fakeProfile.sleepTo,
   date: dateString(-330),
 }).map((block, id) => ({
   ...block,

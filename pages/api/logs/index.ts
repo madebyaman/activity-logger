@@ -34,8 +34,6 @@ const getLogs = async (
 
   // Then, add logs for today based on blocksPerHour.
   const blocksWithUserId = newBlocks({
-    sleepFrom: profile?.sleepFrom || 22,
-    sleepTo: profile?.sleepTo || 6,
     noOfBlocksPerHour: blocksPerHour,
     date,
   }).map((block) => ({
