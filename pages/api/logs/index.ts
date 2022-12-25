@@ -13,7 +13,7 @@ const getLogs = async (
 ) => {
   const { timeZone } = req.body;
   const timeZoneOffset = Number(timeZone);
-  if (!timeZone || Number.isNaN(timeZone)) {
+  if (!timeZone || Number.isNaN(timeZoneOffset)) {
     return res.status(400);
   }
   const date = dateString(timeZoneOffset);

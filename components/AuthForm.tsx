@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, FormEvent, useContext, useState } from 'react';
 
@@ -158,6 +159,16 @@ export function AuthForm(props: AuthFormProps) {
           </button>
         </div>
       </form>
+      {mode === 'SIGNIN' && (
+        <div className="mt-4">
+          <p className="mt-2 md:mt-4 text-sm paragraph text-gray-800">
+            Forgot password?{' '}
+            <Link href="/forgot-password" className="link">
+              Reset here
+            </Link>
+          </p>
+        </div>
+      )}
     </div>
   );
 }
