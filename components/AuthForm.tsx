@@ -32,8 +32,13 @@ type AuthFormProps =
 
 export function AuthForm(props: AuthFormProps) {
   const { mode } = props;
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState(() => {
+    if (mode === 'SIGNIN') return 'amanthakur95@gmail.com'
+    else return ''
+  });
+  const [password, setPassword] = useState(() => {
+    mode === 'SIGNIN' ? 'password' : ''
+  });
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
