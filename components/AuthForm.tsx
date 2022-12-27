@@ -37,7 +37,8 @@ export function AuthForm(props: AuthFormProps) {
     else return ''
   });
   const [password, setPassword] = useState(() => {
-    mode === 'SIGNIN' ? 'password' : ''
+    if (mode === 'SIGNIN') return 'password'
+    else return ''
   });
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
