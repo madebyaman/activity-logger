@@ -11,7 +11,7 @@ test('Home page is rendering the correct heading', async () => {
   expect(heading).toBeInTheDocument();
 
   const screenshot = await screen.findByRole('img', {
-    name: /app screenshot/i,
+    name: /App demo gif/i,
   });
   expect(screenshot).toBeInTheDocument();
 });

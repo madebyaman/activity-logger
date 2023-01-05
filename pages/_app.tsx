@@ -3,7 +3,6 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Router from 'next/router';
 import NProgress from 'nprogress';
-import { Suspense } from 'react';
 import {
   FlashMessageProvider,
   FlashMessageWrapper,
@@ -11,6 +10,7 @@ import {
 import '@/styles/globals.css';
 import '@/styles/nprogress.css';
 import { NextPageWithAuth } from '@/types';
+import { Spinner } from '@/components/ui';
 
 const AppLayout = dynamic(() => import('../components/ui/AppLayout'), {
   suspense: true,
@@ -38,11 +38,9 @@ function MyApp({ Component, pageProps }: ComponentPropsWithAuth) {
         Skip to main content
       </a>
       {Component.protectedRoute ? (
-        <Suspense fallback={`Loading...`}>
-          <AppLayout>
-            <Component {...pageProps} />
-          </AppLayout>
-        </Suspense>
+        <AppLayout>
+          <Component {...pageProps} />
+        </AppLayout>
       ) : (
         <Component {...pageProps} />
       )}

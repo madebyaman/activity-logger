@@ -17,9 +17,10 @@ import { FlashMessageContext } from '../FlashMessage';
 import { format } from 'date-fns';
 import { Profile } from '@prisma/client';
 import { VerifyEmailBanner } from './VerifyEmailBanner';
+import { Spinner } from './Spinner';
 
 const AppLayout = ({ children }: { children: ReactNode }) => {
-  const { profile, isLoading, isError } = useProfile();
+  const { profile, isError, isLoading } = useProfile();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -33,7 +34,7 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
       : removeTrailingSlashAndCapitalize(router.pathname);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Spinner />;
   }
 
   if (isError) {

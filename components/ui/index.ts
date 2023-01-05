@@ -12,3 +12,4 @@ export {
   selectClasses,
   inputClasses,
 } from './classes';
+export { Spinner } from './Spinner';
