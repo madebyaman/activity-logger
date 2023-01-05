@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Report } from '@/types';
 import { classNames } from '@/utils';
 import { PieChart } from '@/components/chart';
-import { h3Classes } from '@/components/ui';
+import { h3Classes, Spinner } from '@/components/ui';
 import { NextPageWithAuth } from '@/types';
 
 function getBackgroundColor() {
@@ -59,7 +59,7 @@ const Reports: NextPageWithAuth = () => {
   }, [days]);
 
   if (!report) {
-    return <div>Loading...</div>;
+    return <Spinner />;
   }
 
   const buttons = [

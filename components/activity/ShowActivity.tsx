@@ -4,10 +4,11 @@ import { Activity, Log } from '@prisma/client';
 import { add, format, isValid, parse, parseISO, sub } from 'date-fns';
 import { useState } from 'react';
 import useSWR from 'swr';
+import { Spinner } from '../ui';
 
 export function ShowActivity({ activity }: { activity: Activity }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const { data: totalActivites, isLoading: totalActivitesLoading } = useSWR<{
+  const { data: totalActivites } = useSWR<{
     totalCount: number;
   }>(`/activities/${activity.id.toString()}`, fetcher);
   const { isLoading, data, error } = useSWR<Log[]>(
@@ -56,7 +57,7 @@ export function ShowActivity({ activity }: { activity: Activity }) {
     } else return true;
   }
 
-  if (isLoading) <p>Loading...</p>;
+  if (isLoading) <Spinner />;
   if (error) <p>Error fetching data. Try again</p>;
 
   function formattedDateIfValid(date: string) {

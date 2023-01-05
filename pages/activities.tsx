@@ -7,7 +7,7 @@ import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { ActivityRow } from '@/components/activity';
 import { ActivityTypes, NextPageWithAuth } from '@/types';
 import { useActivities } from '@/utils';
-import { SlideOver } from '@/components/ui';
+import { SlideOver, Spinner } from '@/components/ui';
 import { ShowActivity } from '@/components/activity';
 import { Activity } from '@prisma/client';
 import axios from 'axios';
@@ -95,7 +95,7 @@ const Activities: NextPageWithAuth = () => {
   };
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <Spinner />;
   }
 
   if (isError) {
