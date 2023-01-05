@@ -29,8 +29,13 @@ const Reports: NextPageWithAuth = () => {
         const report = await axios.post<Report[]>(
           '/api/logs/report',
           {
-            from: new Date(),
-            to: sub(new Date(), { days }),
+            from: sub(new Date(), {
+              minutes: new Date().getTimezoneOffset(),
+            }),
+            to: sub(new Date(), {
+              days,
+              minutes: new Date().getTimezoneOffset(),
+            }),
           },
           {
             signal: controller.signal,
